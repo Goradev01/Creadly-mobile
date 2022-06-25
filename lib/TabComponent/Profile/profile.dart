@@ -1,3 +1,4 @@
+import 'package:creadlymobile/Auth/userregistration.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,7 +33,7 @@ class _ProfileState extends State<Profile> {
             'assets/id.svg',
           ),
           title: 'Add ID Verification',
-          nav: Container()),
+          nav: const Registration()),
       ListItem(
           icon: SvgPicture.asset(
             'assets/profile.svg',
@@ -163,6 +164,12 @@ class _ProfileState extends State<Profile> {
                     (index) => Column(
                           children: [
                             ListTile(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return listitems[index].nav;
+                                }));
+                              },
                               leading: Container(
                                 width: 30,
                                 alignment: Alignment.center,

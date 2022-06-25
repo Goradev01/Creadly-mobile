@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Ui {
-  final shadeP = const Color(0xffEDE9F7);
   final blue = const Color(0xff3A0CA3);
+  final numb = const Color(0xffA9A9BC);
+  final shadeP = const Color(0xffEDE9F7);
+  final shadePi = const Color(0xffF8EAF6);
   final ash = const Color(0xff2E2E2E);
   final pink = const Color(0xffB5179E);
+  final darkPurple = const Color(0xff0D0520);
   final productblack = const Color(0xff1A0404);
 
   final Shader linearGradient = const LinearGradient(
@@ -31,6 +34,27 @@ class Ui {
             decoration: TextDecoration.lineThrough));
   }
 
+  amount(color, size, text, weight) {
+    return Row(
+      children: [
+        Text('N',
+            style: TextStyle(
+                fontSize: size,
+                color: color,
+                decorationStyle: TextDecorationStyle.double,
+                decorationColor: color,
+                decoration: TextDecoration.lineThrough)),
+        Text(text,
+            style: TextStyle(
+              fontSize: size,
+              color: color,
+              fontWeight: weight,
+              decorationColor: color,
+            ))
+      ],
+    );
+  }
+
   ptext(text) {
     return Text(
       text,
@@ -41,13 +65,12 @@ class Ui {
     );
   }
 
-  layout(widgets) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xffffffff),
-        body: SafeArea(
-          child: widgets,
-        ));
+  title(text) {
+    return Text(
+      text,
+      style: TextStyle(
+          fontSize: 20.0, fontWeight: FontWeight.w500, color: productblack),
+    );
   }
 
   smalltext(text) {
@@ -55,6 +78,15 @@ class Ui {
       text,
       style: TextStyle(color: ash, fontSize: 10, fontWeight: FontWeight.w400),
     );
+  }
+
+  layout(widgets) {
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: const Color(0xffffffff),
+        body: SafeArea(
+          child: widgets,
+        ));
   }
 
   hspacer(double num) {

@@ -1,3 +1,4 @@
+import 'package:creadlymobile/TabComponent/Salary-Advanced/salary.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -136,74 +137,83 @@ class _HomepageState extends State<Homepage> {
                         });
                       },
                       itemBuilder: (BuildContext context, index) {
-                        return Container(
-                          width: width,
-                          height: 136,
-                          margin: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: creditmodel[index].color,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Stack(
-                            children: [
-                              Align(
-                                  alignment: Alignment.topLeft,
-                                  child: SvgPicture.asset(
-                                    'assets/group2.svg',
-                                    color: const Color(0xffffffff)
-                                        .withOpacity(0.5),
-                                  )),
-                              Center(
-                                  child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    creditmodel[index].title,
-                                    style: TextStyle(
-                                        fontSize: 10.0,
-                                        fontWeight: FontWeight.w400,
-                                        color: design.shadeP),
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      design.naira(Colors.white, 32.0),
-                                      Text(
-                                        creditmodel[index].amount,
-                                        style: const TextStyle(
-                                            fontSize: 32.0,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    width: 100,
-                                    height: 20,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: const Color(0xffffffff)
-                                            .withOpacity(0.5)),
-                                    child: Text(
-                                      creditmodel[index].mode,
-                                      style: const TextStyle(
+                        return InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return const SalaryAdvanced();
+                            }));
+                          },
+                          child: Container(
+                            width: width,
+                            height: 136,
+                            margin: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: creditmodel[index].color,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Stack(
+                              children: [
+                                Align(
+                                    alignment: Alignment.topLeft,
+                                    child: SvgPicture.asset(
+                                      'assets/group2.svg',
+                                      color: const Color(0xffffffff)
+                                          .withOpacity(0.5),
+                                    )),
+                                Center(
+                                    child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      creditmodel[index].title,
+                                      style: TextStyle(
                                           fontSize: 10.0,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color(0xffffffff)),
+                                          fontWeight: FontWeight.w400,
+                                          color: design.shadeP),
                                     ),
-                                  ),
-                                ],
-                              )),
-                              Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: SvgPicture.asset(
-                                    'assets/group.svg',
-                                    color: const Color(0xffffffff)
-                                        .withOpacity(0.5),
-                                  )),
-                            ],
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        design.naira(Colors.white, 32.0),
+                                        Text(
+                                          creditmodel[index].amount,
+                                          style: const TextStyle(
+                                              fontSize: 32.0,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      width: 100,
+                                      height: 20,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: const Color(0xffffffff)
+                                              .withOpacity(0.5)),
+                                      child: Text(
+                                        creditmodel[index].mode,
+                                        style: const TextStyle(
+                                            fontSize: 10.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xffffffff)),
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                                Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: SvgPicture.asset(
+                                      'assets/group.svg',
+                                      color: const Color(0xffffffff)
+                                          .withOpacity(0.5),
+                                    )),
+                              ],
+                            ),
                           ),
                         );
                       }),
