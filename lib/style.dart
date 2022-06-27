@@ -17,6 +17,7 @@ class Ui {
   lineartext(text) {
     return Text(
       text,
+      textAlign: TextAlign.center,
       style: TextStyle(
           fontSize: 32.0,
           fontWeight: FontWeight.w500,
@@ -87,6 +88,32 @@ class Ui {
         body: SafeArea(
           child: widgets,
         ));
+  }
+
+  stackpage(void nav, text) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () {
+            nav;
+          },
+          child: Container(
+              alignment: Alignment.center,
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(0xffF8F8FA)),
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 10,
+                color: blue,
+              )),
+        ),
+        wspacer(19),
+        title(text),
+      ],
+    );
   }
 
   hspacer(double num) {
