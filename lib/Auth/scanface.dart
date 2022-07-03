@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:camera/camera.dart';
 import 'package:creadlymobile/Auth/submitface.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,9 @@ class Scanface extends StatefulWidget {
   State<Scanface> createState() => _ScanfaceState();
 }
 
+
 class _ScanfaceState extends State<Scanface> {
+ 
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   @override

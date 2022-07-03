@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:creadlymobile/Auth/login.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -15,6 +18,55 @@ class _SignupState extends State<Signup> {
   String phoneNumber = '';
   final formkey = GlobalKey<FormState>();
   bool showPassword = false;
+  void errorAlert(response) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text(response),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    //DeleteProduct(Image, Category, Id)
+
+                    Navigator.pop(context);
+                  },
+                  child: const Text('back')),
+            ],
+          );
+        });
+  }
+
+  Future authsignup(String email, String phonenumber, String password) async {
+    Map body = {
+      "phoneNumber": phonenumber,
+      "email": email,
+      "password": password,
+    };
+    try {
+      final response = await http.post(
+          Uri.parse(
+            "http://simptomini-backend.herokuapp.com/api/v1/users",
+          ),
+          headers: {'Content-Type': 'application/json'},
+          body: const JsonEncoder().convert(body));
+      // print(response.body);
+      if (response.body == 'This email address already exists') {
+        errorAlert(response.body);
+      } else if (response.body == 'Bad Request') {
+        errorAlert('Error');
+      } else {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return const Login();
+        }));
+        // setData(response.body);
+        // errorAlert('on data');
+      }
+    } on Exception {
+      errorAlert('error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final design = Ui();
@@ -53,7 +105,7 @@ class _SignupState extends State<Signup> {
                               const BorderRadius.all(Radius.circular(10))),
                       child: TextFormField(
                         initialValue: '',
-                        onFieldSubmitted: (input) {
+                        onChanged: (input) {
                           setState(() {
                             email = input;
                           });
@@ -79,7 +131,7 @@ class _SignupState extends State<Signup> {
                       child: TextFormField(
                         initialValue: '',
                         keyboardType: TextInputType.phone,
-                        onFieldSubmitted: (input) {
+                        onChanged: (input) {
                           setState(() {
                             phoneNumber = input;
                           });
@@ -109,7 +161,7 @@ class _SignupState extends State<Signup> {
                             child: TextFormField(
                               initialValue: '',
                               obscureText: !showPassword,
-                              onFieldSubmitted: (passwordinput) {
+                              onChanged: (passwordinput) {
                                 setState(() {
                                   password = passwordinput;
                                 });
@@ -138,10 +190,7 @@ class _SignupState extends State<Signup> {
                   Center(
                     child: InkWell(
                       onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return const Login();
-                        }));
+                        authsignup(email, phoneNumber, password);
                       },
                       child: RichText(
                         text: TextSpan(

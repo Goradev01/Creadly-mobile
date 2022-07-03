@@ -1,19 +1,43 @@
-import 'package:creadlymobile/Onboarding/onboarding.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Auth/shared_preference.dart';
+import 'TabComponent/bottomnav.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  String auth = '';
+  void getData() async {
+    final SharedPreferences token = await SharedPreferences.getInstance();
+
+    setState(() {
+      auth = token.getString('AuthToken')!;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   Stream<Widget> loadingStream() async* {
     await Future<void>.delayed(const Duration(seconds: 0));
     yield const SplashScreen();
     await Future<void>.delayed(const Duration(seconds: 3));
-    yield const Onboarding();
+    yield auth.isNotEmpty ? const Shared_Preference() : const BottomNav();
   }
 
   // This widget is the root of your application.

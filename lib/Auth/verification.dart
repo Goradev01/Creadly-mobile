@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:camera/camera.dart';
 import 'package:creadlymobile/Auth/scanface.dart';
 import 'package:creadlymobile/style.dart';
@@ -134,7 +136,8 @@ class _VerificationpageState extends State<Verificationpage> {
           GestureDetector(
               onTap: () async {
                 final cameras = await availableCameras();
-                final firstCamera = cameras.first;
+                final firstCamera = cameras.firstWhere((camera) =>
+                    camera.lensDirection == CameraLensDirection.front);
                 await Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => Scanface(

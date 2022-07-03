@@ -2,6 +2,7 @@ import 'package:creadlymobile/Onboarding/welcome.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({Key? key}) : super(key: key);
@@ -52,6 +53,11 @@ class _OnboardingState extends State<Onboarding> {
     final design = Ui();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    Future<void> setData(data) async {
+      final SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setBool('firsttimer', data);
+    }
+
     return design.layout(Padding(
       padding: const EdgeInsets.fromLTRB(25, 70, 25, 0),
       child: Column(
@@ -96,6 +102,7 @@ class _OnboardingState extends State<Onboarding> {
                   })),
           InkWell(
             onTap: () {
+              setData(false);
               if (onboardNo < 2) {
                 controller.animateToPage(
                   onboardNo + 1,

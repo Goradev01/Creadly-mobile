@@ -1,3 +1,4 @@
+import 'package:creadlymobile/TabComponent/BNPL/bnpl.dart';
 import 'package:creadlymobile/TabComponent/Salary-Advanced/salary.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
@@ -139,10 +140,17 @@ class _HomepageState extends State<Homepage> {
                       itemBuilder: (BuildContext context, index) {
                         return InkWell(
                           onTap: () {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return const SalaryAdvanced();
-                            }));
+                            if (index == 0) {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return const Bnpl();
+                              }));
+                            } else {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return const SalaryAdvanced();
+                              }));
+                            }
                           },
                           child: Container(
                             width: width,

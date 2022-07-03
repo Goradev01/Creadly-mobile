@@ -9,7 +9,7 @@ class Ui {
   final pink = const Color(0xffB5179E);
   final darkPurple = const Color(0xff0D0520);
   final productblack = const Color(0xff1A0404);
-
+  final shadenew = const Color(0xffFFE9E9);
   final Shader linearGradient = const LinearGradient(
     colors: <Color>[Color(0xffB5179E), Color(0xff3A0CA3)],
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));

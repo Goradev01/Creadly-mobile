@@ -26,6 +26,7 @@ class _ScanidState extends State<Scanid> {
     _controller = CameraController(
       // Get a specific camera from the list of available cameras.
       widget.camera,
+       
       // Define the resolution to use.
       ResolutionPreset.medium,
     );
