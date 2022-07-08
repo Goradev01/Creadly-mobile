@@ -12,7 +12,7 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   int stock = 0;
-  bool confirm = false;
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -659,6 +659,7 @@ class _CartState extends State<Cart> {
         context: context,
         pageBuilder: (BuildContext context, Animation animation,
             Animation secondaryAnimation) {
+          bool confirm = false;
           return Dialog(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
@@ -778,13 +779,7 @@ class _CartState extends State<Cart> {
                               )),
                           GestureDetector(
                             onTap: () {
-                              // Navigator.of(
-                              //         context)
-                              //     .pop();
-                              // addaccount(
-                              //     context,
-                              //     width,
-                              //     design);
+                              Navigator.of(context).pop();
                             },
                             child: GestureDetector(
                                 onTap: () {

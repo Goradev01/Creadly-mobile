@@ -1,5 +1,6 @@
 import 'package:creadlymobile/TabComponent/BNPL/bnpl.dart';
 import 'package:creadlymobile/TabComponent/Salary-Advanced/salary.dart';
+import 'package:creadlymobile/TabComponent/Shop/productdetail.dart';
 import 'package:creadlymobile/TabComponent/Shop/searchproduct.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
@@ -275,56 +276,64 @@ class _HomepageState extends State<Homepage> {
                         itemCount: products.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Container(
-                            height: 150,
-                            width: 150,
-                            margin: const EdgeInsets.all(5),
-                            alignment: Alignment.topCenter,
-                            decoration: BoxDecoration(
-                              color: const Color(0xffFfFfFf),
-                              border: Border.all(
-                                  width: 1, color: const Color(0xfff8f8f8)),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                    height: 100,
-                                    width: (width - 50 - 15) / 2,
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xffF6F6F6),
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
-                                          topRight: Radius.circular(10)),
-                                    ),
-                                    child: Image.asset(
-                                      'assets/shopicon/${products[index].imageurl}.jpg',
-                                    )),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(12, 6, 0, 2),
-                                  child:
-                                      design.smallText(products[index].title),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  child: Row(children: [
-                                    design.amount(
-                                        design.ash,
-                                        12.0,
-                                        products[index].amount,
-                                        FontWeight.w500),
-                                    const Spacer(),
-                                    const Icon(Icons.favorite_outline,
-                                        size: 12, color: Color(0xff0d0d0d))
-                                  ]),
-                                )
-                              ],
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return const Productdetail();
+                              }));
+                            },
+                            child: Container(
+                              height: 150,
+                              width: 150,
+                              margin: const EdgeInsets.all(5),
+                              alignment: Alignment.topCenter,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffFfFfFf),
+                                border: Border.all(
+                                    width: 1, color: const Color(0xfff8f8f8)),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      height: 100,
+                                      width: (width - 50 - 15) / 2,
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xffF6F6F6),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10),
+                                            topRight: Radius.circular(10)),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/shopicon/${products[index].imageurl}.jpg',
+                                      )),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(12, 6, 0, 2),
+                                    child:
+                                        design.smallText(products[index].title),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Row(children: [
+                                      design.amount(
+                                          design.ash,
+                                          12.0,
+                                          products[index].amount,
+                                          FontWeight.w500),
+                                      const Spacer(),
+                                      const Icon(Icons.favorite_outline,
+                                          size: 12, color: Color(0xff0d0d0d))
+                                    ]),
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         })),
@@ -347,48 +356,56 @@ class _HomepageState extends State<Homepage> {
               physics: const ScrollPhysics(),
               children: List.generate(
                   products.length,
-                  (index) => Container(
-                        alignment: Alignment.topCenter,
-                        decoration: BoxDecoration(
-                          color: const Color(0xffFfFfFf),
-                          border: Border.all(
-                              width: 1, color: const Color(0xfff8f8f8)),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                height: 100,
-                                width: (width - 50 - 15) / 2,
-                                padding: const EdgeInsets.all(12),
-                                decoration: const BoxDecoration(
-                                  color: Color(0xffF6F6F6),
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                      topRight: Radius.circular(10)),
-                                ),
-                                child: Image.asset(
-                                  'assets/shopicon/${products[index].imageurl}.jpg',
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(12, 6, 0, 2),
-                              child: design.smallText(products[index].title),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              child: Row(children: [
-                                design.amount(design.ash, 12.0,
-                                    products[index].amount, FontWeight.w500),
-                                const Spacer(),
-                                const Icon(Icons.favorite_outline,
-                                    size: 12, color: Color(0xff0d0d0d))
-                              ]),
-                            )
-                          ],
+                  (index) => GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return const Productdetail();
+                          }));
+                        },
+                        child: Container(
+                          alignment: Alignment.topCenter,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffFfFfFf),
+                            border: Border.all(
+                                width: 1, color: const Color(0xfff8f8f8)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  height: 100,
+                                  width: (width - 50 - 15) / 2,
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xffF6F6F6),
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10),
+                                        topRight: Radius.circular(10)),
+                                  ),
+                                  child: Image.asset(
+                                    'assets/shopicon/${products[index].imageurl}.jpg',
+                                  )),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(12, 6, 0, 2),
+                                child: design.smallText(products[index].title),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                child: Row(children: [
+                                  design.amount(design.ash, 12.0,
+                                      products[index].amount, FontWeight.w500),
+                                  const Spacer(),
+                                  const Icon(Icons.favorite_outline,
+                                      size: 12, color: Color(0xff0d0d0d))
+                                ]),
+                              )
+                            ],
+                          ),
                         ),
                       )),
             ),

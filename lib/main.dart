@@ -34,10 +34,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   Stream<Widget> loadingStream() async* {
-    // await Future<void>.delayed(const Duration(seconds: 0));
-    // yield const SplashScreen();
+    await Future<void>.delayed(const Duration(seconds: 0));
+    yield const SplashScreen();
     await Future<void>.delayed(const Duration(seconds: 3));
-    yield auth.isNotEmpty ? const Shared_Preference() : const BottomNav();
+    yield auth.isEmpty ? const Shared_Preference() : const BottomNav();
   }
 
   // This widget is the root of your application.

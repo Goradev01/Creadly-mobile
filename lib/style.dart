@@ -25,6 +25,17 @@ class Ui {
     );
   }
 
+  Widget smallineartext(text, double size) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          fontSize: size,
+          fontWeight: FontWeight.w500,
+          foreground: Paint()..shader = linearGradient),
+    );
+  }
+
   Widget naira(color, size) {
     return Text('N',
         style: TextStyle(
@@ -35,7 +46,7 @@ class Ui {
             decoration: TextDecoration.lineThrough));
   }
 
-  Widget amount(color, size, text, weight) {
+  Widget amount(color, double size, text, weight) {
     return Row(
       children: [
         Text('N',
@@ -134,7 +145,7 @@ class Ui {
     return SizedBox(width: num);
   }
 
-  Widget longButton(width, text) {
+  Widget longButton(double width, text) {
     return Container(
       width: width,
       alignment: Alignment.center,
@@ -175,7 +186,7 @@ class Ui {
     );
   }
 
-  Widget longoutlineButton(width, text) {
+  Widget longoutlineButton(double width, text) {
     return Container(
       width: width,
       alignment: Alignment.center,

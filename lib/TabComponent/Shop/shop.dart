@@ -26,7 +26,7 @@ class ShoppageState extends State<Shoppage> {
     return design.layout(SafeArea(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
+          padding: const EdgeInsets.fromLTRB(25, 25, 25, 20),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Center(
