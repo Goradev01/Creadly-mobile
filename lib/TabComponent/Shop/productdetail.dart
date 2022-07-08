@@ -52,7 +52,7 @@ class _ProductdetailState extends State<Productdetail> {
                           )),
                     ),
                     design.wspacer(19),
-                    design.title('IMac 47 Inches'),
+                    design.title('IMac 47 Inches '),
                   ],
                 ),
               ),
