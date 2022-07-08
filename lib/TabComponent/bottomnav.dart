@@ -1,4 +1,5 @@
 import 'package:creadlymobile/TabComponent/Profile/profile.dart';
+import 'package:creadlymobile/TabComponent/Shop/shop.dart';
 import 'package:creadlymobile/TabComponent/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,7 +20,7 @@ class _BottomNavState extends State<BottomNav> {
         index: tabno,
         children: [
           const Homepage(),
-          Container(),
+          const Shoppage(),
           Container(),
           const Profile(),
         ],

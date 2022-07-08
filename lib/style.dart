@@ -14,7 +14,7 @@ class Ui {
     colors: <Color>[Color(0xffB5179E), Color(0xff3A0CA3)],
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
-  lineartext(text) {
+  Widget lineartext(text) {
     return Text(
       text,
       textAlign: TextAlign.center,
@@ -25,7 +25,7 @@ class Ui {
     );
   }
 
-  naira(color, size) {
+  Widget naira(color, size) {
     return Text('N',
         style: TextStyle(
             fontSize: size,
@@ -35,7 +35,7 @@ class Ui {
             decoration: TextDecoration.lineThrough));
   }
 
-  amount(color, size, text, weight) {
+  Widget amount(color, size, text, weight) {
     return Row(
       children: [
         Text('N',
@@ -56,7 +56,17 @@ class Ui {
     );
   }
 
-  ptext(text) {
+  Widget input(color, double size, text, weight) {
+    return Text(text,
+        style: TextStyle(
+          fontSize: size,
+          color: color,
+          fontWeight: weight,
+          decorationColor: color,
+        ));
+  }
+
+  Widget ptext(text) {
     return Text(
       text,
       style: const TextStyle(
@@ -66,7 +76,7 @@ class Ui {
     );
   }
 
-  title(text) {
+  Widget title(text) {
     return Text(
       text,
       style: TextStyle(
@@ -74,14 +84,14 @@ class Ui {
     );
   }
 
-  smalltext(text) {
+  Widget smalltext(text) {
     return Text(
       text,
       style: TextStyle(color: ash, fontSize: 10, fontWeight: FontWeight.w400),
     );
   }
 
-  layout(widgets) {
+  Widget layout(widgets) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0xffffffff),
@@ -90,7 +100,7 @@ class Ui {
         ));
   }
 
-  stackpage(void nav, text) {
+  Widget stackpage(void nav, text) {
     return Row(
       children: [
         GestureDetector(
@@ -116,15 +126,15 @@ class Ui {
     );
   }
 
-  hspacer(double num) {
+  Widget hspacer(double num) {
     return SizedBox(height: num);
   }
 
-  wspacer(double num) {
+  Widget wspacer(double num) {
     return SizedBox(width: num);
   }
 
-  longButton(width, text) {
+  Widget longButton(width, text) {
     return Container(
       width: width,
       alignment: Alignment.center,
@@ -139,7 +149,7 @@ class Ui {
     );
   }
 
-  linearGButton(width, text) {
+  Widget linearGButton(width, text) {
     return Container(
       width: width,
       alignment: Alignment.center,
@@ -157,7 +167,15 @@ class Ui {
     );
   }
 
-  longoutlineButton(width, text) {
+  Widget smallText(text) {
+    return Text(
+      text,
+      style: const TextStyle(
+          color: Color(0xff8e8e8e), fontSize: 10, fontWeight: FontWeight.w400),
+    );
+  }
+
+  Widget longoutlineButton(width, text) {
     return Container(
       width: width,
       alignment: Alignment.center,
