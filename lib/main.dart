@@ -40,7 +40,6 @@ class _MyAppState extends State<MyApp> {
     yield auth.isEmpty ? const Shared_Preference() : const BottomNav();
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final design = Ui();
