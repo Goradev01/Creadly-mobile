@@ -31,21 +31,25 @@ class _WelcomeState extends State<Welcome> {
           design.hspacer(30),
           InkWell(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
                 return const Signup();
               }));
             },
             child: design.longoutlineButton(width, 'Sign up'),
           ),
           design.hspacer(15),
-          InkWell(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return const Login();
-              }));
-            },
-            child: design.longButton(width, 'Sign in'),
-          ),
+          Builder(builder: (context) {
+            return InkWell(
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return const Login();
+                }));
+              },
+              child: design.longButton(width, 'Sign in'),
+            );
+          }),
         ],
       ),
     ));

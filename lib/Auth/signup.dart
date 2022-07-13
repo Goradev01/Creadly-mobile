@@ -1,9 +1,9 @@
-import 'dart:convert';
+// ignore_for_file: use_build_context_synchronously
 
-import 'package:creadlymobile/Auth/login.dart';
+import 'package:creadlymobile/Statemangement/data.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -18,54 +18,6 @@ class _SignupState extends State<Signup> {
   String phoneNumber = '';
   final formkey = GlobalKey<FormState>();
   bool showPassword = false;
-  void errorAlert(response) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: Text(response),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    //DeleteProduct(Image, Category, Id)
-
-                    Navigator.pop(context);
-                  },
-                  child: const Text('back')),
-            ],
-          );
-        });
-  }
-
-  Future authsignup(String email, String phonenumber, String password) async {
-    Map body = {
-      "phoneNumber": phonenumber,
-      "email": email,
-      "password": password,
-    };
-    try {
-      final response = await http.post(
-          Uri.parse(
-            "http://simptomini-backend.herokuapp.com/api/v1/users",
-          ),
-          headers: {'Content-Type': 'application/json'},
-          body: const JsonEncoder().convert(body));
-      // print(response.body);
-      if (response.body == 'This email address already exists') {
-        errorAlert(response.body);
-      } else if (response.body == 'Bad Request') {
-        errorAlert('Error');
-      } else {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return const Login();
-        }));
-        // setData(response.body);
-        // errorAlert('on data');
-      }
-    } on Exception {
-      errorAlert('error');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +142,8 @@ class _SignupState extends State<Signup> {
                   Center(
                     child: InkWell(
                       onTap: () {
-                        authsignup(email, phoneNumber, password);
+                        Provider.of<DataManagement>(context, listen: false)
+                            .authsignup(email, phoneNumber, password, context);
                       },
                       child: RichText(
                         text: TextSpan(

@@ -1,8 +1,10 @@
 import 'package:creadlymobile/Auth/userregistration.dart';
+import 'package:creadlymobile/Statemangement/data.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -197,31 +199,37 @@ class _ProfileState extends State<Profile> {
                             const Divider(),
                           ],
                         ))),
-            ListTile(
-              leading: Container(
-                width: 30,
-                alignment: Alignment.center,
-                height: 30,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: const Color(0xffFFE9E9),
-                    boxShadow: [
-                      BoxShadow(
-                          offset: Offset.fromDirection(0.1, 0.1),
-                          color: Colors.grey)
-                    ]),
-                child: const Icon(
-                  Icons.logout_outlined,
-                  color: Color(0xffFF4848),
-                  size: 14,
+            GestureDetector(
+              onTap: () {
+                Provider.of<DataManagement>(context, listen: false)
+                    .updateAuth('');
+              },
+              child: ListTile(
+                leading: Container(
+                  width: 30,
+                  alignment: Alignment.center,
+                  height: 30,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: const Color(0xffFFE9E9),
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset.fromDirection(0.1, 0.1),
+                            color: Colors.grey)
+                      ]),
+                  child: const Icon(
+                    Icons.logout_outlined,
+                    color: Color(0xffFF4848),
+                    size: 14,
+                  ),
                 ),
-              ),
-              title: Text(
-                'Log out',
-                style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w500,
-                    color: design.ash),
+                title: Text(
+                  'Log out',
+                  style: TextStyle(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w500,
+                      color: design.ash),
+                ),
               ),
             ),
           ],

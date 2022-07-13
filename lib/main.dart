@@ -1,13 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:creadlymobile/Statemangement/data.dart';
+import 'package:creadlymobile/TabComponent/bottomnav.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'Auth/shared_preference.dart';
-import 'TabComponent/bottomnav.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider<DataManagement>(
+    create: (_) => DataManagement(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -18,26 +23,34 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String auth = '';
+  // late Widget auth;
+
   void getData() async {
     final SharedPreferences token = await SharedPreferences.getInstance();
-
-    setState(() {
-      auth = token.getString('AuthToken')!;
-    });
+    String auth = token.getString('AuthToken')!;
+    Provider.of<DataManagement>(context, listen: false).updateAuth(auth);
   }
 
   @override
   void initState() {
     super.initState();
+
     getData();
+    Provider.of<DataManagement>(context, listen: false).checkfirsttimer();
   }
 
   Stream<Widget> loadingStream() async* {
     await Future<void>.delayed(const Duration(seconds: 0));
     yield const SplashScreen();
     await Future<void>.delayed(const Duration(seconds: 3));
-    yield auth.isEmpty ? const Shared_Preference() : const BottomNav();
+
+    yield Consumer<DataManagement>(builder: (context, data, child) {
+      if (data.auth.isNotEmpty) {
+        return const BottomNav();
+      } else {
+        return data.newuser;
+      }
+    });
   }
 
   @override

@@ -1,4 +1,4 @@
-import 'package:creadlymobile/Auth/welcome.dart';
+import 'package:creadlymobile/Auth/login.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
 
@@ -77,7 +77,7 @@ class _OtpState extends State<Otp> {
                 onTap: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
-                    return const WelcomeAuth();
+                    return const Login();
                   }));
                 },
                 child: design.longButton(width, 'Submit'),
