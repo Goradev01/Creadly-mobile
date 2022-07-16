@@ -1,5 +1,11 @@
 import 'package:creadlymobile/Auth/userregistration.dart';
 import 'package:creadlymobile/Statemangement/data.dart';
+import 'package:creadlymobile/TabComponent/Profile/card.dart';
+import 'package:creadlymobile/TabComponent/Profile/notification.dart';
+import 'package:creadlymobile/TabComponent/Profile/referral.dart';
+import 'package:creadlymobile/TabComponent/Profile/transaction.dart';
+import 'package:creadlymobile/TabComponent/Profile/userinfo.dart';
+import 'package:creadlymobile/TabComponent/Profile/wishlist.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,33 +50,33 @@ class _ProfileState extends State<Profile> {
             height: 8,
           ),
           title: 'Info',
-          nav: Container()),
+          nav: const Userinfo()),
       ListItem(
           icon: const Icon(Icons.favorite_outline,
               size: 14, color: Color(0xffD94848)),
           title: 'Wish list',
-          nav: Container()),
+          nav: const Wishlist()),
       ListItem(
           icon: const Icon(Icons.send_outlined,
               size: 14, color: Color(0xffB5179E)),
           title: 'Transaction History',
-          nav: Container()),
+          nav: const Transaction()),
       ListItem(
           icon: Icon(Icons.notifications, size: 14, color: design.blue),
           title: 'Notifications',
-          nav: Container()),
+          nav: const Notificationpage()),
       ListItem(
           icon: SvgPicture.asset(
             'assets/card.svg',
           ),
           title: 'Cards and Accounts',
-          nav: Container()),
+          nav: const Cardpage()),
       ListItem(
           icon: SvgPicture.asset(
             'assets/credit.svg',
           ),
           title: 'Referrals & Credit Points',
-          nav: Container()),
+          nav: const Referral()),
     ];
 
     return design.layout(SingleChildScrollView(
@@ -116,44 +122,49 @@ class _ProfileState extends State<Profile> {
                           fontWeight: FontWeight.w700,
                           color: design.productblack),
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(3),
-                          color: design.shadeP.withOpacity(0.2)),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Credley/kanyetgev',
-                            style: TextStyle(
-                                fontSize: 10.0,
-                                fontWeight: FontWeight.w500,
-                                color: design.ash),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          var snackBar = SnackBar(
+                            backgroundColor: Colors.white,
+                            content: Text(
+                              'Copied!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w500,
+                                  color: design.ash),
+                            ),
+                          );
+                          Clipboard.setData(
+                              const ClipboardData(text: "Credley/kanyetgev"));
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        },
+                        child: Container(
+                          width: 136,
+                          height: 21,
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.symmetric(vertical: 5),
+                          // padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(3),
+                              color: design.shadeP.withOpacity(0.2)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Credley/kanyetgev',
+                                style: TextStyle(
+                                    fontSize: 10.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: design.ash),
+                              ),
+                              design.wspacer(5),
+                              Icon(Icons.copy, color: design.blue, size: 9.17)
+                            ],
                           ),
-                          design.wspacer(5),
-                          GestureDetector(
-                              onTap: () {
-                                var snackBar = SnackBar(
-                                  backgroundColor: Colors.white,
-                                  content: Text(
-                                    'Copied!',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w500,
-                                        color: design.ash),
-                                  ),
-                                );
-                                Clipboard.setData(const ClipboardData(
-                                    text: "Credley/kanyetgev"));
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              },
-                              child: Icon(Icons.copy,
-                                  color: design.blue, size: 9.17))
-                        ],
+                        ),
                       ),
                     ),
                   ],

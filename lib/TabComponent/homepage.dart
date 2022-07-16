@@ -350,7 +350,7 @@ class _HomepageState extends State<Homepage> {
               // crossAxisCount: 2,
               shrinkWrap: true,
               crossAxisCount: 2,
-              childAspectRatio: 1.18,
+              childAspectRatio: 1.2,
               crossAxisSpacing: 15.0,
               mainAxisSpacing: 10.0,
               physics: const ScrollPhysics(),

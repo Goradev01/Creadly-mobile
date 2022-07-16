@@ -5,6 +5,8 @@ class Ui {
   final numb = const Color(0xffA9A9BC);
   final shadeP = const Color(0xffEDE9F7);
   final shadePi = const Color(0xffF8EAF6);
+  final lightgrey = const Color(0xffF8F8FA);
+
   final ash = const Color(0xff2E2E2E);
   final pink = const Color(0xffB5179E);
   final darkPurple = const Color(0xff0D0520);
@@ -84,6 +86,35 @@ class Ui {
           fontSize: 14.0,
           fontWeight: FontWeight.w700,
           color: Color(0xff2E2E2E)),
+    );
+  }
+
+  Widget backnav(context, text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+                alignment: Alignment.center,
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xffF8F8FA)),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 10,
+                  color: blue,
+                )),
+          ),
+          wspacer(19),
+          title(text),
+        ],
+      ),
     );
   }
 
