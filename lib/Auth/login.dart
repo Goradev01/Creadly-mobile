@@ -1,7 +1,9 @@
-import 'package:creadlymobile/Auth/otp.dart';
 import 'package:creadlymobile/Auth/signup.dart';
+import 'package:creadlymobile/Statemangement/data.dart';
+import 'package:creadlymobile/TabComponent/bottomnav.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class _LoginState extends State<Login> {
 
   final formkey = GlobalKey<FormState>();
   bool showPassword = false;
+
   @override
   Widget build(BuildContext context) {
     final design = Ui();
@@ -52,9 +55,9 @@ class _LoginState extends State<Login> {
                               const BorderRadius.all(Radius.circular(10))),
                       child: TextFormField(
                         initialValue: '',
-                        onFieldSubmitted: (input) {
+                        onChanged: (input) {
                           setState(() {
-                            email = input;
+                            email = input.trim();
                           });
                         },
                         decoration: const InputDecoration(
@@ -84,9 +87,9 @@ class _LoginState extends State<Login> {
                             child: TextFormField(
                               initialValue: '',
                               obscureText: !showPassword,
-                              onFieldSubmitted: (passwordinput) {
+                              onChanged: (passwordinput) {
                                 setState(() {
-                                  password = passwordinput;
+                                  password = passwordinput.trim();
                                 });
                               },
                               decoration: const InputDecoration(
@@ -113,10 +116,17 @@ class _LoginState extends State<Login> {
                   design.hspacer(50),
                   InkWell(
                       onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return const Otp();
-                        }));
+                        Provider.of<DataManagement>(context, listen: false)
+                            .authlogin(
+                              email,
+                              password,
+                              context,
+                            )
+                            .then((value) => Navigator.of(context)
+                                    .pushReplacement(
+                                        MaterialPageRoute(builder: (context) {
+                                  return const BottomNav();
+                                })));
                       },
                       child: design.longButton(width, 'Log in')),
                   Center(

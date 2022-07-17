@@ -1,4 +1,6 @@
+import 'package:creadlymobile/TabComponent/Order/order.dart';
 import 'package:creadlymobile/TabComponent/Profile/profile.dart';
+import 'package:creadlymobile/TabComponent/Shop/shop.dart';
 import 'package:creadlymobile/TabComponent/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,11 +19,11 @@ class _BottomNavState extends State<BottomNav> {
     return Scaffold(
       body: IndexedStack(
         index: tabno,
-        children: [
-          const Homepage(),
-          Container(),
-          Container(),
-          const Profile(),
+        children: const [
+          Homepage(),
+          Shoppage(),
+          Orderpage(),
+          Profile(),
         ],
       ),
       bottomNavigationBar: BottomAppBar(

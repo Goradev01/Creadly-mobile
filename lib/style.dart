@@ -5,18 +5,21 @@ class Ui {
   final numb = const Color(0xffA9A9BC);
   final shadeP = const Color(0xffEDE9F7);
   final shadePi = const Color(0xffF8EAF6);
+  final lightgrey = const Color(0xffF8F8FA);
+
   final ash = const Color(0xff2E2E2E);
   final pink = const Color(0xffB5179E);
   final darkPurple = const Color(0xff0D0520);
   final productblack = const Color(0xff1A0404);
-
+  final shadenew = const Color(0xffFFE9E9);
   final Shader linearGradient = const LinearGradient(
     colors: <Color>[Color(0xffB5179E), Color(0xff3A0CA3)],
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
-  lineartext(text) {
+  Widget lineartext(text) {
     return Text(
       text,
+      textAlign: TextAlign.center,
       style: TextStyle(
           fontSize: 32.0,
           fontWeight: FontWeight.w500,
@@ -24,7 +27,18 @@ class Ui {
     );
   }
 
-  naira(color, size) {
+  Widget smallineartext(text, double size) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          fontSize: size,
+          fontWeight: FontWeight.w500,
+          foreground: Paint()..shader = linearGradient),
+    );
+  }
+
+  Widget naira(color, size) {
     return Text('N',
         style: TextStyle(
             fontSize: size,
@@ -34,7 +48,7 @@ class Ui {
             decoration: TextDecoration.lineThrough));
   }
 
-  amount(color, size, text, weight) {
+  Widget amount(color, double size, text, weight) {
     return Row(
       children: [
         Text('N',
@@ -55,7 +69,17 @@ class Ui {
     );
   }
 
-  ptext(text) {
+  Widget input(color, double size, text, weight) {
+    return Text(text,
+        style: TextStyle(
+          fontSize: size,
+          color: color,
+          fontWeight: weight,
+          decorationColor: color,
+        ));
+  }
+
+  Widget ptext(text) {
     return Text(
       text,
       style: const TextStyle(
@@ -65,7 +89,36 @@ class Ui {
     );
   }
 
-  title(text) {
+  Widget backnav(context, text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+                alignment: Alignment.center,
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xffF8F8FA)),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 10,
+                  color: blue,
+                )),
+          ),
+          wspacer(19),
+          title(text),
+        ],
+      ),
+    );
+  }
+
+  Widget title(text) {
     return Text(
       text,
       style: TextStyle(
@@ -73,14 +126,14 @@ class Ui {
     );
   }
 
-  smalltext(text) {
+  Widget smalltext(text) {
     return Text(
       text,
       style: TextStyle(color: ash, fontSize: 10, fontWeight: FontWeight.w400),
     );
   }
 
-  layout(widgets) {
+  Widget layout(widgets) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0xffffffff),
@@ -89,15 +142,41 @@ class Ui {
         ));
   }
 
-  hspacer(double num) {
+  Widget stackpage(void nav, text) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () {
+            nav;
+          },
+          child: Container(
+              alignment: Alignment.center,
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(0xffF8F8FA)),
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 10,
+                color: blue,
+              )),
+        ),
+        wspacer(19),
+        title(text),
+      ],
+    );
+  }
+
+  Widget hspacer(double num) {
     return SizedBox(height: num);
   }
 
-  wspacer(double num) {
+  Widget wspacer(double num) {
     return SizedBox(width: num);
   }
 
-  longButton(width, text) {
+  Widget longButton(double width, text) {
     return Container(
       width: width,
       alignment: Alignment.center,
@@ -112,7 +191,7 @@ class Ui {
     );
   }
 
-  linearGButton(width, text) {
+  Widget linearGButton(width, text) {
     return Container(
       width: width,
       alignment: Alignment.center,
@@ -130,7 +209,15 @@ class Ui {
     );
   }
 
-  longoutlineButton(width, text) {
+  Widget smallText(text) {
+    return Text(
+      text,
+      style: const TextStyle(
+          color: Color(0xff8e8e8e), fontSize: 10, fontWeight: FontWeight.w400),
+    );
+  }
+
+  Widget longoutlineButton(double width, text) {
     return Container(
       width: width,
       alignment: Alignment.center,

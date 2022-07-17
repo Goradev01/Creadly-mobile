@@ -1,5 +1,6 @@
-import 'package:camera/camera.dart';
-import 'package:creadlymobile/Auth/facescan.dart';
+// import 'package:camera/camera.dart';
+
+import 'package:creadlymobile/Auth/verification.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
 
@@ -326,15 +327,20 @@ class _RegistrationState extends State<Registration> {
             ),
             GestureDetector(
                 onTap: () async {
-                  final cameras = await availableCameras();
-                  final firstCamera = cameras.first;
-                  await Navigator.of(context).push(
+                  // final cameras = await availableCameras();
+                  // final firstCamera = cameras.first;
+                  // await Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => TakePictureScreen(
+                  //       camera: firstCamera,
+                  //       // Pass the automatically generated path to
+                  //       // the DisplayPictureScreen widget.
+                  //     ),
+                  //   ),
+                  // );
+                  Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => TakePictureScreen(
-                        camera: firstCamera,
-                        // Pass the automatically generated path to
-                        // the DisplayPictureScreen widget.
-                      ),
+                      builder: (context) => const Verificationpage(),
                     ),
                   );
                 },

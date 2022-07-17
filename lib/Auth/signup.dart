@@ -1,6 +1,9 @@
-import 'package:creadlymobile/Auth/login.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:creadlymobile/Statemangement/data.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -15,6 +18,7 @@ class _SignupState extends State<Signup> {
   String phoneNumber = '';
   final formkey = GlobalKey<FormState>();
   bool showPassword = false;
+
   @override
   Widget build(BuildContext context) {
     final design = Ui();
@@ -53,7 +57,7 @@ class _SignupState extends State<Signup> {
                               const BorderRadius.all(Radius.circular(10))),
                       child: TextFormField(
                         initialValue: '',
-                        onFieldSubmitted: (input) {
+                        onChanged: (input) {
                           setState(() {
                             email = input;
                           });
@@ -79,7 +83,7 @@ class _SignupState extends State<Signup> {
                       child: TextFormField(
                         initialValue: '',
                         keyboardType: TextInputType.phone,
-                        onFieldSubmitted: (input) {
+                        onChanged: (input) {
                           setState(() {
                             phoneNumber = input;
                           });
@@ -109,7 +113,7 @@ class _SignupState extends State<Signup> {
                             child: TextFormField(
                               initialValue: '',
                               obscureText: !showPassword,
-                              onFieldSubmitted: (passwordinput) {
+                              onChanged: (passwordinput) {
                                 setState(() {
                                   password = passwordinput;
                                 });
@@ -138,10 +142,8 @@ class _SignupState extends State<Signup> {
                   Center(
                     child: InkWell(
                       onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return const Login();
-                        }));
+                        Provider.of<DataManagement>(context, listen: false)
+                            .authsignup(email, phoneNumber, password, context);
                       },
                       child: RichText(
                         text: TextSpan(

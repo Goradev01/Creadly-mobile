@@ -66,8 +66,10 @@ class _WithdrawalhistoryState extends State<Withdrawalhistory> {
                 design.title('Previous Withdrawals'),
                 const Spacer(),
                 TextButton(
-                  onPressed: () {},
-                  child: Text('View all',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Go Back',
                       style: TextStyle(
                           fontSize: 12.0,
                           decorationColor: design.blue,
