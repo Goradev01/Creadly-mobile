@@ -345,12 +345,12 @@ class _HomepageState extends State<Homepage> {
             child: design.input(design.ash, 15, "Products", FontWeight.w700),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+            padding: const EdgeInsets.fromLTRB(25, 10, 25, 50),
             child: GridView.count(
               // crossAxisCount: 2,
               shrinkWrap: true,
               crossAxisCount: 2,
-              childAspectRatio: 1.2,
+              childAspectRatio: 1.12,
               crossAxisSpacing: 15.0,
               mainAxisSpacing: 10.0,
               physics: const ScrollPhysics(),

@@ -1,5 +1,6 @@
 import 'package:creadlymobile/Auth/signup.dart';
 import 'package:creadlymobile/Statemangement/data.dart';
+import 'package:creadlymobile/TabComponent/bottomnav.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -121,7 +122,11 @@ class _LoginState extends State<Login> {
                               password,
                               context,
                             )
-                            .then((value) => Navigator.of(context).pop());
+                            .then((value) => Navigator.of(context)
+                                    .pushReplacement(
+                                        MaterialPageRoute(builder: (context) {
+                                  return const BottomNav();
+                                })));
                       },
                       child: design.longButton(width, 'Log in')),
                   Center(
