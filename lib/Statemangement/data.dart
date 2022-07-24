@@ -7,10 +7,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../Onboarding/onboarding.dart';
+import '../TabComponent/bottomnav.dart';
 
 class DataManagement extends ChangeNotifier {
   // Loading screen / auth checker
   String auth = '';
+  bool loadlogin = false;
+  bool loadsignup = false;
+  void updateloadlogin(bool val) {
+    loadlogin = val;
+
+    notifyListeners();
+  }
+
+  void updateloadsignup(bool val) {
+    loadsignup = val;
+
+    notifyListeners();
+  }
 
   void updateAuth(token) async {
     auth = token;
@@ -47,15 +61,22 @@ class DataManagement extends ChangeNotifier {
 //  print(response.body);
       if (response.body == 'Unauthorized') {
         errorAlert(response.body, context);
+        updateloadlogin(false);
       } else if (response.body == 'Bad Request') {
         errorAlert('Error', context);
+        updateloadlogin(false);
       } else {
         updateAuth(response.body);
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) {
+          return const BottomNav();
+        }));
 
         // errorAlert('on data');
       }
     } catch (e) {
       errorAlert('error', context);
+      updateloadlogin(false);
     }
   }
 
@@ -76,8 +97,10 @@ class DataManagement extends ChangeNotifier {
       // print(response.body);
       if (response.body == 'This email address already exists') {
         errorAlert(response.body, context);
+        updateloadsignup(false);
       } else if (response.body == 'Bad Request') {
         errorAlert('Error', context);
+        updateloadsignup(false);
       } else {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return const Otp();
@@ -87,6 +110,7 @@ class DataManagement extends ChangeNotifier {
       }
     } catch (e) {
       errorAlert('error', context);
+      updateloadsignup(false);
     }
   }
 

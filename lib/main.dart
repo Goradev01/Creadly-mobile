@@ -1,11 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:creadlymobile/Statemangement/data.dart';
-import 'package:creadlymobile/TabComponent/bottomnav.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'TabComponent/bottomnav.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +43,7 @@ class _MyAppState extends State<MyApp> {
   Stream<Widget> loadingStream() async* {
     await Future<void>.delayed(const Duration(seconds: 0));
     yield const SplashScreen();
-    await Future<void>.delayed(const Duration(seconds: 3));
+    await Future<void>.delayed(const Duration(seconds: 10));
 
     yield Consumer<DataManagement>(builder: (context, data, child) {
       if (data.auth.isNotEmpty) {
@@ -91,7 +92,8 @@ class _SplashScreenState extends State<SplashScreen> {
             alignment: Alignment.topRight,
             child: Image.asset('assets/splash1.png')),
         Align(
-            alignment: Alignment.center, child: Image.asset('assets/logo.png')),
+            alignment: Alignment.center,
+            child: Image.asset('assets/splash.gif')),
         Align(
             alignment: Alignment.bottomLeft,
             child: Image.asset('assets/splash2.png')),

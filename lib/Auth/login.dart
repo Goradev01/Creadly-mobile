@@ -1,6 +1,5 @@
 import 'package:creadlymobile/Auth/signup.dart';
 import 'package:creadlymobile/Statemangement/data.dart';
-import 'package:creadlymobile/TabComponent/bottomnav.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -117,18 +116,52 @@ class _LoginState extends State<Login> {
                   InkWell(
                       onTap: () {
                         Provider.of<DataManagement>(context, listen: false)
+                            .updateloadlogin(true);
+                        Provider.of<DataManagement>(context, listen: false)
                             .authlogin(
-                              email,
-                              password,
-                              context,
-                            )
-                            .then((value) => Navigator.of(context)
-                                    .pushReplacement(
-                                        MaterialPageRoute(builder: (context) {
-                                  return const BottomNav();
-                                })));
+                          email,
+                          password,
+                          context,
+                        );
                       },
-                      child: design.longButton(width, 'Log in')),
+                      child: Container(
+                        width: width,
+                        height: 50,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                            color: design.blue,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const Expanded(child: SizedBox()),
+                              const Expanded(
+                                child: Center(
+                                  child: Text("Log in",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white)),
+                                ),
+                              ),
+                              const Spacer(),
+                              Consumer<DataManagement>(
+                                  builder: (context, data, child) {
+                                return Visibility(
+                                  visible: data.loadlogin,
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                        // value: 0.5,
+                                        color: design.blue,
+                                        backgroundColor: Colors.white),
+                                  ),
+                                );
+                              })
+                            ]),
+                      )),
                   Center(
                     child: InkWell(
                       onTap: () {

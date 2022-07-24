@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:creadlymobile/Auth/login.dart';
 import 'package:creadlymobile/Statemangement/data.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
@@ -138,12 +139,57 @@ class _SignupState extends State<Signup> {
                         ],
                       )),
                   design.hspacer(50),
-                  design.longButton(width, 'Sign up'),
+                  GestureDetector(
+                    onTap: () {
+                      Provider.of<DataManagement>(context, listen: false)
+                          .updateloadsignup(true);
+                      Provider.of<DataManagement>(context, listen: false)
+                          .authsignup(email, phoneNumber, password, context);
+                    },
+                    child: Container(
+                      width: width,
+                      height: 50,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                          color: design.blue,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Expanded(child: SizedBox()),
+                            const Expanded(
+                                child: Text("Sign up",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white))),
+                            const Spacer(),
+                            Consumer<DataManagement>(
+                                builder: (context, data, child) {
+                              return Visibility(
+                                visible: data.loadlogin,
+                                child: const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                      strokeWidth: 3,
+                                      // value: 0.5,
+                                      color: Color(0xff71BBE0),
+                                      backgroundColor: Colors.white),
+                                ),
+                              );
+                            })
+                          ]),
+                    ),
+                  ),
+                  // design.longButton(width, 'Sign up'),
                   Center(
                     child: InkWell(
                       onTap: () {
-                        Provider.of<DataManagement>(context, listen: false)
-                            .authsignup(email, phoneNumber, password, context);
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return const Login();
+                        }));
                       },
                       child: RichText(
                         text: TextSpan(

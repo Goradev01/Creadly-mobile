@@ -214,6 +214,8 @@ class _ProfileState extends State<Profile> {
               onTap: () {
                 Provider.of<DataManagement>(context, listen: false)
                     .updateAuth('');
+
+                Navigator.of(context).pop(); 
               },
               child: ListTile(
                 leading: Container(

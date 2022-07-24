@@ -4,7 +4,7 @@
    <application
         android:label="creadlymobile"
         android:name="${applicationName}"
-        android:icon="@mipmap/logo">
+        android:icon="@mipmap/appicon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
