@@ -37,25 +37,25 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     getData();
-    Provider.of<DataManagement>(context, listen: false).checkfirsttimer();
-  }
-
-  Stream<Widget> loadingStream() async* {
-    await Future<void>.delayed(const Duration(seconds: 0));
-    yield const SplashScreen();
-    await Future<void>.delayed(const Duration(seconds: 10));
-
-    yield Consumer<DataManagement>(builder: (context, data, child) {
-      if (data.auth.isNotEmpty) {
-        return const BottomNav();
-      } else {
-        return data.newuser;
-      }
-    });
+    // Provider.of<DataManagement>(context, listen: false).checkfirsttimer();
   }
 
   @override
   Widget build(BuildContext context) {
+    Stream<Widget> loadingStream() async* {
+      await Future<void>.delayed(const Duration(seconds: 0));
+      yield const SplashScreen();
+      await Future<void>.delayed(const Duration(seconds: 5));
+
+      yield Consumer<DataManagement>(builder: (context, data, child) {
+        if (data.auth.isNotEmpty) {
+          return const BottomNav();
+        } else {
+          return data.newuser;
+        }
+      });
+    }
+
     final design = Ui();
     return MaterialApp(
       title: 'Creadly',

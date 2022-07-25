@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../Onboarding/onboarding.dart';
-import '../TabComponent/bottomnav.dart';
 
 class DataManagement extends ChangeNotifier {
   // Loading screen / auth checker
@@ -66,11 +65,10 @@ class DataManagement extends ChangeNotifier {
         errorAlert('Error', context);
         updateloadlogin(false);
       } else {
-        updateAuth(response.body);
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (context) {
-          return const BottomNav();
-        }));
+        auth = response.body;
+        final SharedPreferences pref = await SharedPreferences.getInstance();
+
+        pref.setString('AuthToken', response.body);
 
         // errorAlert('on data');
       }
@@ -78,6 +76,7 @@ class DataManagement extends ChangeNotifier {
       errorAlert('error', context);
       updateloadlogin(false);
     }
+    notifyListeners();
   }
 
   Future authsignup(

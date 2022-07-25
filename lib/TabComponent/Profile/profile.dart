@@ -215,7 +215,7 @@ class _ProfileState extends State<Profile> {
                 Provider.of<DataManagement>(context, listen: false)
                     .updateAuth('');
 
-                Navigator.of(context).pop(); 
+                 
               },
               child: ListTile(
                 leading: Container(

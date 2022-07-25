@@ -119,10 +119,11 @@ class _LoginState extends State<Login> {
                             .updateloadlogin(true);
                         Provider.of<DataManagement>(context, listen: false)
                             .authlogin(
-                          email,
-                          password,
-                          context,
-                        );
+                              email,
+                              password,
+                              context,
+                            )
+                            .then((value) => Navigator.of(context).pop());
                       },
                       child: Container(
                         width: width,

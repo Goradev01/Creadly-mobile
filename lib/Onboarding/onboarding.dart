@@ -1,8 +1,10 @@
-import 'package:creadlymobile/Onboarding/welcome.dart';
 import 'package:creadlymobile/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Statemangement/data.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({Key? key}) : super(key: key);
@@ -110,10 +112,8 @@ class _OnboardingState extends State<Onboarding> {
                   curve: Curves.easeInOut,
                 );
               } else {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return const Welcome();
-                }));
+                Provider.of<DataManagement>(context, listen: false)
+                    .checkfirsttimer();
               }
             },
             child: Container(
