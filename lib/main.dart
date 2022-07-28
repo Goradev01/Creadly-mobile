@@ -43,8 +43,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     Stream<Widget> loadingStream() async* {
-      // await Future<void>.delayed(const Duration(seconds: 0));
-      // yield const SplashScreen();
+      await Future<void>.delayed(const Duration(seconds: 0));
+      yield const SplashScreen();
       await Future<void>.delayed(const Duration(seconds: 5));
 
       yield Consumer<DataManagement>(builder: (context, data, child) {
