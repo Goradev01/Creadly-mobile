@@ -9,6 +9,7 @@ class Ui {
 
   final ash = const Color(0xff2E2E2E);
   final pink = const Color(0xffB5179E);
+
   final darkPurple = const Color(0xff0D0520);
   final productblack = const Color(0xff1A0404);
   final shadenew = const Color(0xffFFE9E9);
@@ -25,6 +26,12 @@ class Ui {
           fontWeight: FontWeight.w500,
           foreground: Paint()..shader = linearGradient),
     );
+  }
+
+  Future nav(BuildContext context, Widget widget) {
+    return Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return widget;
+    }));
   }
 
   Widget smallineartext(text, double size) {

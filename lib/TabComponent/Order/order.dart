@@ -29,36 +29,47 @@ class _OrderpageState extends State<Orderpage> {
     Orderdata(
         id: '#1VKDH73849',
         date: '22, May 2022',
-        status: 'Completed Transaction',
+        status: 'Settled',
         item: 'Macbook (2x), Canon Camera (4x), Oculux VR googles (2x)',
         amount: '200,000.00'),
     Orderdata(
         id: '#1VKDH73849',
         date: '22, May 2022',
-        status: 'Pending Transaction',
+        status: 'In Progress',
         item: 'Macbook (2x), Canon Camera (4x), Oculux VR googles (2x)',
         amount: '200,000.00'),
     Orderdata(
         id: '#1VKDH73849',
         date: '22, May 2022',
-        status: 'Completed Transaction',
+        status: 'Settled',
         item: 'Macbook (2x), Canon Camera (4x), Oculux VR googles (2x)',
         amount: '200,000.00'),
     Orderdata(
         id: '#1VKDH73849',
         date: '22, May 2022',
-        status: 'Pending Transaction',
+        status: 'In Progress',
         item: 'Macbook (2x), Canon Camera (4x), Oculux VR googles (2x)',
         amount: '200,000.00'),
     Orderdata(
         id: '#1VKDH73849',
         date: '22, May 2022',
-        status: 'Completed Transaction',
+        status: 'Settled',
         item: 'Macbook (2x), Canon Camera (4x), Oculux VR googles (2x)',
         amount: '200,000.00')
   ];
+  int tabno = 0;
   @override
   Widget build(BuildContext context) {
+    Widget smalltext(text) {
+      return Text(
+        text,
+        style: const TextStyle(
+            color: Color(0xff8e8e8e),
+            fontSize: 10,
+            fontWeight: FontWeight.w400),
+      );
+    }
+
     final design = Ui();
     final width = MediaQuery.of(context).size.width;
     return design.layout(SingleChildScrollView(
@@ -69,7 +80,7 @@ class _OrderpageState extends State<Orderpage> {
           children: [
             Center(
               child: Text(
-                'Order',
+                'Transactions',
                 style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w700,
@@ -77,51 +88,86 @@ class _OrderpageState extends State<Orderpage> {
               ),
             ),
             design.hspacer(35),
-            GestureDetector(
-              onTap: () {
-                // Navigator.of(context)
-                //     .push(MaterialPageRoute(builder: (context) {
-                //   return const Searchproduct();
-                // }));
-              },
-              child: Container(
-                  width: width,
-                  height: 40,
-                  padding: const EdgeInsets.only(right: 15.3),
-                  decoration: BoxDecoration(
-                    color: const Color(0xffF8F8FA),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child:
-                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    design.smallText('Search'),
-                    design.hspacer(12),
-                    const Icon(Icons.search, size: 10, color: Color(0xff8E8E8E))
-                  ])),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      tabno = 0;
+                    });
+                  },
+                  child: Container(
+                      width: (width - 50) / 2,
+                      height: 40,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: tabno == 0
+                              ? const Color(0xffffffff)
+                              : const Color(0xfff8f8fa)),
+                      child: tabno != 0
+                          ? design.input(
+                              design.numb, 11, 'Orders', FontWeight.w500)
+                          : design.smallineartext('Orders', 11)),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    orderdata.shuffle();
+                    setState(() {
+                      tabno = 1;
+                    });
+                  },
+                  child: Container(
+                      width: (width - 50) / 2,
+                      height: 40,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: tabno == 1
+                              ? const Color(0xffffffff)
+                              : const Color(0xfff8f8fa)),
+                      child: tabno != 1
+                          ? design.input(
+                              design.numb, 11, 'Payments', FontWeight.w500)
+                          : design.smallineartext('Payments', 11)),
+                ),
+              ],
             ),
             design.hspacer(15),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                    width: (width - 50) / 3,
+                    width: (width - 60) / 2,
                     height: 40,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(color: Color(0xffffffff)),
-                    child: design.smallineartext('All', 11)),
+                    padding: const EdgeInsets.symmetric(horizontal: 15.3),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffF8F8FA),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          smalltext('All'),
+                          Transform.rotate(
+                              angle: 55,
+                              child: Icon(Icons.arrow_back_ios,
+                                  size: 10, color: design.darkPurple))
+                        ])),
                 Container(
-                    width: (width - 50) / 3,
+                    width: (width - 60) / 2,
                     height: 40,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(color: Color(0xfff8f8fa)),
-                    child: design.input(
-                        design.numb, 11, 'Pending', FontWeight.w500)),
-                Container(
-                    width: (width - 50) / 3,
-                    height: 40,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(color: Color(0xfff8f8fa)),
-                    child: design.input(
-                        design.numb, 11, 'Completed', FontWeight.w500)),
+                    padding: const EdgeInsets.symmetric(horizontal: 15.3),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffF8F8FA),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          smalltext('Search'),
+                          design.wspacer(15),
+                          Icon(Icons.search, size: 10, color: design.darkPurple)
+                        ])),
               ],
             ),
             Column(
@@ -168,25 +214,24 @@ class _OrderpageState extends State<Orderpage> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              14, 4, 14, 5),
+                                          width: 137,
+                                          height: 21,
+                                          alignment: Alignment.center,
                                           decoration: BoxDecoration(
                                               color: orderdata[index].status ==
-                                                      'Completed Transaction'
-                                                  ? const Color(0xff00BA07)
-                                                      .withOpacity(0.2)
-                                                  : const Color(0xffD3AE28)
-                                                      .withOpacity(0.2),
+                                                      'Settled'
+                                                  ? design.shadeP
+                                                  : design.shadePi,
                                               borderRadius:
                                                   BorderRadius.circular(29)),
                                           child: Text(
-                                            orderdata[index].amount,
+                                            orderdata[index].status,
                                             style: TextStyle(
-                                                color: orderdata[index]
-                                                            .status ==
-                                                        'Completed Transaction'
-                                                    ? const Color(0xff00BA07)
-                                                    : const Color(0xffD3AE28),
+                                                color:
+                                                    orderdata[index].status ==
+                                                            'Settled'
+                                                        ? design.blue
+                                                        : design.pink,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.w500),
                                           )),

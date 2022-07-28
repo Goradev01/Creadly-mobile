@@ -1,3 +1,4 @@
+import 'package:creadlymobile/Auth/verification.dart';
 import 'package:creadlymobile/TabComponent/BNPL/bnpl.dart';
 import 'package:creadlymobile/TabComponent/Salary-Advanced/salary.dart';
 import 'package:creadlymobile/TabComponent/Shop/productdetail.dart';
@@ -57,6 +58,7 @@ class _HomepageState extends State<Homepage> {
         color: const Color(0xffCB32B5)),
   ];
   int creditmodelno = 0;
+  bool newuser = true;
   @override
   Widget build(BuildContext context) {
     final design = Ui();
@@ -200,7 +202,9 @@ class _HomepageState extends State<Homepage> {
                                       children: [
                                         design.naira(Colors.white, 32.0),
                                         Text(
-                                          creditmodel[index].amount,
+                                          newuser
+                                              ? '--'
+                                              : creditmodel[index].amount,
                                           style: const TextStyle(
                                               fontSize: 32.0,
                                               fontWeight: FontWeight.w700,
@@ -208,21 +212,24 @@ class _HomepageState extends State<Homepage> {
                                         ),
                                       ],
                                     ),
-                                    Container(
-                                      width: 100,
-                                      height: 20,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          color: const Color(0xffffffff)
-                                              .withOpacity(0.5)),
-                                      child: Text(
-                                        creditmodel[index].mode,
-                                        style: const TextStyle(
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xffffffff)),
+                                    Visibility(
+                                      visible: !newuser,
+                                      child: Container(
+                                        width: 100,
+                                        height: 20,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: const Color(0xffffffff)
+                                                .withOpacity(0.5)),
+                                        child: Text(
+                                          creditmodel[index].mode,
+                                          style: const TextStyle(
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xffffffff)),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -254,6 +261,76 @@ class _HomepageState extends State<Homepage> {
                         color: creditmodel[index].id == creditmodelno
                             ? creditmodel[index].color
                             : const Color(0xffD9D9D9)))),
+          ),
+          Visibility(
+            visible: newuser,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: GestureDetector(
+                  onTap: () {
+                    design.nav(context, const Verificationpage());
+                    setState(() {
+                      newuser = false;
+                    });
+                  },
+                  child: Container(
+                    width: width,
+                    height: 80,
+                    padding: const EdgeInsets.only(left: 20),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: const Color(0xffFF4848),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                            height: 40,
+                            width: 40,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: 39,
+                                  height: 39,
+                                  alignment: Alignment.center,
+                                  margin: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: design.smallineartext('50%', 10),
+                                ),
+                                Positioned(
+                                    // bottom: 5,
+                                    // right: 0,
+                                    child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Image.asset(
+                                    'assets/acr.png',
+                                  ),
+                                ))
+                              ],
+                            )),
+                        design.wspacer(15),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            design.input(Colors.white, 15,
+                                'Complete your registration', FontWeight.w500),
+                            design.hspacer(5),
+                            design.input(
+                                const Color(0xffFF9C9C),
+                                10,
+                                'BVN, D.O.B and full name needed',
+                                FontWeight.w500)
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
