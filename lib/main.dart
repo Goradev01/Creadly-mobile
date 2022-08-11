@@ -1,17 +1,34 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:creadlymobile/Statemangement/data.dart';
-import 'package:creadlymobile/style.dart';
+// import 'package:creadlymobile/Provider/data.dart';
+import 'package:creadlymobile/Provider/categoryprovider.dart';
+import 'package:creadlymobile/Provider/login.dart';
+import 'package:creadlymobile/Provider/merchantprovider.dart';
+import 'package:creadlymobile/Provider/signup.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'TabComponent/bottomnav.dart';
+import 'View/TabComponent/bottomnav.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(ChangeNotifierProvider<DataManagement>(
-    create: (_) => DataManagement(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<LoginProvider>(
+        create: (_) => LoginProvider(),
+      ),
+      ChangeNotifierProvider<SignupProvider>(
+        create: (_) => SignupProvider(),
+      ),
+      ChangeNotifierProvider<CategoryProvider>(
+        create: (_) => CategoryProvider(),
+      ),
+      ChangeNotifierProvider<MerchantProvider>(
+        create: (_) => MerchantProvider(),
+      ),
+    ],
     child: const MyApp(),
   ));
 }
@@ -29,45 +46,41 @@ class _MyAppState extends State<MyApp> {
   void getData() async {
     final SharedPreferences token = await SharedPreferences.getInstance();
     String auth = token.getString('AuthToken')!;
-    Provider.of<DataManagement>(context, listen: false).updateAuth(auth);
+    Provider.of<LoginProvider>(context, listen: false).updateAuth(auth);
   }
 
   @override
   void initState() {
     super.initState();
-
     getData();
-    // Provider.of<DataManagement>(context, listen: false).checkfirsttimer();
+  }
+
+  Stream<Widget> loadingStream() async* {
+    // await Future<void>.delayed(const Duration(seconds: 0));
+    // yield const SplashScreen();
+    await Future<void>.delayed(const Duration(seconds: 5));
+    yield Consumer<LoginProvider>(builder: (context, data, child) {
+      if (data.auth.isNotEmpty) {
+        return const BottomNav();
+      } else {
+        return data.newuser;
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Stream<Widget> loadingStream() async* {
-      await Future<void>.delayed(const Duration(seconds: 0));
-      yield const SplashScreen();
-      await Future<void>.delayed(const Duration(seconds: 5));
-
-      yield Consumer<DataManagement>(builder: (context, data, child) {
-        if (data.auth.isNotEmpty) {
-          return const BottomNav();
-        } else {
-          return data.newuser;
-        }
-      });
-    }
-
-    final design = Ui();
     return MaterialApp(
       title: 'Creadly',
       theme: ThemeData(
         fontFamily: 'Moderat',
         primarySwatch: Colors.blue,
       ),
-      home: StreamBuilder(
-        initialData: const SplashScreen(),
+      home: StreamBuilder<Widget>(
+        // initialData: const SplashScreen(),
         stream: loadingStream(),
         builder: (context, snapshot) {
-          return design.layout(snapshot.data);
+          return Scaffold(body: snapshot.data);
         },
       ),
     );
