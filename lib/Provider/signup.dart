@@ -13,7 +13,7 @@ class SignupProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future authsignup(
+  Future authSignUp(
       String email, String phonenumber, String password, context) async {
     Map body = {
       "phoneNumber": phonenumber,

@@ -8,7 +8,7 @@ class CategoryProvider extends ChangeNotifier {
   final helper = CategoryHelper();
   List<CategoryData> categorydata = [];
 
-  Future getCategorydata() async {
+  Future getCategoryData() async {
     final res =
         helper.getdata().then((value) => value.fold((l) => print(l), (r) {
               categorydata = r;

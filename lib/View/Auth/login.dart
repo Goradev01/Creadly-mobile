@@ -118,7 +118,7 @@ class _LoginState extends State<Login> {
                         Provider.of<LoginProvider>(context, listen: false)
                             .updateloadlogin(true);
                         Provider.of<LoginProvider>(context, listen: false)
-                            .authlogin(
+                            .authLogin(
                               email,
                               password,
                               context,

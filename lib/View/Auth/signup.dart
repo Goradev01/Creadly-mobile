@@ -144,7 +144,7 @@ class _SignupState extends State<Signup> {
                       Provider.of<SignupProvider>(context, listen: false)
                           .updateloadsignup(true);
                       Provider.of<SignupProvider>(context, listen: false)
-                          .authsignup(email, phoneNumber, password, context);
+                          .authSignUp(email, phoneNumber, password, context);
                     },
                     child: Container(
                       width: width,

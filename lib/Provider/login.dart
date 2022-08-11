@@ -35,7 +35,7 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future authlogin(String email, String password, context) async {
+  Future authLogin(String email, String password, context) async {
     Map body = {
       "email": email,
       "password": password,

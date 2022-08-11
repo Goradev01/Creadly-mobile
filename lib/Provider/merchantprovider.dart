@@ -6,7 +6,7 @@ class MerchantProvider extends ChangeNotifier {
   final helper = MerchantHelper();
   List<MerchantData> merchantdata = [];
 
-  Future<void> getMerchantdata() async {
+  Future<void> getMerchantData() async {
     await helper
         .getdata()
         .then((value) => value.fold((l) => null, (r) => {merchantdata = r}));

@@ -20,8 +20,8 @@ class ShoppageState extends State<Shoppage> {
   void initState() {
     super.initState();
 
-    Provider.of<CategoryProvider>(context, listen: false).getCategorydata();
-    Provider.of<MerchantProvider>(context, listen: false).getMerchantdata();
+    Provider.of<CategoryProvider>(context, listen: false).getCategoryData();
+    Provider.of<MerchantProvider>(context, listen: false).getMerchantData();
     // print(Provider.of<CategoryProvider>(context, listen: true).categorydata);
   }
 
