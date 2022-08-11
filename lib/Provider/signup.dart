@@ -7,7 +7,7 @@ import '../View/Auth/otp.dart';
 class SignupProvider extends ChangeNotifier {
   bool loadsignup = false;
 
-  void updateloadsignup(bool val) {
+  void updateLoadSignup(bool val) {
     loadsignup = val;
 
     notifyListeners();
@@ -21,13 +21,13 @@ class SignupProvider extends ChangeNotifier {
       "password": password,
     };
 
-    final helper = SignUpHelper().postsignup(body).then((value) => {
+    final helper = SignUpHelper().postSignUp(body).then((value) => {
           if (value.toString() == 'This email address already exists')
-            {updateloadsignup(false)}
+            {updateLoadSignup(false)}
           else if (value.toString() == 'Bad Request')
             {
               // errorAlert('Error', context);
-              updateloadsignup(false)
+              updateLoadSignup(false)
             }
           else
             {

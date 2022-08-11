@@ -142,7 +142,7 @@ class _SignupState extends State<Signup> {
                   GestureDetector(
                     onTap: () {
                       Provider.of<SignupProvider>(context, listen: false)
-                          .updateloadsignup(true);
+                          .updateLoadSignup(true);
                       Provider.of<SignupProvider>(context, listen: false)
                           .authSignUp(email, phoneNumber, password, context);
                     },

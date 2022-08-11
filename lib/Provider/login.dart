@@ -20,7 +20,7 @@ class LoginProvider extends ChangeNotifier {
 
   String auth = '';
   bool loadlogin = false;
-  void updateloadlogin(bool val) {
+  void updateLoadLogin(bool val) {
     loadlogin = val;
 
     notifyListeners();
@@ -40,13 +40,13 @@ class LoginProvider extends ChangeNotifier {
       "email": email,
       "password": password,
     };
-    final helper = LoginHelper().postlogin(body).then((value) async {
+    final helper = LoginHelper().postLogin(body).then((value) async {
       if (value.toString() == 'Unauthorized') {
         // errorAlert(value, context);
-        updateloadlogin(false);
+        updateLoadLogin(false);
       } else if (value.toString() == 'Bad Request') {
         // errorAlert('Error', context);
-        updateloadlogin(false);
+        updateLoadLogin(false);
       } else {
         auth = value.toString();
         final SharedPreferences pref = await SharedPreferences.getInstance();
@@ -70,7 +70,7 @@ class LoginProvider extends ChangeNotifier {
 
 //     } catch (e) {
 //       // errorAlert('error', context);
-//       updateloadlogin(false);
+//       updateLoadLogin(false);
 //     }
   }
 }

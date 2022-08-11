@@ -116,7 +116,7 @@ class _LoginState extends State<Login> {
                   InkWell(
                       onTap: () {
                         Provider.of<LoginProvider>(context, listen: false)
-                            .updateloadlogin(true);
+                            .updateLoadLogin(true);
                         Provider.of<LoginProvider>(context, listen: false)
                             .authLogin(
                               email,

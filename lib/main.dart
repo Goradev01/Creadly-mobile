@@ -51,6 +51,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    Provider.of<LoginProvider>(context, listen: false).checkfirsttimer();
     super.initState();
     getData();
   }
