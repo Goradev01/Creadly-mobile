@@ -10,6 +10,7 @@ class CategoryProvider extends ChangeNotifier {
 
   Future getCategoryData() async {
     final res =
+        // ignore: avoid_print
         helper.getdata().then((value) => value.fold((l) => print(l), (r) {
               categorydata = r;
               notifyListeners();
