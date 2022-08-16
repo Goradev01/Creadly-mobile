@@ -1,14 +1,16 @@
 import 'dart:io';
 
-import 'package:creadlymobile/View/Auth/facecompleted.dart';
+import 'package:creadlymobile/Provider/verifyselfieprovider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../style.dart';
+import 'facecompleted.dart';
 
 class Submitface extends StatefulWidget {
-  final String imagepath;
-
-  const Submitface({Key? key, required this.imagepath}) : super(key: key);
+  const Submitface({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Submitface> createState() => _SubmitfaceState();
@@ -75,24 +77,31 @@ class _SubmitfaceState extends State<Submitface> {
                         Color(0xffE1E1EC),
                       ],
                     )),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.file(
-                    File(widget.imagepath),
-                    width: width,
-                    height: height / 1.7,
-                    fit: BoxFit.fill,
-                  ),
-                )),
+                child: Consumer<VerifySelfieProvider>(
+                    builder: (context, data, child) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.file(
+                      File(data.imageFile!.path),
+                      width: width,
+                      height: height / 1.7,
+                      fit: BoxFit.fill,
+                    ),
+                  );
+                })),
           ),
-          GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const Facecompleted()),
-                );
-              },
-              child: design.longButton(width, 'Submit'))
+          Consumer<VerifySelfieProvider>(builder: (context, data, child) {
+            return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const Facecompleted()),
+                  );
+                  // Provider.of<VerifySelfieProvider>(context, listen: false)
+                  //     .verifySelfie(data.imageFile!, context);
+                },
+                child: design.longButton(width, 'Submit'));
+          })
         ],
       ),
     ));

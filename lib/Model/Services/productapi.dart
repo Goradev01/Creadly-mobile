@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 
 import '../Configure/baseurl.dart';
 
-class CategoryAPi {
-  String endpoint = "${Baseurl().url}/api/v1/category";
+class ProductApi {
+  String endpoint = "${Baseurl().url}/api/v1/products";
 
-  Future<Either<Exception, dynamic>> categoryApi() async {
+  Future<Either<Exception, dynamic>> productApi() async {
     try {
       final response = await http.get(
         Uri.parse(

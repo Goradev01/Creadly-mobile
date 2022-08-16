@@ -9,12 +9,12 @@ class CategoryProvider extends ChangeNotifier {
   List<CategoryData> categorydata = [];
 
   Future getCategoryData() async {
-    final res =
+    final result =
         // ignore: avoid_print
-        helper.getdata().then((value) => value.fold((l) => print(l), (r) {
+        helper.getData().then((value) => value.fold((l) => print(l), (r) {
               categorydata = r;
               notifyListeners();
             }));
-    return res;
+    return result;
   }
 }

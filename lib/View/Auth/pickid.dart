@@ -1,6 +1,8 @@
+import 'package:creadlymobile/Provider/verifyselfieprovider.dart';
 import 'package:creadlymobile/View/Auth/idform.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Pickid extends StatefulWidget {
   const Pickid({Key? key}) : super(key: key);
@@ -12,21 +14,27 @@ class Pickid extends StatefulWidget {
 class Idslist {
   String title;
   String subtitle;
-  Idslist({required this.title, required this.subtitle});
+  String idType;
+  Idslist({required this.title, required this.idType, required this.subtitle});
 }
 
 class _PickidState extends State<Pickid> {
-  List ids = [
+  List<Idslist> ids = [
     Idslist(
-        title: 'Driver’s Liscense',
+        title: "Driver’s Liscense",
+        idType: 'driversLicense',
         subtitle: 'Small Copy of description or something'),
     Idslist(
-        title: 'NIN Card', subtitle: 'Small Copy of description or something'),
+        title: 'NIN Card',
+        idType: 'nin',
+        subtitle: 'Small Copy of description or something'),
     Idslist(
         title: 'International Passport',
+        idType: 'internationalPassport',
         subtitle: 'Small Copy of description or something'),
     Idslist(
         title: 'Voter’s ID',
+        idType: 'votersCard',
         subtitle: 'Small Copy of description or something'),
   ];
   @override
@@ -67,45 +75,57 @@ class _PickidState extends State<Pickid> {
           Column(
               children: List.generate(
                   ids.length,
-                  (index) => Container(
-                        height: 60,
-                        width: width,
-                        margin: const EdgeInsets.symmetric(vertical: 5),
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        alignment: Alignment.centerLeft,
-                        decoration: BoxDecoration(
-                          color: const Color(0xfff8f8fa),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  ids[index].title,
-                                  style: const TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xff2E2E2E)),
-                                ),
-                                design.hspacer(5),
-                                Text(
-                                  ids[index].subtitle,
-                                  style: const TextStyle(
-                                      fontSize: 7,
-                                      fontWeight: FontWeight.w700,
-                                      color: Color(0xff737373)),
-                                )
-                              ],
-                            ),
-                            const Spacer(),
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.arrow_forward_ios,
-                                    size: 10))
-                          ],
+                  (index) => GestureDetector(
+                        onTap: () {
+                          String idType = ids[index].idType;
+                          Provider.of<VerifySelfieProvider>(context,
+                                  listen: false)
+                              .updateIdType(idType);
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return const Idform();
+                          }));
+                        },
+                        child: Container(
+                          height: 60,
+                          width: width,
+                          margin: const EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          alignment: Alignment.centerLeft,
+                          decoration: BoxDecoration(
+                            color: const Color(0xfff8f8fa),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    ids[index].title,
+                                    style: const TextStyle(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xff2E2E2E)),
+                                  ),
+                                  design.hspacer(5),
+                                  Text(
+                                    ids[index].subtitle,
+                                    style: const TextStyle(
+                                        fontSize: 7,
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xff737373)),
+                                  )
+                                ],
+                              ),
+                              const Spacer(),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.arrow_forward_ios,
+                                      size: 10))
+                            ],
+                          ),
                         ),
                       ))),
           const Spacer(),

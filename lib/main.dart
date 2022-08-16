@@ -1,10 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
 // import 'package:creadlymobile/Provider/data.dart';
+import 'package:creadlymobile/Provider/addcartprovider.dart';
 import 'package:creadlymobile/Provider/categoryprovider.dart';
 import 'package:creadlymobile/Provider/login.dart';
 import 'package:creadlymobile/Provider/merchantprovider.dart';
+import 'package:creadlymobile/Provider/productprovider.dart';
 import 'package:creadlymobile/Provider/signup.dart';
+import 'package:creadlymobile/Provider/verifyidprovider.dart';
+import 'package:creadlymobile/Provider/verifyselfieprovider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +31,18 @@ void main() {
       ),
       ChangeNotifierProvider<MerchantProvider>(
         create: (_) => MerchantProvider(),
+      ),
+      ChangeNotifierProvider<ProductProvider>(
+        create: (_) => ProductProvider(),
+      ),
+      ChangeNotifierProvider<VerifyIdProvider>(
+        create: (_) => VerifyIdProvider(),
+      ),
+      ChangeNotifierProvider<VerifySelfieProvider>(
+        create: (_) => VerifySelfieProvider(),
+      ),
+      ChangeNotifierProvider<AddCartProvider>(
+        create: (_) => AddCartProvider(),
       ),
     ],
     child: const MyApp(),

@@ -1,14 +1,17 @@
 import 'dart:io';
 
-import 'package:creadlymobile/View/Auth/idcomplete.dart';
+import 'package:camera/camera.dart';
+import 'package:creadlymobile/Provider/verifyidprovider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../Provider/verifyselfieprovider.dart';
 import '../style.dart';
 
 class Submitid extends StatefulWidget {
-  final String imagepath;
+  final XFile image;
 
-  const Submitid({Key? key, required this.imagepath}) : super(key: key);
+  const Submitid({Key? key, required this.image}) : super(key: key);
 
   @override
   State<Submitid> createState() => _SubmitidState();
@@ -78,7 +81,7 @@ class _SubmitidState extends State<Submitid> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.file(
-                    File(widget.imagepath),
+                    File(widget.image.path),
                     width: width,
                     height: height / 1.7,
                     fit: BoxFit.fill,
@@ -86,10 +89,20 @@ class _SubmitidState extends State<Submitid> {
                 )),
           ),
           GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const Idcompleted()),
-                );
+              onTap: () async {
+                final idNumber =
+                    Provider.of<VerifySelfieProvider>(context, listen: false)
+                        .idNumber;
+                final idType =
+                    Provider.of<VerifySelfieProvider>(context, listen: false)
+                        .idType;
+                final selfie =
+                    Provider.of<VerifySelfieProvider>(context, listen: false)
+                        .imageFile;
+                await Provider.of<VerifySelfieProvider>(context, listen: false)
+                    .verifySelfie(selfie!);
+                Provider.of<VerifyIdProvider>(context, listen: false)
+                    .verifyId(idType, idNumber, widget.image, context);
               },
               child: design.longButton(width, 'Submit'))
         ],

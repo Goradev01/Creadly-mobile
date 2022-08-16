@@ -18,6 +18,12 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String> getUserToken() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    String usertoken = pref.getString('AuthToken')!;
+    return usertoken;
+  }
+
   String auth = '';
   bool loadlogin = false;
   void updateLoadLogin(bool val) {
@@ -41,20 +47,25 @@ class LoginProvider extends ChangeNotifier {
       "password": password,
     };
     final helper = LoginHelper().postLogin(body).then((value) async {
-      if (value.toString() == 'Unauthorized') {
-        // errorAlert(value, context);
-        updateLoadLogin(false);
-      } else if (value.toString() == 'Bad Request') {
-        // errorAlert('Error', context);
-        updateLoadLogin(false);
-      } else {
-        auth = value.toString();
+      value.fold((l) {
+        if (l.toString() == 'Unauthorized') {
+          // errorAlert(value, context);
+          updateLoadLogin(false);
+        } else if (l.toString() == 'Bad Request') {
+          // errorAlert('Error', context);
+          updateLoadLogin(false);
+        } else {
+          updateLoadLogin(false);
+        }
+      }, (r) async {
+        auth = r.toString();
         final SharedPreferences pref = await SharedPreferences.getInstance();
 
-        pref.setString('AuthToken', value.toString());
+        pref.setString('AuthToken', r.toString());
 
         // errorAlert('on data');
-      }
+      });
+
       notifyListeners();
     });
     return helper;

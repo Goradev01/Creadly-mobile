@@ -6,6 +6,9 @@ import 'package:creadlymobile/View/TabComponent/Shop/searchproduct.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+
+import '../../Provider/productprovider.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -31,6 +34,12 @@ class CreditModel {
 }
 
 class _HomepageState extends State<Homepage> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ProductProvider>(context, listen: false).getProductData();
+  }
+
   List<Product> products = [
     Product(
         title: 'Hisense Refrigerator...',
@@ -356,10 +365,10 @@ class _HomepageState extends State<Homepage> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) {
-                                return const Productdetail();
-                              }));
+                              // Navigator.of(context)
+                              //     .push(MaterialPageRoute(builder: (context) {
+                              //   return const Productdetail(id: 0);
+                              // }));
                             },
                             child: Container(
                               height: 150,
@@ -422,72 +431,85 @@ class _HomepageState extends State<Homepage> {
             padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
             child: design.input(design.ash, 15, "Products", FontWeight.w700),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(25, 10, 25, 50),
-            child: GridView.count(
-              // crossAxisCount: 2,
-              shrinkWrap: true,
-              crossAxisCount: 2,
-              childAspectRatio: 1.12,
-              crossAxisSpacing: 15.0,
-              mainAxisSpacing: 10.0,
-              physics: const ScrollPhysics(),
-              children: List.generate(
-                  products.length,
-                  (index) => GestureDetector(
-                        onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return const Productdetail();
-                          }));
-                        },
-                        child: Container(
-                          alignment: Alignment.topCenter,
-                          decoration: BoxDecoration(
-                            color: const Color(0xffFfFfFf),
-                            border: Border.all(
-                                width: 1, color: const Color(0xfff8f8f8)),
-                            borderRadius: BorderRadius.circular(10),
+          Consumer<ProductProvider>(builder: (context, data, child) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(25, 10, 25, 50),
+              child: GridView.count(
+                // crossAxisCount: 2,
+                shrinkWrap: true,
+                crossAxisCount: 2,
+                childAspectRatio: 1.1,
+                crossAxisSpacing: 15.0,
+                mainAxisSpacing: 10.0,
+                physics: const ScrollPhysics(),
+                children: List.generate(
+                    data.productData.length,
+                    (index) => GestureDetector(
+                          onTap: () {
+                            final id = data.productData[index].id!;
+                            final merchantId =
+                                data.productData[index].merchant!;
+                            Provider.of<ProductProvider>(context, listen: false)
+                                .performQuery(id.trim(), context, merchantId)
+                                .then((val) => Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return const Productdetail();
+                                    })));
+                          },
+                          child: Container(
+                            alignment: Alignment.topCenter,
+                            decoration: BoxDecoration(
+                              color: const Color(0xffFfFfFf),
+                              border: Border.all(
+                                  width: 1, color: const Color(0xfff8f8f8)),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    height: 100,
+                                    width: (width - 50 - 15) / 2,
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xffF6F6F6),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10),
+                                          topRight: Radius.circular(10)),
+                                    ),
+                                    child: Image.network(
+                                      '${data.productData[index].image}',
+                                    )),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(12, 6, 0, 2),
+                                  child: design
+                                      .smallText(data.productData[index].name),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
+                                  child: Row(children: [
+                                    design.amount(
+                                        design.ash,
+                                        12.0,
+                                        data.productData[index].price
+                                            .toString(),
+                                        FontWeight.w500),
+                                    const Spacer(),
+                                    const Icon(Icons.favorite_outline,
+                                        size: 12, color: Color(0xff0d0d0d))
+                                  ]),
+                                )
+                              ],
+                            ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  height: 100,
-                                  width: (width - 50 - 15) / 2,
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xffF6F6F6),
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10),
-                                        topRight: Radius.circular(10)),
-                                  ),
-                                  child: Image.asset(
-                                    'assets/shopicon/${products[index].imageurl}.jpg',
-                                  )),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(12, 6, 0, 2),
-                                child: design.smallText(products[index].title),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                child: Row(children: [
-                                  design.amount(design.ash, 12.0,
-                                      products[index].amount, FontWeight.w500),
-                                  const Spacer(),
-                                  const Icon(Icons.favorite_outline,
-                                      size: 12, color: Color(0xff0d0d0d))
-                                ]),
-                              )
-                            ],
-                          ),
-                        ),
-                      )),
-            ),
-          )
+                        )),
+              ),
+            );
+          })
         ],
       ),
     ));

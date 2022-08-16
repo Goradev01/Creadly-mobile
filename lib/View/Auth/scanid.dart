@@ -132,7 +132,7 @@ class _ScanidState extends State<Scanid> {
                       builder: (context) => Submitid(
                         // Pass the automatically generated path to
                         // the DisplayPictureScreen widget.
-                        imagepath: image.path,
+                        image: image,
                       ),
                     ),
                   );

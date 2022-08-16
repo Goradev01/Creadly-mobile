@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:camera/camera.dart';
+import 'package:creadlymobile/Provider/verifyselfieprovider.dart';
 import 'package:creadlymobile/View/Auth/scanid.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Idform extends StatefulWidget {
   const Idform({Key? key}) : super(key: key);
@@ -13,7 +15,7 @@ class Idform extends StatefulWidget {
 }
 
 class _IdformState extends State<Idform> {
-  String idnumber = '';
+  String idNumber = '';
   @override
   Widget build(BuildContext context) {
     final design = Ui();
@@ -64,9 +66,9 @@ class _IdformState extends State<Idform> {
                           const BorderRadius.all(Radius.circular(10))),
                   child: TextFormField(
                     initialValue: '',
-                    onFieldSubmitted: (input) {
+                    onChanged: (input) {
                       setState(() {
-                        idnumber = input;
+                        idNumber = input;
                       });
                     },
                     decoration: const InputDecoration(
@@ -81,6 +83,8 @@ class _IdformState extends State<Idform> {
                 onTap: () async {
                   final cameras = await availableCameras();
                   final firstCamera = cameras.first;
+                  Provider.of<VerifySelfieProvider>(context, listen: false)
+                      .updateIdNumber(idNumber);
                   await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => Scanid(

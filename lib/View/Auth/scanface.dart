@@ -3,7 +3,9 @@
 import 'package:camera/camera.dart';
 import 'package:creadlymobile/View/Auth/submitface.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../Provider/verifyselfieprovider.dart';
 import '../style.dart';
 
 class Scanface extends StatefulWidget {
@@ -15,9 +17,7 @@ class Scanface extends StatefulWidget {
   State<Scanface> createState() => _ScanfaceState();
 }
 
-
 class _ScanfaceState extends State<Scanface> {
- 
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   @override
@@ -133,15 +133,13 @@ class _ScanfaceState extends State<Scanface> {
                   // Attempt to take a picture and get the file `image`
                   // where it was saved.
                   final image = await _controller.takePicture();
+                  Provider.of<VerifySelfieProvider>(context, listen: false)
+                      .updateImage(image);
 
                   // If the picture was taken, display it on a new screen.
                   await Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => Submitface(
-                        // Pass the automatically generated path to
-                        // the DisplayPictureScreen widget.
-                        imagepath: image.path,
-                      ),
+                      builder: (context) => const Submitface(),
                     ),
                   );
                 } catch (e) {
