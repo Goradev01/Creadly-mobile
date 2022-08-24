@@ -15,7 +15,6 @@ class VerifyIdentityApi {
 
       Map<String, String> headers = {
         "Content-Type": "multipart/form-data",
-        // ignore: unnecessary_string_interpolations
         "authorization": usertoken
       };
       http.MultipartFile filepath =

@@ -108,7 +108,7 @@ class _ProductdetailState extends State<Productdetail> {
                                       size: 13, color: Color(0xffffb800))),
                             ),
                             const Spacer(),
-                            Text(data[0].category!,
+                            Text(data[0].category!['name'],
                                 style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w400,
@@ -175,6 +175,7 @@ class _ProductdetailState extends State<Productdetail> {
                             ],
                           ),
                         ),
+                        //! dsg
                         Padding(
                           padding: const EdgeInsets.only(top: 20, bottom: 10),
                           child: Text('Product Rating',
@@ -275,6 +276,8 @@ class _ProductdetailState extends State<Productdetail> {
                       GestureDetector(
                         onTap: () {
                           Provider.of<AddCartProvider>(context, listen: false)
+                              .updateLoadingCart(true);
+                          Provider.of<AddCartProvider>(context, listen: false)
                               .addCart(data[0].id!, context);
                         },
                         child: Container(
@@ -291,7 +294,23 @@ class _ProductdetailState extends State<Productdetail> {
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white)),
                         ),
-                      )
+                      ),
+                      design.wspacer(20),
+                      Consumer<AddCartProvider>(
+                          builder: (context, data, child) {
+                        return Visibility(
+                          visible: data.loadingAddCart,
+                          child: SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                                // value: 0.5,
+                                color: Colors.white,
+                                backgroundColor: design.blue),
+                          ),
+                        );
+                      })
                     ],
                   ),
                 )

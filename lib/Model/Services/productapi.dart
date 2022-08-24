@@ -23,4 +23,36 @@ class ProductApi {
       return Left(e);
     }
   }
+
+  Future<Either<Exception, dynamic>> productCategoryApi(String id) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+          '$endpoint/category/$id',
+        ),
+        headers: {'Content-Type': 'application/json'},
+      );
+      final data = jsonDecode(response.body);
+
+      return Right(data);
+    } on Exception catch (e) {
+      return Left(e);
+    }
+  }
+
+  Future<Either<Exception, dynamic>> productMerchantApi(String id) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+          '$endpoint/category/$id',
+        ),
+        headers: {'Content-Type': 'application/json'},
+      );
+      final data = jsonDecode(response.body);
+
+      return Right(data);
+    } on Exception catch (e) {
+      return Left(e);
+    }
+  }
 }

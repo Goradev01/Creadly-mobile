@@ -1,6 +1,12 @@
-import 'package:creadlymobile/View/TabComponent/Shop/purchasedone.dart';
+import 'dart:async';
+
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:creadlymobile/View/style.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_paystack_payment/flutter_paystack_payment.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Cart extends StatefulWidget {
@@ -12,6 +18,84 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   int stock = 0;
+  String paystackPublicKey = 'pk_test_cc4c2259b62bc75842e99e60a2e4ac12a883a840';
+  bool inProgress = false;
+  String? _cardNumber;
+  String? _cvv;
+  int? _expiryMonth;
+  int? _expiryYear;
+  PaymentCard _getCardFromUI() {
+    // Using just the must-required parameters.
+    return PaymentCard(
+      number: _cardNumber,
+      cvc: _cvv,
+      expiryMonth: _expiryMonth,
+      expiryYear: _expiryYear,
+    );
+  }
+
+  String _getReference() {
+    log("We are here");
+    String platform;
+    if (!kIsWeb) {
+      if (Platform.isIOS) {
+        platform = 'iOS';
+      } else if (Platform.isLinux) {
+        platform = 'Linux';
+      } else if (Platform.isMacOS) {
+        platform = 'MacOS';
+      } else if (Platform.isFuchsia) {
+        platform = 'Fuchsia';
+      } else if (Platform.isWindows) {
+        platform = 'Windows';
+      } else {
+        platform = 'Android';
+      }
+      // platform = 'Unknown';
+    } else {
+      platform = "WEB";
+    }
+
+    return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
+  }
+
+  handleCheckout(BuildContext context) async {
+    // if (_method != CheckoutMethod.card && _isLocal) {
+    //   _showMessage('Select server initialization method at the top');
+    //   return;
+    // }
+    // setState(() => inProgress = true);
+    // _formKey.currentState?.save();
+    Charge charge = Charge()
+      ..amount = 1000 + 00 // In base currency
+      ..email = 'customer@email.com'
+      ..card = _getCardFromUI();
+
+    charge.reference = _getReference();
+
+    try {
+      CheckoutResponse response = await plugin.checkout(
+        context,
+        method: CheckoutMethod.card,
+        charge: charge,
+        fullscreen: false,
+      );
+      log('Response = $response');
+      setState(() => inProgress = false);
+      // _updateStatus(response.reference, '$response');
+    } catch (e) {
+      setState(() => inProgress = false);
+      // _showMessage("Check console for error");
+      rethrow;
+    }
+  }
+
+  final plugin = PaystackPayment();
+  @override
+  void initState() {
+    plugin.initialize(publicKey: paystackPublicKey);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -783,10 +867,12 @@ class _CartState extends State<Cart> {
                             },
                             child: GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return const PurchaseDone();
-                                  }));
+                                  Navigator.of(context).pop();
+                                  handleCheckout(context);
+                                  // Navigator.of(context).push(
+                                  //     MaterialPageRoute(builder: (context) {
+                                  //   return const PurchaseDone();
+                                  // }));
                                 },
                                 child: design.longButton(169.0, 'Confirm')),
                           )

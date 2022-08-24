@@ -3,6 +3,9 @@
 import 'package:creadlymobile/View/Auth/verification.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../Provider/userdataprovider.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -14,10 +17,11 @@ class Registration extends StatefulWidget {
 class _RegistrationState extends State<Registration> {
   String email = '';
   String phonenumber = '';
-  String fullname = '';
+  String firstname = '';
+  String lastname = '';
   String companyinput = '';
   String bnv = '';
-  String dateofbirth = '';
+  DateTime dateofbirth = DateTime.now();
   String address = '';
 
   @override
@@ -126,8 +130,9 @@ class _RegistrationState extends State<Registration> {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10))),
                       child: TextFormField(
+                        readOnly: true,
                         initialValue: '',
-                        onFieldSubmitted: (input) {
+                        onChanged: (input) {
                           setState(() {
                             email = input;
                           });
@@ -153,7 +158,7 @@ class _RegistrationState extends State<Registration> {
                               const BorderRadius.all(Radius.circular(10))),
                       child: TextFormField(
                         initialValue: '',
-                        onFieldSubmitted: (input) {
+                        onChanged: (input) {
                           setState(() {
                             phonenumber = input;
                           });
@@ -168,7 +173,7 @@ class _RegistrationState extends State<Registration> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      design.smalltext('Full Name'),
+                      design.smalltext('First Name'),
                       design.wspacer(10),
                       Text(
                         'as seen on your ID*',
@@ -192,9 +197,48 @@ class _RegistrationState extends State<Registration> {
                               const BorderRadius.all(Radius.circular(10))),
                       child: TextFormField(
                         initialValue: '',
-                        onFieldSubmitted: (input) {
+                        onChanged: (input) {
                           setState(() {
-                            fullname = input;
+                            firstname = input;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          // labelText: 'Email address',
+                          border: InputBorder.none,
+                          labelStyle: TextStyle(color: Colors.grey),
+                          // errorText: validmail(email),
+                        ),
+                      )),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      design.smalltext('Last Name'),
+                      design.wspacer(10),
+                      Text(
+                        'as seen on your ID*',
+                        style: TextStyle(
+                            color: design.pink,
+                            fontSize: 7,
+                            fontWeight: FontWeight.w400),
+                      )
+                    ],
+                  ),
+                  Container(
+                      width: width,
+                      alignment: Alignment.centerLeft,
+                      margin: const EdgeInsets.only(top: 10, bottom: 20),
+                      height: 51,
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: const Color(0xffC0BACE), width: 1.5),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
+                      child: TextFormField(
+                        initialValue: '',
+                        onChanged: (input) {
+                          setState(() {
+                            lastname = input;
                           });
                         },
                         decoration: const InputDecoration(
@@ -232,7 +276,7 @@ class _RegistrationState extends State<Registration> {
                               const BorderRadius.all(Radius.circular(10))),
                       child: TextFormField(
                         initialValue: '',
-                        onFieldSubmitted: (input) {
+                        onChanged: (input) {
                           setState(() {
                             companyinput = input;
                           });
@@ -258,7 +302,7 @@ class _RegistrationState extends State<Registration> {
                               const BorderRadius.all(Radius.circular(10))),
                       child: TextFormField(
                         initialValue: '',
-                        onFieldSubmitted: (input) {
+                        onChanged: (input) {
                           setState(() {
                             bnv = input;
                           });
@@ -271,31 +315,33 @@ class _RegistrationState extends State<Registration> {
                         ),
                       )),
                   design.smalltext('Date Of Birth'),
-                  Container(
-                      width: width,
-                      alignment: Alignment.centerLeft,
-                      margin: const EdgeInsets.only(top: 10, bottom: 20),
-                      height: 51,
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: const Color(0xffC0BACE), width: 1.5),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
-                      child: TextFormField(
-                        initialValue: '',
-                        onFieldSubmitted: (input) {
-                          setState(() {
-                            dateofbirth = input;
-                          });
-                        },
-                        decoration: const InputDecoration(
-                          // labelText: 'Email address',
-                          border: InputBorder.none,
-                          labelStyle: TextStyle(color: Colors.grey),
-                          // errorText: validmail(email),
-                        ),
-                      )),
+                  GestureDetector(
+                    onTap: () async {
+                      DateTime? date = await showDatePicker(
+                          context: context,
+                          initialDate: dateofbirth,
+                          firstDate: DateTime(1960),
+                          lastDate: dateofbirth);
+                      if (date != null) {
+                        setState(() {
+                          dateofbirth = date;
+                        });
+                      }
+                    },
+                    child: Container(
+                        width: width,
+                        alignment: Alignment.centerLeft,
+                        margin: const EdgeInsets.only(top: 10, bottom: 20),
+                        height: 51,
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: const Color(0xffC0BACE), width: 1.5),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10))),
+                        child: Text(
+                            '${dateofbirth.year.toString()}-${dateofbirth.month.toString()}-${dateofbirth.day.toString()}')),
+                  ),
                   design.smalltext('Address'),
                   Container(
                       width: width,
@@ -310,7 +356,7 @@ class _RegistrationState extends State<Registration> {
                               const BorderRadius.all(Radius.circular(10))),
                       child: TextFormField(
                         initialValue: '',
-                        onFieldSubmitted: (input) {
+                        onChanged: (input) {
                           setState(() {
                             address = input;
                           });
@@ -327,24 +373,41 @@ class _RegistrationState extends State<Registration> {
             ),
             GestureDetector(
                 onTap: () async {
-                  // final cameras = await availableCameras();
-                  // final firstCamera = cameras.first;
-                  // await Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => TakePictureScreen(
-                  //       camera: firstCamera,
-                  //       // Pass the automatically generated path to
-                  //       // the DisplayPictureScreen widget.
-                  //     ),
-                  //   ),
-                  // );
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const Verificationpage(),
-                    ),
-                  );
+                  Provider.of<UserDataProvider>(context, listen: false)
+                      .updateLoadingProgress(false);
+
+                  Map body = {
+                    "firstName": firstname,
+                    "lastName": lastname,
+                    "companyCode": companyinput,
+                    "bvn": bnv,
+                    "dateOfBirth":
+                        '${dateofbirth.day.toString()}-${dateofbirth.month.toString()}-${dateofbirth.year.toString()}',
+                    "address": address
+                  };
+                  Provider.of<UserDataProvider>(context, listen: false)
+                      .updateDate(body)
+                      .whenComplete(() => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const Verificationpage(),
+                            ),
+                          ));
                 },
-                child: design.longButton(width, 'Update'))
+                child: design.longButton(width, 'Update')),
+            Consumer<UserDataProvider>(builder: (context, data, child) {
+              return Visibility(
+                visible: data.loadingProgress,
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      // value: 0.5,
+                      color: Colors.white,
+                      backgroundColor: design.blue),
+                ),
+              );
+            })
           ],
         ),
       ),

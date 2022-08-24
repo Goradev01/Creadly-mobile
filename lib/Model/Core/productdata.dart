@@ -5,8 +5,8 @@ class ProductData {
   List? pictures;
   String? name;
   String? description;
-  String? merchant;
-  String? category;
+  dynamic merchant;
+  dynamic category;
   int? quantity;
   int? price;
   bool? isActive;

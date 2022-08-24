@@ -1,7 +1,10 @@
 import 'package:creadlymobile/Model/Core/categorydata.dart';
 import 'package:creadlymobile/Model/Core/merchantdata.dart';
 import 'package:creadlymobile/Provider/merchantprovider.dart';
+import 'package:creadlymobile/View/TabComponent/Shop/allmerchant.dart';
+import 'package:creadlymobile/View/TabComponent/Shop/merchantproduct.dart';
 import 'package:creadlymobile/View/TabComponent/Shop/searchproduct.dart';
+import 'package:creadlymobile/View/TabComponent/Shop/categoryProduct.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -160,20 +163,29 @@ class ShoppageState extends State<Shoppage> {
                 physics: const ScrollPhysics(),
                 children: List.generate(result.length, (index) {
                   String image = result[index].imageUrl.toString();
-                  return Column(
-                    children: [
-                      Container(
-                        width: 55,
-                        height: 55,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: design.shadeP, shape: BoxShape.circle),
-                        child: Image.network(image),
-                        // child: SvgPicture.asset('assets/shopicon/ipad.svg'),
-                      ),
-                      design.hspacer(10),
-                      smalltext(result[index].name)
-                    ],
+                  String id = result[index].id!;
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return CategoryProduct(id: id);
+                      }));
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 55,
+                          height: 55,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: design.shadeP, shape: BoxShape.circle),
+                          child: Image.network(image),
+                          // child: SvgPicture.asset('assets/shopicon/ipad.svg'),
+                        ),
+                        design.hspacer(10),
+                        smalltext(result[index].name)
+                      ],
+                    ),
                   );
                 }),
               );
@@ -193,19 +205,29 @@ class ShoppageState extends State<Shoppage> {
                         fontWeight: FontWeight.w700),
                   ),
                   const Spacer(),
-                  Text(
-                    'View all',
-                    style: TextStyle(
-                        color: design.blue,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500),
-                  ),
+                  Builder(builder: (BuildContext context) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return const AllMerchantPage();
+                        }));
+                      },
+                      child: Text(
+                        'View all',
+                        style: TextStyle(
+                            color: design.blue,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    );
+                  }),
                 ],
               ),
             ),
             Consumer<MerchantProvider>(builder: (context, data, child) {
               List<MerchantData> result = data.merchantdata;
-
+              print(result[0].profilePicture);
               return Center(
                 child: GridView.count(
                   // crossAxisCount: 2,
@@ -217,65 +239,73 @@ class ShoppageState extends State<Shoppage> {
                   physics: const ScrollPhysics(),
                   children: List.generate(
                       result.length,
-                      (index) => Container(
-                            height: 120,
-                            alignment: Alignment.topCenter,
-                            decoration: BoxDecoration(
-                              color: const Color(0xffFfFfFf),
-                              border: Border.all(
-                                  width: 1, color: const Color(0xfff8f8f8)),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 100,
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xffF6F6F6),
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10),
-                                        topRight: Radius.circular(10)),
-                                  ),
-                                  child: Image.asset(
-                                      'assets/shopicon/shoplogo.jpg'),
+                      (index) => GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return MerchantProduct(id: result[index].id!);
+                              }));
+                            },
+                            child: Container(
+                              height: 120,
+                              alignment: Alignment.topCenter,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffFfFfFf),
+                                border: Border.all(
+                                    width: 1, color: const Color(0xfff8f8f8)),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xffF6F6F6),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10),
+                                          topRight: Radius.circular(10)),
+                                    ),
+                                    child: Image.network(
+                                        'https://visaapplicationdocuments.s3.amazonaws.com/2790021660482906703.jpg'),
 
-                                  // child: SvgPicture.asset(
-                                  //                       'assets/shopicon/shoplogo.svg')
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(result[index].shopName!,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w500,
-                                              color: design.ash)),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: const [
-                                          Text(
-                                            'Phone | Gadgets | Gaming',
-                                            style: TextStyle(
-                                                color: Color(0xff8e8e8e),
-                                                fontSize: 8,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          Icon(Icons.star_outline,
-                                              size: 12.7,
-                                              color: Color(0xffFFB800))
-                                        ],
-                                      )
-                                    ],
+                                    // child: SvgPicture.asset(
+                                    //                       'assets/shopicon/shoplogo.svg')
                                   ),
-                                )
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(result[index].shopName!,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                                color: design.ash)),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: const [
+                                            Text(
+                                              '',
+                                              style: TextStyle(
+                                                  color: Color(0xff8e8e8e),
+                                                  fontSize: 8,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                            Icon(Icons.star_outline,
+                                                size: 12.7,
+                                                color: Color(0xffFFB800))
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           )),
                 ),

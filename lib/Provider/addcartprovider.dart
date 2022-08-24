@@ -5,6 +5,12 @@ import 'package:flutter/material.dart';
 
 class AddCartProvider extends ChangeNotifier {
   final usertoken = LoginProvider().getUserToken();
+  bool loadingAddCart = false;
+  void updateLoadingCart(bool val) {
+    loadingAddCart = val;
+
+    notifyListeners();
+  }
 
   Future addCart(String id, context) async {
     final helper = AddCartHelper();
@@ -14,6 +20,7 @@ class AddCartProvider extends ChangeNotifier {
         value.fold((l) => null, (r) {
           print(r);
           if (r.toString() == '200') {
+            updateLoadingCart(false);
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const Cart()),
             );

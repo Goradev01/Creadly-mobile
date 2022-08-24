@@ -7,6 +7,12 @@ import '../View/Auth/idcomplete.dart';
 
 class VerifyIdProvider extends ChangeNotifier {
   final usertoken = LoginProvider().getUserToken();
+  bool loadingProgress = false;
+  void updateLoadingProgress(bool val) {
+    loadingProgress = val;
+
+    notifyListeners();
+  }
 
   Future verifyId(
     String idType,
@@ -21,11 +27,13 @@ class VerifyIdProvider extends ChangeNotifier {
           .then((value) {
         value.fold((l) {
           if (l.toString() == 'Invaild Token') {
+            updateLoadingProgress(true);
             return (l.toString());
           }
         }, (r) {
           // print(r);
           if (r.toString() == '200') {
+            updateLoadingProgress(true);
             // print(r);
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const Idcompleted()),

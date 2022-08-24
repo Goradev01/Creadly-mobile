@@ -15,4 +15,14 @@ class ProductHelper {
       return Right(data);
     });
   }
+
+  Future<Either<Glitch, List<ProductData>>> getProductCategory(
+      String id) async {
+    final apiResult = await api.productCategoryApi(id);
+    return apiResult.fold((l) => Left(NoInternetGlitch()), (r) {
+      List<ProductData> data =
+          List.generate(r.length, (index) => ProductData.fromJson(r[index]));
+      return Right(data);
+    });
+  }
 }

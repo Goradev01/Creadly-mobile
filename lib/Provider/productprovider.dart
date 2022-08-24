@@ -1,16 +1,21 @@
 import 'package:creadlymobile/Model/Helper/productapi.dart';
-import 'package:creadlymobile/Provider/merchantprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../Model/Core/productdata.dart';
+import 'merchantprovider.dart';
 
 class ProductProvider extends ChangeNotifier {
   final helper = ProductHelper();
-  List<ProductData> productData = [];
-  List<ProductData> productQueryData = [];
 
-  Future performQuery(String inputId, context, merchantId) async {
+  List<ProductData> productQueryData = [];
+  List<ProductData> productCategoryQueryData = [];
+  void updateproductCategoryQueryData() {
+    productCategoryQueryData = [];
+    notifyListeners();
+  }
+
+  Future performQuery(String inputId, context, String merchantId) async {
     await Provider.of<MerchantProvider>(context, listen: false)
         .performQuery(merchantId);
 
@@ -29,13 +34,39 @@ class ProductProvider extends ChangeNotifier {
     return await result;
   }
 
-  Future getProductData() async {
-    final result =
-        helper.getData().then((value) => value.fold((l) => print(l), (r) {
-              productData = r;
-              notifyListeners();
+  Future<List<ProductData>> performMerchantQuery(String inputId) async {
+    List<ProductData> data = [];
+    await helper.getData().then((value) => value.fold((l) => null, (r) {
+          Iterable<ProductData> query =
+              r.where((element) => element.merchant['_id']!.contains(inputId));
+          data = query.toList();
+
+          notifyListeners();
+        }));
+    return data;
+  }
+
+  Future<List<ProductData>> getProductData() async {
+    List<ProductData> data = [];
+    await helper.getData().then((value) => value.fold((l) => null, (r) {
+          data = r;
+        }));
+
+    return data;
+  }
+
+  Future<List<ProductData>> performCategoryQuery(
+    String inputId,
+  ) async {
+    List<ProductData> data = [];
+    await helper
+        .getProductCategory(inputId)
+        .then((value) => value.fold((l) => print(l), (r) {
+              data = r;
+
+              // notifyListeners();
             }));
 
-    return result;
+    return data;
   }
 }

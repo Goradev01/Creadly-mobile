@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -90,6 +92,8 @@ class _SubmitidState extends State<Submitid> {
           ),
           GestureDetector(
               onTap: () async {
+                Provider.of<VerifyIdProvider>(context, listen: false)
+                    .updateLoadingProgress(true);
                 final idNumber =
                     Provider.of<VerifySelfieProvider>(context, listen: false)
                         .idNumber;
@@ -104,7 +108,21 @@ class _SubmitidState extends State<Submitid> {
                 Provider.of<VerifyIdProvider>(context, listen: false)
                     .verifyId(idType, idNumber, widget.image, context);
               },
-              child: design.longButton(width, 'Submit'))
+              child: design.longButton(width, 'Submit')),
+          Consumer<VerifyIdProvider>(builder: (context, data, child) {
+            return Visibility(
+              visible: data.loadingProgress,
+              child: SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    // value: 0.5,
+                    color: Colors.white,
+                    backgroundColor: design.blue),
+              ),
+            );
+          })
         ],
       ),
     ));

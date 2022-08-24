@@ -5,8 +5,10 @@ import 'package:creadlymobile/Provider/addcartprovider.dart';
 import 'package:creadlymobile/Provider/categoryprovider.dart';
 import 'package:creadlymobile/Provider/login.dart';
 import 'package:creadlymobile/Provider/merchantprovider.dart';
+import 'package:creadlymobile/Provider/orderprovider.dart';
 import 'package:creadlymobile/Provider/productprovider.dart';
 import 'package:creadlymobile/Provider/signup.dart';
+import 'package:creadlymobile/Provider/userdataprovider.dart';
 import 'package:creadlymobile/Provider/verifyidprovider.dart';
 import 'package:creadlymobile/Provider/verifyselfieprovider.dart';
 
@@ -44,6 +46,12 @@ void main() {
       ChangeNotifierProvider<AddCartProvider>(
         create: (_) => AddCartProvider(),
       ),
+      ChangeNotifierProvider<OrderProvider>(
+        create: (_) => OrderProvider(),
+      ),
+      ChangeNotifierProvider<UserDataProvider>(
+        create: (_) => UserDataProvider(),
+      ),
     ],
     child: const MyApp(),
   ));
@@ -68,8 +76,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     Provider.of<LoginProvider>(context, listen: false).checkfirsttimer();
-    super.initState();
     getData();
+    super.initState();
   }
 
   Stream<Widget> loadingStream() async* {

@@ -21,6 +21,7 @@ class LoginProvider extends ChangeNotifier {
   Future<String> getUserToken() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     String usertoken = pref.getString('AuthToken')!;
+    print(usertoken);
     return usertoken;
   }
 

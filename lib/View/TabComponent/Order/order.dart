@@ -1,6 +1,9 @@
+import 'package:creadlymobile/Model/Core/orderdata.dart';
+import 'package:creadlymobile/Provider/orderprovider.dart';
 import 'package:creadlymobile/View/TabComponent/Order/orderprocess.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Orderpage extends StatefulWidget {
   const Orderpage({Key? key}) : super(key: key);
@@ -25,7 +28,7 @@ class Orderdata {
 }
 
 class _OrderpageState extends State<Orderpage> {
-  List<Orderdata> orderdata = [
+  List<Orderdata> orderData = [
     Orderdata(
         id: '#1VKDH73849',
         date: '22, May 2022',
@@ -111,7 +114,7 @@ class _OrderpageState extends State<Orderpage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    orderdata.shuffle();
+                    orderData.shuffle();
                     setState(() {
                       tabno = 1;
                     });
@@ -170,90 +173,137 @@ class _OrderpageState extends State<Orderpage> {
                         ])),
               ],
             ),
-            Column(
-              children: List.generate(
-                  orderdata.length,
-                  (index) => Container(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (context) {
-                                  return const OrderProcess();
-                                }));
-                              },
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+            Consumer<OrderProvider>(builder: (context, data, child) {
+              return FutureBuilder<List<OrderData>>(
+                  future: data.getOrderData(),
+                  builder: (context, snapshot) {
+                    // print(snapshot.data![0].amountPaid);
+                    if (snapshot.connectionState.name == 'done') {
+                      return Column(
+                        children: List.generate(
+                            snapshot.data!.length,
+                            (index) => Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 14),
+                                  child: Column(
                                     children: [
-                                      design.smallText(orderdata[index].date),
-                                      design.hspacer(5),
-                                      design.title(orderdata[index].id),
-                                      design.hspacer(10),
-                                      design.smalltext('items'),
-                                      design.hspacer(10),
-                                      SizedBox(
-                                        width: 125,
-                                        child: design.input(
-                                            const Color(0xff8e8e8e),
-                                            10,
-                                            orderdata[index].item,
-                                            FontWeight.w500),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return const OrderProcess();
+                                          }));
+                                        },
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                design.smallText(snapshot
+                                                    .data?[index].createdAt),
+                                                design.hspacer(5),
+                                                Text(snapshot.data![index].id!,
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                    )),
+                                                design.hspacer(10),
+                                                design.smalltext('items'),
+                                                design.hspacer(10),
+                                                SizedBox(
+                                                  width: 125,
+                                                  child: Row(
+                                                      children: List.generate(
+                                                    snapshot.data![index].items!
+                                                        .length,
+                                                    (ind) => design.input(
+                                                        const Color(0xff8e8e8e),
+                                                        10,
+                                                        snapshot.data![index]
+                                                                    .items![ind]
+                                                                ['productId']
+                                                            ['name'],
+                                                        FontWeight.w500),
+                                                  )),
+                                                ),
+                                                design.hspacer(10),
+                                              ],
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                    width: 137,
+                                                    height: 21,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                        color: snapshot
+                                                                .data![index]
+                                                                .isCompleted!
+                                                            ? design.shadeP
+                                                            : design.shadePi,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(29)),
+                                                    child: Text(
+                                                      // orderdata[index].isid
+                                                      snapshot.data![index]
+                                                              .isCompleted!
+                                                          ? 'Settled'
+                                                          : 'In progress',
+                                                      style: TextStyle(
+                                                          color: snapshot
+                                                                  .data![index]
+                                                                  .isCompleted!
+                                                              ? design.blue
+                                                              : design.pink,
+                                                          fontSize: 10,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    )),
+                                                design.hspacer(25),
+                                                design.amount(
+                                                    design.blue,
+                                                    20.0,
+                                                    snapshot
+                                                        .data![index].amountPaid
+                                                        .toString(),
+                                                    FontWeight.w500)
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      design.hspacer(10),
+                                      Divider(
+                                        color: design.blue,
+                                        thickness: 1,
+                                      )
                                     ],
                                   ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                          width: 137,
-                                          height: 21,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                              color: orderdata[index].status ==
-                                                      'Settled'
-                                                  ? design.shadeP
-                                                  : design.shadePi,
-                                              borderRadius:
-                                                  BorderRadius.circular(29)),
-                                          child: Text(
-                                            orderdata[index].status,
-                                            style: TextStyle(
-                                                color:
-                                                    orderdata[index].status ==
-                                                            'Settled'
-                                                        ? design.blue
-                                                        : design.pink,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w500),
-                                          )),
-                                      design.hspacer(25),
-                                      design.amount(
-                                          design.blue,
-                                          20.0,
-                                          orderdata[index].amount,
-                                          FontWeight.w500)
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              color: design.blue,
-                              thickness: 1,
-                            )
-                          ],
-                        ),
-                      )),
-            )
+                                )),
+                      );
+                    }
+                    if (snapshot.connectionState.name == 'waiting') {
+                      return Center(
+                          child: CircularProgressIndicator(
+                        backgroundColor: Colors.white,
+                        color: design.blue,
+                      ));
+                    } else {
+                      return Center(
+                          child: CircularProgressIndicator(
+                        backgroundColor: Colors.white,
+                        color: design.blue,
+                      ));
+                    }
+                  });
+            })
           ],
         ),
       ),
