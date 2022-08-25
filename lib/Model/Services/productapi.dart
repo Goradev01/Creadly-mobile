@@ -40,11 +40,43 @@ class ProductApi {
     }
   }
 
+  Future<Either<Exception, dynamic>> perProduct(String id) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+          '$endpoint/$id',
+        ),
+        headers: {'Content-Type': 'application/json'},
+      );
+      final data = jsonDecode(response.body);
+
+      return Right(data);
+    } on Exception catch (e) {
+      return Left(e);
+    }
+  }
+
   Future<Either<Exception, dynamic>> productMerchantApi(String id) async {
     try {
       final response = await http.get(
         Uri.parse(
           '$endpoint/category/$id',
+        ),
+        headers: {'Content-Type': 'application/json'},
+      );
+      final data = jsonDecode(response.body);
+
+      return Right(data);
+    } on Exception catch (e) {
+      return Left(e);
+    }
+  }
+
+  Future<Either<Exception, dynamic>> productHotDeal() async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+          '$endpoint/hot',
         ),
         headers: {'Content-Type': 'application/json'},
       );

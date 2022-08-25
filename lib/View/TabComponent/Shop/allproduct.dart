@@ -7,15 +7,16 @@ import '../../../Provider/productprovider.dart';
 import 'productdetail.dart';
 import 'searchproduct.dart';
 
-class CategoryProduct extends StatefulWidget {
-  final String id;
-  const CategoryProduct({Key? key, required this.id}) : super(key: key);
+class AllProduct extends StatefulWidget {
+  const AllProduct({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<CategoryProduct> createState() => _CategoryProductState();
+  State<AllProduct> createState() => _AllProductState();
 }
 
-class _CategoryProductState extends State<CategoryProduct> {
+class _AllProductState extends State<AllProduct> {
   Widget smalltext(text) {
     return Text(
       text,
@@ -30,7 +31,7 @@ class _CategoryProductState extends State<CategoryProduct> {
     final width = MediaQuery.of(context).size.width;
     return design.layout(FutureBuilder<List<ProductData>>(
         future: Provider.of<ProductProvider>(context, listen: false)
-            .performCategoryQuery(widget.id),
+            .getProductData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState.name == 'done') {
             // print(snapshot.data![0].name);

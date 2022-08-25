@@ -25,4 +25,22 @@ class ProductHelper {
       return Right(data);
     });
   }
+
+  Future<Either<Glitch, List<ProductData>>> getPerProduct(String id) async {
+    final apiResult = await api.perProduct(id);
+    return apiResult.fold((l) => Left(NoInternetGlitch()), (r) {
+      List<ProductData> data =
+          List.generate(r.length, (index) => ProductData.fromJson(r[index]));
+      return Right(data);
+    });
+  }
+
+  Future<Either<Glitch, List<ProductData>>> getHotDeal() async {
+    final apiResult = await api.productHotDeal();
+    return apiResult.fold((l) => Left(NoInternetGlitch()), (r) {
+      List<ProductData> data =
+          List.generate(r.length, (index) => ProductData.fromJson(r[index]));
+      return Right(data);
+    });
+  }
 }

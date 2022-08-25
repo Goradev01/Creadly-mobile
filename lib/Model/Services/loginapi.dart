@@ -9,7 +9,7 @@ import '../Configure/baseurl.dart';
 class LoginApi {
   String endpoint = '${Baseurl().url}/api/v1/users/login';
 
-  Future<Either<Exception, String>> login(Map body) async {
+  Future<Either<Exception, http.Response>> login(Map body) async {
     try {
       final response = await http.post(
           Uri.parse(
@@ -18,7 +18,7 @@ class LoginApi {
           headers: {'Content-Type': 'application/json'},
           body: const JsonEncoder().convert(body));
 
-      return Right(response.body);
+      return Right(response);
     } on Exception catch (e) {
       return Left(e);
     }

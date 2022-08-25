@@ -3,6 +3,7 @@
 // import 'package:creadlymobile/Provider/data.dart';
 import 'package:creadlymobile/Provider/addcartprovider.dart';
 import 'package:creadlymobile/Provider/categoryprovider.dart';
+import 'package:creadlymobile/Provider/getcartprovider.dart';
 import 'package:creadlymobile/Provider/login.dart';
 import 'package:creadlymobile/Provider/merchantprovider.dart';
 import 'package:creadlymobile/Provider/orderprovider.dart';
@@ -11,6 +12,7 @@ import 'package:creadlymobile/Provider/signup.dart';
 import 'package:creadlymobile/Provider/userdataprovider.dart';
 import 'package:creadlymobile/Provider/verifyidprovider.dart';
 import 'package:creadlymobile/Provider/verifyselfieprovider.dart';
+import 'package:creadlymobile/Provider/wishlistprovider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +54,12 @@ void main() {
       ChangeNotifierProvider<UserDataProvider>(
         create: (_) => UserDataProvider(),
       ),
+      ChangeNotifierProvider<GetCartProvider>(
+        create: (_) => GetCartProvider(),
+      ),
+      ChangeNotifierProvider<WishListProvider>(
+        create: (_) => WishListProvider(),
+      ),
     ],
     child: const MyApp(),
   ));
@@ -81,8 +89,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Stream<Widget> loadingStream() async* {
-    // await Future<void>.delayed(const Duration(seconds: 0));
-    // yield const SplashScreen();
+    await Future<void>.delayed(const Duration(seconds: 0));
+    yield const SplashScreen();
     await Future<void>.delayed(const Duration(seconds: 5));
     yield Consumer<LoginProvider>(builder: (context, data, child) {
       if (data.auth.isNotEmpty) {
@@ -102,7 +110,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       home: StreamBuilder<Widget>(
-        // initialData: const SplashScreen(),
+        initialData: const SplashScreen(),
         stream: loadingStream(),
         builder: (context, snapshot) {
           return Scaffold(body: snapshot.data);

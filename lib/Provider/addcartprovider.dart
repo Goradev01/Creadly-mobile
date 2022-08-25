@@ -18,7 +18,6 @@ class AddCartProvider extends ChangeNotifier {
     final postData = usertoken.then((token) {
       return helper.postCart(body, token).then((value) {
         value.fold((l) => null, (r) {
-          print(r);
           if (r.toString() == '200') {
             updateLoadingCart(false);
             Navigator.of(context).push(

@@ -11,7 +11,8 @@ class UserDataHelper {
     final apiResult = await api.userDataApi(usertoken);
     return apiResult.fold((l) => Left(NoInternetGlitch()), (r) {
       List<UserData> data =
-          List.generate(r.length, (index) => UserData.fromJson(r[index]));
+          List.generate(1, (index) => UserData.fromJson(r[index]));
+
       return Right(data);
     });
   }

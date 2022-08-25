@@ -1,12 +1,9 @@
-import 'package:creadlymobile/Provider/categoryprovider.dart';
-import 'package:creadlymobile/Provider/merchantprovider.dart';
 import 'package:creadlymobile/View/TabComponent/Order/order.dart';
 import 'package:creadlymobile/View/TabComponent/Profile/profile.dart';
 import 'package:creadlymobile/View/TabComponent/Shop/shop.dart';
 import 'package:creadlymobile/View/TabComponent/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({Key? key}) : super(key: key);
@@ -17,6 +14,8 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   int tabno = 0;
+  // PageController controller= PageController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

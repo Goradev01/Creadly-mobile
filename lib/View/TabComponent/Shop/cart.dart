@@ -3,11 +3,14 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:creadlymobile/Model/Core/cartdata.dart';
+import 'package:creadlymobile/Provider/getcartprovider.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack_payment/flutter_paystack_payment.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class Cart extends StatefulWidget {
   const Cart({Key? key}) : super(key: key);
@@ -18,12 +21,14 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   int stock = 0;
+
   String paystackPublicKey = 'pk_test_cc4c2259b62bc75842e99e60a2e4ac12a883a840';
   bool inProgress = false;
   String? _cardNumber;
   String? _cvv;
   int? _expiryMonth;
   int? _expiryYear;
+  int radioKey = 0;
   PaymentCard _getCardFromUI() {
     // Using just the must-required parameters.
     return PaymentCard(
@@ -34,6 +39,7 @@ class _CartState extends State<Cart> {
     );
   }
 
+  List<int> radiokeyList = List.generate(3, (index) => index + 1);
   String _getReference() {
     log("We are here");
     String platform;
@@ -91,10 +97,12 @@ class _CartState extends State<Cart> {
   }
 
   final plugin = PaystackPayment();
+
   @override
   void initState() {
-    plugin.initialize(publicKey: paystackPublicKey);
     super.initState();
+    plugin.initialize(publicKey: paystackPublicKey);
+    Provider.of<GetCartProvider>(context, listen: false).updateTotalCost();
   }
 
   @override
@@ -135,242 +143,174 @@ class _CartState extends State<Cart> {
                   ],
                 ),
               ),
-              Container(
-                width: width,
-                height: 85,
-                // padding: const EdgeInsets.all(5),
-                margin: const EdgeInsets.fromLTRB(25, 24, 25, 5),
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                decoration: const BoxDecoration(color: Color(0xfff8f8fa)),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        'assets/shopicon/imac.jpg',
-                        height: 44.82,
-                        width: 59.5,
-                      ),
-                      design.wspacer(5),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          design.smallText('IMac 47 Inches'),
-                          design.hspacer(5),
-                          Builder(builder: (context) {
-                            List<Widget> star = List.filled(
-                                4,
-                                SvgPicture.asset('assets/shopicon/starhalf.svg',
-                                    width: 9.98, height: 9.55),
-                                growable: true);
-                            List<Widget> replace = List.generate(
-                                3,
-                                (index) => SvgPicture.asset(
-                                    'assets/shopicon/star.svg',
-                                    width: 9.98,
-                                    height: 9.55));
-                            star.replaceRange(0, 3, replace);
+              Consumer<GetCartProvider>(builder: (context, data, child) {
+                return FutureBuilder<List<CartData>>(
+                    future: data.getData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState.name == 'done') {
+                        // setState(() {
 
-                            return Row(
-                              children: star,
-                            );
-                          }),
-                          const Spacer(),
-                          design.amount(
-                              design.ash, 12.0, '500,000', FontWeight.w500)
-                        ],
-                      ),
-                      const Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text('Remove',
-                              style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: design.blue,
-                                  fontSize: 10,
-                                  color: design.blue,
-                                  fontWeight: FontWeight.w400)),
-                          const Spacer(),
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    stock = stock + 1;
-                                  });
-                                },
-                                child: Container(
-                                  height: 24.1,
-                                  alignment: Alignment.center,
-                                  width: 24.1,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                          width: 1, color: design.shadeP)),
-                                  child: Text('+',
-                                      style: TextStyle(
-                                          fontSize: 10, color: design.blue)),
-                                ),
-                              ),
-                              Container(
-                                height: 34,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                alignment: Alignment.center,
-                                width: 34,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color(0xffffffff)),
-                                child: Text(stock.toString(),
-                                    style: TextStyle(
-                                        fontSize: 20, color: design.ash)),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (stock > 0) {
-                                    setState(() {
-                                      stock = stock - 1;
-                                    });
-                                  }
-                                },
-                                child: Container(
-                                  height: 24.1,
-                                  alignment: Alignment.center,
-                                  width: 24.1,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                          width: 1, color: design.shadeP)),
-                                  child: Text('-',
-                                      style: TextStyle(
-                                          fontSize: 10, color: design.blue)),
-                                ),
-                              ),
-                              design.wspacer(10),
-                            ],
-                          ),
-                        ],
-                      )
-                    ]),
-              ),
-              Container(
-                width: width,
-                height: 85,
-                // padding: const EdgeInsets.all(5),
-                margin: const EdgeInsets.fromLTRB(25, 5, 25, 10),
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                decoration: const BoxDecoration(color: Color(0xfff8f8fa)),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        'assets/shopicon/ac.jpg',
-                        height: 44.82,
-                        width: 59.5,
-                      ),
-                      design.wspacer(5),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          design.smallText('IMac 47 Inches'),
-                          design.hspacer(5),
-                          Builder(builder: (context) {
-                            List<Widget> star = List.filled(
-                                4,
-                                SvgPicture.asset('assets/shopicon/starhalf.svg',
-                                    width: 9.98, height: 9.55),
-                                growable: true);
-                            List<Widget> replace = List.generate(
-                                3,
-                                (index) => SvgPicture.asset(
-                                    'assets/shopicon/star.svg',
-                                    width: 9.98,
-                                    height: 9.55));
-                            star.replaceRange(0, 3, replace);
+                        // });
+                        return Column(
+                            children: List.generate(
+                          snapshot.data!.length,
+                          (index) => Container(
+                            width: width,
+                            height: 85,
+                            // padding: const EdgeInsets.all(5),
+                            margin: const EdgeInsets.fromLTRB(25, 24, 25, 5),
+                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            decoration:
+                                const BoxDecoration(color: Color(0xfff8f8fa)),
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Image.network(
+                                    snapshot.data![index].image!,
+                                    height: 44.82,
+                                    width: 59.5,
+                                  ),
+                                  design.wspacer(5),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      design.smallText(
+                                          snapshot.data![index].name!),
+                                      design.hspacer(5),
+                                      Builder(builder: (context) {
+                                        List<Widget> star = List.filled(
+                                            4,
+                                            SvgPicture.asset(
+                                                'assets/shopicon/starhalf.svg',
+                                                width: 9.98,
+                                                height: 9.55),
+                                            growable: true);
+                                        List<Widget> replace = List.generate(
+                                            3,
+                                            (index) => SvgPicture.asset(
+                                                'assets/shopicon/star.svg',
+                                                width: 9.98,
+                                                height: 9.55));
+                                        star.replaceRange(0, 3, replace);
 
-                            return Row(
-                              children: star,
-                            );
-                          }),
-                          const Spacer(),
-                          design.amount(
-                              design.ash, 12.0, '500,000', FontWeight.w500)
-                        ],
-                      ),
-                      const Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text('Remove',
-                              style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: design.blue,
-                                  fontSize: 10,
-                                  color: design.blue,
-                                  fontWeight: FontWeight.w400)),
-                          const Spacer(),
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    stock = stock + 1;
-                                  });
-                                },
-                                child: Container(
-                                  height: 24.1,
-                                  alignment: Alignment.center,
-                                  width: 24.1,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                          width: 1, color: design.shadeP)),
-                                  child: Text('+',
-                                      style: TextStyle(
-                                          fontSize: 10, color: design.blue)),
-                                ),
-                              ),
-                              Container(
-                                height: 34,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                alignment: Alignment.center,
-                                width: 34,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color(0xffffffff)),
-                                child: Text(stock.toString(),
-                                    style: TextStyle(
-                                        fontSize: 20, color: design.ash)),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (stock > 0) {
-                                    setState(() {
-                                      stock = stock - 1;
-                                    });
-                                  }
-                                },
-                                child: Container(
-                                  height: 24.1,
-                                  alignment: Alignment.center,
-                                  width: 24.1,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                          width: 1, color: design.shadeP)),
-                                  child: Text('-',
-                                      style: TextStyle(
-                                          fontSize: 10, color: design.blue)),
-                                ),
-                              ),
-                              design.wspacer(10),
-                            ],
+                                        return Row(
+                                          children: star,
+                                        );
+                                      }),
+                                      const Spacer(),
+                                      design.amount(
+                                          design.ash,
+                                          12.0,
+                                          snapshot.data![index].price!
+                                              .toString(),
+                                          FontWeight.w500)
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text('Remove',
+                                          style: TextStyle(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              decorationColor: design.blue,
+                                              fontSize: 10,
+                                              color: design.blue,
+                                              fontWeight: FontWeight.w400)),
+                                      const Spacer(),
+                                      Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (stock <
+                                                  snapshot
+                                                      .data![index].quantity!) {
+                                                setState(() {
+                                                  stock = stock + 1;
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              height: 24.1,
+                                              alignment: Alignment.center,
+                                              width: 24.1,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  border: Border.all(
+                                                      width: 1,
+                                                      color: design.shadeP)),
+                                              child: Text('+',
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      color: design.blue)),
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 34,
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            alignment: Alignment.center,
+                                            width: 34,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: const Color(0xffffffff)),
+                                            child: Text(stock.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: design.ash)),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (stock > 0) {
+                                                setState(() {
+                                                  stock = stock - 1;
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              height: 24.1,
+                                              alignment: Alignment.center,
+                                              width: 24.1,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  border: Border.all(
+                                                      width: 1,
+                                                      color: design.shadeP)),
+                                              child: Text('-',
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      color: design.blue)),
+                                            ),
+                                          ),
+                                          design.wspacer(10),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                ]),
                           ),
-                        ],
-                      )
-                    ]),
-              ),
+                        ));
+                      }
+                      if (snapshot.connectionState.name == 'waiting') {
+                        return Center(
+                            child: CircularProgressIndicator(
+                          backgroundColor: Colors.white,
+                          color: design.blue,
+                        ));
+                      } else {
+                        return Center(
+                            child: CircularProgressIndicator(
+                          backgroundColor: Colors.white,
+                          color: design.blue,
+                        ));
+                      }
+                    });
+              }),
               Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: Column(
@@ -455,51 +395,67 @@ class _CartState extends State<Cart> {
                   ],
                 ),
               ),
-              Container(
-                decoration: const BoxDecoration(color: Color(0xfff8f8fa)),
-                padding: const EdgeInsets.fromLTRB(25, 20, 35, 24),
-                child: Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Total Cost',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: design.pink,
-                                fontWeight: FontWeight.w400)),
-                        design.hspacer(10),
-                        design.amount(
-                            design.ash, 20.0, '500,000', FontWeight.w500)
-                      ],
-                    ),
-                    const Spacer(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Status',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: design.pink,
-                                fontWeight: FontWeight.w400)),
-                        design.hspacer(10),
-                        Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(29),
-                              color: const Color(0xffD3AE28).withOpacity(0.2)),
-                          padding: const EdgeInsets.fromLTRB(21, 4, 21, 4),
-                          child: const Text('Pending Transaction',
+              Consumer<GetCartProvider>(builder: (context, data, child) {
+                return Container(
+                  decoration: const BoxDecoration(color: Color(0xfff8f8fa)),
+                  padding: const EdgeInsets.fromLTRB(25, 20, 35, 24),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Total Cost',
                               style: TextStyle(
-                                  color: Color(0xffD3AE28),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500)),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+                                  fontSize: 12,
+                                  color: design.pink,
+                                  fontWeight: FontWeight.w400)),
+                          design.hspacer(10),
+                          FutureBuilder<int>(
+                              future: data.totalAmount(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState.name == 'done') {
+                                  return design.amount(
+                                      design.ash,
+                                      20.0,
+                                      snapshot.data.toString(),
+                                      FontWeight.w500);
+                                }
+                                return SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: design.loadingProgress());
+                              }),
+                        ],
+                      ),
+                      const Spacer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Status',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: design.pink,
+                                  fontWeight: FontWeight.w400)),
+                          design.hspacer(10),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(29),
+                                color:
+                                    const Color(0xffD3AE28).withOpacity(0.2)),
+                            padding: const EdgeInsets.fromLTRB(21, 4, 21, 4),
+                            child: const Text('Pending Transaction',
+                                style: TextStyle(
+                                    color: Color(0xffD3AE28),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500)),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }),
               Padding(
                 padding: const EdgeInsets.fromLTRB(25, 14, 0, 10),
                 child: Text('Payment',
@@ -541,7 +497,17 @@ class _CartState extends State<Cart> {
                       ],
                     ),
                     const Spacer(),
-                    design.amount(design.pink, 10.0, '50,000', FontWeight.w400)
+                    design.amount(design.pink, 10.0, '50,000', FontWeight.w400),
+                    Radio(
+                      activeColor: const Color(0xff121212),
+                      value: radiokeyList[0],
+                      groupValue: radioKey,
+                      onChanged: (int? value) {
+                        setState(() {
+                          radioKey = value!;
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -590,7 +556,17 @@ class _CartState extends State<Cart> {
                       ],
                     ),
                     const Spacer(),
-                    Image.asset('assets/Mastercard.png')
+                    Image.asset('assets/Mastercard.png'),
+                    Radio(
+                      activeColor: const Color(0xff121212),
+                      value: radiokeyList[1],
+                      groupValue: radioKey,
+                      onChanged: (int? value) {
+                        setState(() {
+                          radioKey = value!;
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -628,7 +604,17 @@ class _CartState extends State<Cart> {
                     ),
                     const Spacer(),
                     design.input(
-                        design.pink, 10.0, '20 Points', FontWeight.w400)
+                        design.pink, 10.0, '20 Points', FontWeight.w400),
+                    Radio(
+                      activeColor: const Color(0xff121212),
+                      value: radiokeyList[2],
+                      groupValue: radioKey,
+                      onChanged: (int? value) {
+                        setState(() {
+                          radioKey = value!;
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),

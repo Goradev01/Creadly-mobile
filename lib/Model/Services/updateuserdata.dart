@@ -12,7 +12,7 @@ class UpdateUserData {
   Future<Either<Exception, dynamic>> updateUserData(
       Map body, String usertoken) async {
     try {
-      final response = await http.post(
+      final response = await http.patch(
           Uri.parse(
             endpoint,
           ),

@@ -4,6 +4,7 @@ import 'package:creadlymobile/Provider/userdataprovider.dart';
 import 'package:creadlymobile/View/Auth/verification.dart';
 import 'package:creadlymobile/View/TabComponent/BNPL/bnpl.dart';
 import 'package:creadlymobile/View/TabComponent/Salary-Advanced/salary.dart';
+import 'package:creadlymobile/View/TabComponent/Shop/allproduct.dart';
 import 'package:creadlymobile/View/TabComponent/Shop/searchproduct.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,11 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
+    Provider.of<UserDataProvider>(context, listen: false).getUserData().then(
+        (value) => Provider.of<UserDataProvider>(context, listen: false)
+            .updateDetail(
+                value[0].email!, value[0].firstName!, value[0].phoneNumber!));
+    print(Provider.of<UserDataProvider>(context, listen: false).firstName);
   }
 
   List<Product> products = [
@@ -121,10 +127,10 @@ class _HomepageState extends State<Homepage> {
                                   children: [
                                     Text(
                                       snapshot.data?[0].firstName != null
-                                          ? 'Hello ${snapshot.data![0].firstName},'
+                                          ? 'Hello ${snapshot.data?[0].firstName},'
                                           : 'Hello',
                                       style: TextStyle(
-                                          fontSize: 14.0,
+                                          fontSize: 18.0,
                                           fontWeight: FontWeight.w700,
                                           color: design.productblack),
                                     ),
@@ -421,79 +427,133 @@ class _HomepageState extends State<Homepage> {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
-                child: SizedBox(
-                    height: 160,
-                    child: ListView.builder(
-                        itemCount: products.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              // Navigator.of(context)
-                              //     .push(MaterialPageRoute(builder: (context) {
-                              //   return const Productdetail(id: 0);
-                              // }));
-                            },
-                            child: Container(
-                              height: 150,
-                              width: 150,
-                              margin: const EdgeInsets.all(5),
-                              alignment: Alignment.topCenter,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffFfFfFf),
-                                border: Border.all(
-                                    width: 1, color: const Color(0xfff8f8f8)),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                      height: 100,
-                                      width: (width - 50 - 15) / 2,
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xffF6F6F6),
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10),
-                                            topRight: Radius.circular(10)),
+                child:
+                    Consumer<ProductProvider>(builder: (context, data, child) {
+                  return FutureBuilder<List<ProductData>>(
+                      future: data.getHotDealData(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState.name == 'done') {
+                          return SizedBox(
+                              height: 160,
+                              child: ListView.builder(
+                                  itemCount: snapshot.data!.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return Productdetail(
+                                              id: snapshot.data![index].id!);
+                                        }));
+                                      },
+                                      child: Container(
+                                        height: 150,
+                                        width: 150,
+                                        margin: const EdgeInsets.all(5),
+                                        alignment: Alignment.topCenter,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xffFfFfFf),
+                                          border: Border.all(
+                                              width: 1,
+                                              color: const Color(0xfff8f8f8)),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                height: 100,
+                                                width: (width - 50 - 15) / 2,
+                                                padding:
+                                                    const EdgeInsets.all(12),
+                                                decoration: const BoxDecoration(
+                                                  color: Color(0xffF6F6F6),
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                ),
+                                                child: Image.network(
+                                                  snapshot.data![index].image!,
+                                                )),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      12, 6, 0, 2),
+                                              child: design.smallText(
+                                                  snapshot.data![index].name),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12),
+                                              child: Row(children: [
+                                                design.amount(
+                                                    design.ash,
+                                                    12.0,
+                                                    snapshot.data![index].price
+                                                        .toString(),
+                                                    FontWeight.w500),
+                                                const Spacer(),
+                                                const Icon(
+                                                    Icons.favorite_outline,
+                                                    size: 12,
+                                                    color: Color(0xff0d0d0d))
+                                              ]),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      child: Image.asset(
-                                        'assets/shopicon/${products[index].imageurl}.jpg',
-                                      )),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(12, 6, 0, 2),
-                                    child:
-                                        design.smallText(products[index].title),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    child: Row(children: [
-                                      design.amount(
-                                          design.ash,
-                                          12.0,
-                                          products[index].amount,
-                                          FontWeight.w500),
-                                      const Spacer(),
-                                      const Icon(Icons.favorite_outline,
-                                          size: 12, color: Color(0xff0d0d0d))
-                                    ]),
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
-                        })),
+                                    );
+                                  }));
+                        }
+                        if (snapshot.connectionState.name == 'waiting') {
+                          return design.loadingProgress();
+                        } else {
+                          return design.loadingProgress();
+                        }
+                      });
+                }),
               ),
             ],
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
-            child: design.input(design.ash, 15, "Products", FontWeight.w700),
+            child: Row(
+              children: [
+                design.input(design.ash, 15, "Products", FontWeight.w700),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return const AllProduct();
+                    }));
+                  },
+                  child: Text(
+                    'View all',
+                    style: TextStyle(
+                        color: design.blue,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500),
+                  ),
+                )
+              ],
+            ),
           ),
           Consumer<ProductProvider>(builder: (context, data, child) {
             return FutureBuilder<List<ProductData>>(
@@ -515,17 +575,10 @@ class _HomepageState extends State<Homepage> {
                             (index) => GestureDetector(
                                   onTap: () {
                                     final id = snapshot.data![index].id!;
-                                    final merchantId =
-                                        snapshot.data![index].merchant!['_id'];
-                                    Provider.of<ProductProvider>(context,
-                                            listen: false)
-                                        .performQuery(
-                                            id.trim(), context, merchantId)
-                                        .then((val) => Navigator.of(context)
-                                                .push(MaterialPageRoute(
-                                                    builder: (context) {
-                                              return const Productdetail();
-                                            })));
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return Productdetail(id: id);
+                                    }));
                                   },
                                   child: Container(
                                     alignment: Alignment.topCenter,

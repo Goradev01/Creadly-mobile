@@ -175,6 +175,14 @@ class Ui {
     );
   }
 
+  Widget loadingProgress() {
+    return Center(
+        child: CircularProgressIndicator(
+      backgroundColor: Colors.white,
+      color: blue,
+    ));
+  }
+
   Widget hspacer(double num) {
     return SizedBox(height: num);
   }

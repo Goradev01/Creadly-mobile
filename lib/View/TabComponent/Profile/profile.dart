@@ -12,6 +12,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Provider/userdataprovider.dart';
+
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -115,13 +117,15 @@ class _ProfileState extends State<Profile> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Hello Adekanye,',
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w700,
-                          color: design.productblack),
-                    ),
+                    Consumer<UserDataProvider>(builder: (context, data, child) {
+                      return Text(
+                        'Hello ${data.firstName}',
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                            color: design.productblack),
+                      );
+                    }),
                     Center(
                       child: GestureDetector(
                         onTap: () {

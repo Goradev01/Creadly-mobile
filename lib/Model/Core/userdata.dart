@@ -12,9 +12,15 @@ class UserData {
   String? password;
   String? createdAt;
   int? v;
-  String? firstName;
-  String? lastName;
+  dynamic firstName;
+  dynamic address;
+  dynamic bvn;
+  dynamic dateOfBirth;
+  dynamic companyCode;
+
+  dynamic lastName;
   List? cart;
+
   UserData({
     required this.isIDVerified,
     required this.isSelfieVerified,
@@ -31,6 +37,10 @@ class UserData {
     required this.password,
     required this.createdAt,
     required this.v,
+    required this.address,
+    required this.bvn,
+    required this.dateOfBirth,
+    required this.companyCode,
     required this.cart,
   });
   UserData.fromJson(Map<String, dynamic> map) {
@@ -43,13 +53,18 @@ class UserData {
     isAdmin = map['isAdmin'];
     isSuperAdmin = map['isSuperAdmin'];
     isActive = map['isActive'];
-    firstName = map['isActive'];
+    firstName = map['firstName'];
     lastName = map['lastName'];
     isVerified = map['isVerified'];
     password = map['password'];
     createdAt = map['createdAt'];
     v = map['_v'];
+    companyCode = map['companyCode'];
+    v = map['_v'];
     cart = map['cart'];
+    address = map['address'];
+    bvn = map['bvn'];
+    dateOfBirth = map['dateOfBirth'];
   }
   Map<String, dynamic> toJson() => {
         'isIDVerified': isIDVerified,
@@ -68,5 +83,9 @@ class UserData {
         'createdAt': createdAt,
         'v': v,
         'cart': cart,
+        'address': address,
+        'bvn': bvn,
+        'dateOfBirth': dateOfBirth,
+        'companyCode': companyCode,
       };
 }

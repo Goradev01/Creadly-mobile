@@ -7,11 +7,24 @@ import 'package:flutter/cupertino.dart';
 class UserDataProvider extends ChangeNotifier {
   final helper = UserDataHelper();
   final updateHelper = UpdateUserHelper();
+  String email = '';
+  String firstName = '';
+  String phoneNumber = '';
   final usertoken = LoginProvider().getUserToken();
-  bool loadingProgress = false;
+  bool loadingProgress = true;
   void updateLoadingProgress(bool val) {
     loadingProgress = val;
 
+    notifyListeners();
+  }
+
+  void updateDetail(String input, dynamic name, String phoneNo) {
+    email = input;
+    if (name != null) {
+      firstName = name;
+    }
+
+    phoneNumber = phoneNo;
     notifyListeners();
   }
 
@@ -21,11 +34,10 @@ class UserDataProvider extends ChangeNotifier {
       return helper.getData(token.trim()).then((value) {
         value.fold((l) => null, (r) {
           data = r;
-          print(data);
-          // notifyListeners();
         });
       });
     });
+
     return data;
   }
 
