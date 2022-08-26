@@ -97,12 +97,25 @@ class _CartState extends State<Cart> {
   }
 
   final plugin = PaystackPayment();
-
+  Future<List<CartData>>? futureCart;
+  Future<int>? totalAmount;
+  List<int>? productlimit;
   @override
   void initState() {
     super.initState();
     plugin.initialize(publicKey: paystackPublicKey);
-    Provider.of<GetCartProvider>(context, listen: false).updateTotalCost();
+    totalAmount =
+        Provider.of<GetCartProvider>(context, listen: false).totalAmount();
+    futureCart = Provider.of<GetCartProvider>(context, listen: false).getData();
+    Provider.of<GetCartProvider>(context, listen: false).getData().then((r) {
+      for (var i = 0; i < r.length; i++) {
+        List<int> sum = List.filled(r.length, 0);
+        setState(() {
+          productlimit = sum;
+        });
+      }
+    });
+    // Provider.of<GetCartProvider>(context, listen: false).updateTotalCost();
   }
 
   @override
@@ -145,7 +158,7 @@ class _CartState extends State<Cart> {
               ),
               Consumer<GetCartProvider>(builder: (context, data, child) {
                 return FutureBuilder<List<CartData>>(
-                    future: data.getData(),
+                    future: futureCart,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState.name == 'done') {
                         // setState(() {
@@ -224,11 +237,12 @@ class _CartState extends State<Cart> {
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              if (stock <
+                                              if (productlimit![index] <
                                                   snapshot
                                                       .data![index].quantity!) {
                                                 setState(() {
-                                                  stock = stock + 1;
+                                                  productlimit![index] =
+                                                      productlimit![index] + 1;
                                                 });
                                               }
                                             },
@@ -258,16 +272,18 @@ class _CartState extends State<Cart> {
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                                 color: const Color(0xffffffff)),
-                                            child: Text(stock.toString(),
+                                            child: Text(
+                                                productlimit![index].toString(),
                                                 style: TextStyle(
                                                     fontSize: 20,
                                                     color: design.ash)),
                                           ),
                                           GestureDetector(
                                             onTap: () {
-                                              if (stock > 0) {
+                                              if (productlimit![index] != 0) {
                                                 setState(() {
-                                                  stock = stock - 1;
+                                                  productlimit![index] =
+                                                      productlimit![index] - 1;
                                                 });
                                               }
                                             },
@@ -411,7 +427,7 @@ class _CartState extends State<Cart> {
                                   fontWeight: FontWeight.w400)),
                           design.hspacer(10),
                           FutureBuilder<int>(
-                              future: data.totalAmount(),
+                              future: totalAmount,
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState.name == 'done') {
                                   return design.amount(

@@ -17,6 +17,7 @@ class Productdetail extends StatefulWidget {
 
 class _ProductdetailState extends State<Productdetail> {
   int stock = 0;
+  // List<ProductData> data = [];
   Widget smalltext(text) {
     return Text(
       text,
@@ -25,9 +26,13 @@ class _ProductdetailState extends State<Productdetail> {
     );
   }
 
+  Future<List<ProductData>>? futuredata;
+
   @override
   void initState() {
     super.initState();
+    futuredata = Provider.of<ProductProvider>(context, listen: false)
+        .perProductData(widget.id);
   }
 
   @override
@@ -37,13 +42,15 @@ class _ProductdetailState extends State<Productdetail> {
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(bottom: 30),
-          child: Consumer<ProductProvider>(builder: (context, perdata, child) {
+          child: Builder(builder: (
+            context,
+          ) {
             return FutureBuilder<List<ProductData>>(
-                future: perdata.perProductData(widget.id),
+                future: futuredata,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState.name == 'waiting') {
                     return SizedBox(
-                        height: 200, child: design.loadingProgress());
+                        height: 50, child: design.loadingProgress());
                   }
                   if (snapshot.connectionState.name == 'done') {
                     List<ProductData> data = snapshot.data!;
