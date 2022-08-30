@@ -8,7 +8,7 @@ import '../Configure/baseurl.dart';
 class SignUpAPi {
   String endpoint = '${Baseurl().url}/api/v1/users';
 
-  Future<Either<Exception, String>> signup(Map body) async {
+  Future<Either<Exception, http.Response>> signup(Map body) async {
     try {
       final response = await http.post(
           Uri.parse(
@@ -17,7 +17,7 @@ class SignUpAPi {
           headers: {'Content-Type': 'application/json'},
           body: const JsonEncoder().convert(body));
 
-      return Right(response.body);
+      return Right(response);
     } on Exception catch (e) {
       return Left(e);
     }

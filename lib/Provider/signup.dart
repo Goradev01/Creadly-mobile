@@ -22,19 +22,15 @@ class SignupProvider extends ChangeNotifier {
     };
 
     final helper = SignUpHelper().postSignUp(body).then((value) => {
-          if (value.toString() == 'This email address already exists')
-            {updateLoadSignup(false)}
-          else if (value.toString() == 'Bad Request')
-            {
-              // errorAlert('Error', context);
-              updateLoadSignup(false)
-            }
-          else
-            {
+          value.fold((l) => null, (r) {
+            if (r.statusCode == 200) {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return const Otp();
-              }))
+              }));
+            } else {
+              return 'Error';
             }
+          })
         });
     return helper;
   }
