@@ -10,6 +10,7 @@ class BnplProvider extends ChangeNotifier {
     await helper.getData().then((value) => value.fold((l) => null, (r) {
           data = r;
         }));
+
     return data;
   }
 }
