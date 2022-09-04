@@ -1,22 +1,14 @@
 class BnplData {
-  int? bnpl;
-  int? salaryAdvance;
-  int? onDemand;
+  Map? data;
 
   BnplData({
-    required this.bnpl,
-    required this.salaryAdvance,
-    required this.onDemand,
+    required this.data,
   });
 
   BnplData.fromJson(Map<String, dynamic> map) {
-    bnpl = map['bnpl'];
-    salaryAdvance = map['salaryAdvance'];
-    onDemand = map['onDemand'];
+    data = map['data'];
   }
   Map<String, dynamic> toJson() => {
-        'bnpl': bnpl,
-        'salaryAdvance': salaryAdvance,
-        'OnDemand': onDemand,
+        'data': data,
       };
 }

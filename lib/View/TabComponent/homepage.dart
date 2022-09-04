@@ -1,3 +1,4 @@
+import 'package:creadlymobile/Model/Core/bnlp.dart';
 import 'package:creadlymobile/Model/Core/productdata.dart';
 import 'package:creadlymobile/Model/Core/userdata.dart';
 import 'package:creadlymobile/Provider/userdataprovider.dart';
@@ -5,12 +6,12 @@ import 'package:creadlymobile/View/Auth/verification.dart';
 import 'package:creadlymobile/View/TabComponent/BNPL/bnpl.dart';
 import 'package:creadlymobile/View/TabComponent/Salary-Advanced/salary.dart';
 import 'package:creadlymobile/View/TabComponent/Shop/allproduct.dart';
-import 'package:creadlymobile/View/TabComponent/Shop/searchproduct.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../Provider/bnplprovider.dart';
 import '../../Provider/productprovider.dart';
 import 'Shop/productdetail.dart';
 
@@ -23,7 +24,7 @@ class Homepage extends StatefulWidget {
 
 class CreditModel {
   String title;
-  String amount;
+  String name;
   int id;
   String mode;
   Color color;
@@ -32,15 +33,29 @@ class CreditModel {
     required this.title,
     required this.id,
     required this.mode,
-    required this.amount,
+    required this.name,
     required this.color,
   });
 }
 
 class _HomepageState extends State<Homepage> {
+  Future<List<BnplData>>? creditModel;
+  int creditmodelno = 0;
+  bool newuser = true;
+  Future<List<UserData>>? userData;
+  Future<List<ProductData>>? hotDeal;
+  Future<List<ProductData>>? productData;
+
   @override
   void initState() {
     super.initState();
+    creditModel = Provider.of<BnplProvider>(context, listen: false).getData();
+    hotDeal =
+        Provider.of<ProductProvider>(context, listen: false).getHotDealData();
+    productData =
+        Provider.of<ProductProvider>(context, listen: false).getProductData();
+    userData =
+        Provider.of<UserDataProvider>(context, listen: false).getUserData();
     Provider.of<UserDataProvider>(context, listen: false).getUserData().then(
         (value) => Provider.of<UserDataProvider>(context, listen: false)
             .updateDetail(
@@ -48,22 +63,10 @@ class _HomepageState extends State<Homepage> {
     print(Provider.of<UserDataProvider>(context, listen: false).firstName);
   }
 
-  List<Product> products = [
-    Product(
-        title: 'Hisense Refrigerator...',
-        amount: '500,000',
-        imageurl: 'fridge'),
-    Product(title: 'Nike Sneakers AF683', amount: '70,000', imageurl: 'shoe'),
-    Product(
-        title: 'Black Stylish Beanie', amount: '500,000', imageurl: 'beanie'),
-    Product(title: 'LG Microwave', amount: '70,000', imageurl: 'machine'),
-    Product(title: 'Samsung Split Air C...', amount: '70,000', imageurl: 'ac'),
-    Product(title: 'I Mac 47 Inches', amount: '500,000', imageurl: 'imac'),
-  ];
   List<CreditModel> creditmodel = [
     CreditModel(
         title: 'BNPL Balance',
-        amount: '200,000',
+        name: 'bnpl',
         mode: 'Make Request',
         id: 0,
         color: const Color(0xff3A0CA3)),
@@ -71,11 +74,15 @@ class _HomepageState extends State<Homepage> {
         title: 'Salary Advance',
         mode: 'Withdraw',
         id: 1,
-        amount: '300,000',
+        name: 'salaryAdvance',
         color: const Color(0xffCB32B5)),
+    CreditModel(
+        title: 'On Demand',
+        mode: 'Withdraw',
+        id: 2,
+        name: 'onDemand',
+        color: Colors.yellow),
   ];
-  int creditmodelno = 0;
-  bool newuser = true;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +95,7 @@ class _HomepageState extends State<Homepage> {
         children: [
           Consumer<UserDataProvider>(builder: (context, data, child) {
             return FutureBuilder<List<UserData>>(
-                future: data.getUserData(),
+                future: userData,
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState.name == 'done') {
                     return Container(
@@ -198,111 +205,143 @@ class _HomepageState extends State<Homepage> {
                 }));
           }),
           Center(
-            child: Padding(
-                padding: const EdgeInsets.fromLTRB(30, 30, 30, 10),
-                child: SizedBox(
-                  height: 136,
-                  child: PageView.builder(
-                      itemCount: creditmodel.length,
-                      onPageChanged: (value) {
-                        setState(() {
-                          creditmodelno = value;
-                        });
-                      },
-                      itemBuilder: (BuildContext context, index) {
-                        return InkWell(
-                          onTap: () {
-                            if (index == 0) {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) {
-                                return const Bnpl();
-                              }));
-                            } else {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) {
-                                return const SalaryAdvanced();
-                              }));
-                            }
-                          },
-                          child: Container(
-                            width: width,
+            child: Consumer<BnplProvider>(builder: (context, data, child) {
+              return FutureBuilder<List<BnplData>>(
+                  future: creditModel,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState.name == 'waiting') {
+                      design.loadingProgress();
+                    }
+                    if (snapshot.connectionState.name == 'done') {
+                      return Padding(
+                          padding: const EdgeInsets.fromLTRB(30, 30, 30, 10),
+                          child: SizedBox(
                             height: 136,
-                            margin: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              color: creditmodel[index].color,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Stack(
-                              children: [
-                                Align(
-                                    alignment: Alignment.topLeft,
-                                    child: SvgPicture.asset(
-                                      'assets/group2.svg',
-                                      color: const Color(0xffffffff)
-                                          .withOpacity(0.5),
-                                    )),
-                                Center(
-                                    child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      creditmodel[index].title,
-                                      style: TextStyle(
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.w400,
-                                          color: design.shadeP),
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        design.naira(Colors.white, 32.0),
-                                        Text(
-                                          newuser
-                                              ? '--'
-                                              : creditmodel[index].amount,
-                                          style: const TextStyle(
-                                              fontSize: 32.0,
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                    Visibility(
-                                      visible: !newuser,
-                                      child: Container(
-                                        width: 100,
-                                        height: 20,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            color: const Color(0xffffffff)
-                                                .withOpacity(0.5)),
-                                        child: Text(
-                                          creditmodel[index].mode,
-                                          style: const TextStyle(
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color(0xffffffff)),
-                                        ),
+                            child: PageView.builder(
+                                itemCount: creditmodel.length,
+                                onPageChanged: (value) {
+                                  setState(() {
+                                    creditmodelno = value;
+                                  });
+                                },
+                                itemBuilder: (BuildContext context, index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      if (index == 0) {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return const Bnpl();
+                                        }));
+                                      } else if (index == 2) {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return const SalaryAdvanced();
+                                        }));
+                                      } else {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return const SalaryAdvanced();
+                                        }));
+                                      }
+                                    },
+                                    child: Container(
+                                      width: width,
+                                      height: 136,
+                                      margin: const EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        color: creditmodel[index].color,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          Align(
+                                              alignment: Alignment.topLeft,
+                                              child: SvgPicture.asset(
+                                                'assets/group2.svg',
+                                                color: const Color(0xffffffff)
+                                                    .withOpacity(0.5),
+                                              )),
+                                          Center(
+                                              child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Text(
+                                                creditmodel[index].title,
+                                                style: TextStyle(
+                                                    fontSize: 10.0,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: design.shadeP),
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  design.naira(
+                                                      Colors.white, 32.0),
+                                                  Text(
+                                                    !newuser
+                                                        ? '--'
+                                                        : snapshot
+                                                            .data![0]
+                                                            .data![creditmodel[
+                                                                    index]
+                                                                .name]
+                                                            .toString(),
+                                                    style: const TextStyle(
+                                                        fontSize: 32.0,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: Colors.white),
+                                                  ),
+                                                ],
+                                              ),
+                                              Visibility(
+                                                visible: !newuser,
+                                                child: Container(
+                                                  width: 100,
+                                                  height: 20,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      color: const Color(
+                                                              0xffffffff)
+                                                          .withOpacity(0.5)),
+                                                  child: Text(
+                                                    creditmodel[index].mode,
+                                                    style: const TextStyle(
+                                                        fontSize: 10.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color:
+                                                            Color(0xffffffff)),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                          Align(
+                                              alignment: Alignment.bottomRight,
+                                              child: SvgPicture.asset(
+                                                'assets/group.svg',
+                                                color: const Color(0xffffffff)
+                                                    .withOpacity(0.5),
+                                              )),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                )),
-                                Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: SvgPicture.asset(
-                                      'assets/group.svg',
-                                      color: const Color(0xffffffff)
-                                          .withOpacity(0.5),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                )),
+                                  );
+                                }),
+                          ));
+                    } else {
+                      return design.loadingProgress();
+                    }
+                  });
+            }),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -320,7 +359,7 @@ class _HomepageState extends State<Homepage> {
           ),
           Consumer<UserDataProvider>(builder: (context, data, child) {
             return FutureBuilder<List<UserData>>(
-                future: data.getUserData(),
+                future: userData,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState.name == 'done') {
                     return Visibility(
@@ -430,7 +469,7 @@ class _HomepageState extends State<Homepage> {
                 child:
                     Consumer<ProductProvider>(builder: (context, data, child) {
                   return FutureBuilder<List<ProductData>>(
-                      future: data.getHotDealData(),
+                      future: hotDeal,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState.name == 'done') {
                           return SizedBox(
@@ -557,7 +596,7 @@ class _HomepageState extends State<Homepage> {
           ),
           Consumer<ProductProvider>(builder: (context, data, child) {
             return FutureBuilder<List<ProductData>>(
-                future: data.getProductData(),
+                future: productData,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState.name == 'done') {
                     return Padding(

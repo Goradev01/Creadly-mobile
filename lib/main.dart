@@ -93,8 +93,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Stream<Widget> loadingStream() async* {
-    await Future<void>.delayed(const Duration(seconds: 0));
-    yield const SplashScreen();
+    // await Future<void>.delayed(const Duration(seconds: 0));
+    // yield const SplashScreen();
     await Future<void>.delayed(const Duration(seconds: 5));
     yield Consumer<LoginProvider>(builder: (context, data, child) {
       if (data.auth.isNotEmpty) {
