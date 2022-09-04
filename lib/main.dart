@@ -2,6 +2,7 @@
 
 // import 'package:creadlymobile/Provider/data.dart';
 import 'package:creadlymobile/Provider/addcartprovider.dart';
+import 'package:creadlymobile/Provider/bnplprovider.dart';
 import 'package:creadlymobile/Provider/categoryprovider.dart';
 import 'package:creadlymobile/Provider/getcartprovider.dart';
 import 'package:creadlymobile/Provider/login.dart';
@@ -59,6 +60,9 @@ void main() {
       ),
       ChangeNotifierProvider<WishListProvider>(
         create: (_) => WishListProvider(),
+      ),
+      ChangeNotifierProvider<BnplProvider>(
+        create: (_) => BnplProvider(),
       ),
     ],
     child: const MyApp(),
