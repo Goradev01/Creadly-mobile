@@ -25,6 +25,33 @@ class _MerchantProductState extends State<MerchantProduct> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    filterOption = categoryOption;
+  }
+
+  String filterSub = 'Clothing';
+  List<DropdownMenuItem<String>>? filterOption;
+
+  final List<DropdownMenuItem<String>> categoryOption = [
+    const DropdownMenuItem<String>(value: 'Clothing', child: Text('Clothing')),
+    const DropdownMenuItem<String>(value: 'Gadgets', child: Text('Gadgets')),
+    const DropdownMenuItem<String>(
+        value: 'Automobiles', child: Text('Automobiles')),
+    const DropdownMenuItem<String>(
+        value: 'Electronics', child: Text('Electronics')),
+    const DropdownMenuItem<String>(value: 'Skincare', child: Text('Skincare')),
+  ];
+  final List<DropdownMenuItem<String>> priceOption = [
+    const DropdownMenuItem<String>(value: '0-40,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '40,000-80,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '80,000-200,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '200,000-600,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '600,000 -1M', child: SizedBox()),
+  ];
+
+  String filter = 'Category';
+  @override
   Widget build(BuildContext context) {
     final design = Ui();
     final width = MediaQuery.of(context).size.width;

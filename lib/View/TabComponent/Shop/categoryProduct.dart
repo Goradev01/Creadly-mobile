@@ -25,6 +25,33 @@ class _CategoryProductState extends State<CategoryProduct> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    filterOption = categoryOption;
+  }
+
+  String filterSub = 'Clothing';
+  List<DropdownMenuItem<String>>? filterOption;
+
+  final List<DropdownMenuItem<String>> categoryOption = [
+    const DropdownMenuItem<String>(value: 'Clothing', child: Text('Clothing')),
+    const DropdownMenuItem<String>(value: 'Gadgets', child: Text('Gadgets')),
+    const DropdownMenuItem<String>(
+        value: 'Automobiles', child: Text('Automobiles')),
+    const DropdownMenuItem<String>(
+        value: 'Electronics', child: Text('Electronics')),
+    const DropdownMenuItem<String>(value: 'Skincare', child: Text('Skincare')),
+  ];
+  final List<DropdownMenuItem<String>> priceOption = [
+    const DropdownMenuItem<String>(value: '0-40,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '40,000-80,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '80,000-200,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '200,000-600,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '600,000 -1M', child: SizedBox()),
+  ];
+
+  String filter = 'Category';
+  @override
   Widget build(BuildContext context) {
     final design = Ui();
     final width = MediaQuery.of(context).size.width;
@@ -78,10 +105,9 @@ class _CategoryProductState extends State<CategoryProduct> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                            width: 124,
+                            width: 150,
                             height: 40,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.3),
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
                             decoration: BoxDecoration(
                               color: const Color(0xffF8F8FA),
                               borderRadius: BorderRadius.circular(5),
@@ -90,17 +116,50 @@ class _CategoryProductState extends State<CategoryProduct> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  smalltext('Filter'),
-                                  Transform.rotate(
-                                      angle: 55,
-                                      child: Icon(Icons.arrow_back_ios,
-                                          size: 10, color: design.darkPurple))
+                                  Expanded(child: smalltext(filter)),
+                                  Expanded(
+                                    flex: 1,
+                                    child: DropdownButton<String>(
+                                      isExpanded: true,
+                                      underline: const SizedBox(),
+                                      icon: Transform.rotate(
+                                          angle: 55,
+                                          child: Icon(Icons.arrow_back_ios,
+                                              size: 10,
+                                              color: design.darkPurple)),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          filter = value!;
+                                        });
+                                        if (filter == 'Category') {
+                                          setState(() {
+                                            filterOption = categoryOption;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            filterOption = priceOption;
+                                          });
+                                        }
+                                      },
+                                      items: const [
+                                        DropdownMenuItem<String>(
+                                            value: 'Category',
+                                            child: Text('Category')),
+                                        DropdownMenuItem<String>(
+                                            value: 'Price',
+                                            child: Text('Price(N)')),
+                                        DropdownMenuItem<String>(
+                                            value: 'Brand',
+                                            child: Text('Brand')),
+                                      ],
+                                    ),
+                                  )
                                 ])),
                         Container(
-                            width: 124,
+                            width: 130,
                             height: 40,
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 15.3),
+                                const EdgeInsets.symmetric(horizontal: 6.3),
                             decoration: BoxDecoration(
                               color: const Color(0xffF8F8FA),
                               borderRadius: BorderRadius.circular(5),
@@ -109,11 +168,23 @@ class _CategoryProductState extends State<CategoryProduct> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  smalltext('Category'),
-                                  Transform.rotate(
-                                      angle: 55,
-                                      child: Icon(Icons.arrow_back_ios,
-                                          size: 10, color: design.darkPurple))
+                                  Expanded(child: smalltext(filterSub)),
+                                  Expanded(
+                                    child: DropdownButton<String>(
+                                        isExpanded: true,
+                                        underline: const SizedBox(),
+                                        icon: Transform.rotate(
+                                            angle: 55,
+                                            child: Icon(Icons.arrow_back_ios,
+                                                size: 10,
+                                                color: design.darkPurple)),
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            filterSub = value!;
+                                          });
+                                        },
+                                        items: filterOption),
+                                  )
                                 ])),
                         Container(
                             alignment: Alignment.center,

@@ -25,7 +25,7 @@ class ShoppageState extends State<Shoppage> {
   @override
   void initState() {
     super.initState();
-
+    filterOption = categoryOption;
     categoryData =
         Provider.of<CategoryProvider>(context, listen: false).getCategoryData();
     merchantData =
@@ -41,6 +41,27 @@ class ShoppageState extends State<Shoppage> {
     );
   }
 
+  String filterSub = 'Clothing';
+  List<DropdownMenuItem<String>>? filterOption;
+
+  final List<DropdownMenuItem<String>> categoryOption = [
+    const DropdownMenuItem<String>(value: 'Clothing', child: Text('Clothing')),
+    const DropdownMenuItem<String>(value: 'Gadgets', child: Text('Gadgets')),
+    const DropdownMenuItem<String>(
+        value: 'Automobiles', child: Text('Automobiles')),
+    const DropdownMenuItem<String>(
+        value: 'Electronics', child: Text('Electronics')),
+    const DropdownMenuItem<String>(value: 'Skincare', child: Text('Skincare')),
+  ];
+  final List<DropdownMenuItem<String>> priceOption = [
+    const DropdownMenuItem<String>(value: '0-40,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '40,000-80,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '80,000-200,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '200,000-600,000', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '600,000 -1M', child: SizedBox()),
+  ];
+
+  String filter = 'Category';
   @override
   Widget build(BuildContext context) {
     final design = Ui();
@@ -88,9 +109,9 @@ class ShoppageState extends State<Shoppage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                    width: 124,
+                    width: 150,
                     height: 40,
-                    padding: const EdgeInsets.symmetric(horizontal: 15.3),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
                       color: const Color(0xffF8F8FA),
                       borderRadius: BorderRadius.circular(5),
@@ -98,16 +119,45 @@ class ShoppageState extends State<Shoppage> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          smalltext('Filter'),
-                          Transform.rotate(
-                              angle: 55,
-                              child: Icon(Icons.arrow_back_ios,
-                                  size: 10, color: design.darkPurple))
+                          Expanded(child: smalltext(filter)),
+                          Expanded(
+                            flex: 1,
+                            child: DropdownButton<String>(
+                              isExpanded: true,
+                              underline: const SizedBox(),
+                              icon: Transform.rotate(
+                                  angle: 55,
+                                  child: Icon(Icons.arrow_back_ios,
+                                      size: 10, color: design.darkPurple)),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  filter = value!;
+                                });
+                                if (filter == 'Category') {
+                                  setState(() {
+                                    filterOption = categoryOption;
+                                  });
+                                } else {
+                                  setState(() {
+                                    filterOption = priceOption;
+                                  });
+                                }
+                              },
+                              items: const [
+                                DropdownMenuItem<String>(
+                                    value: 'Category', child: Text('Category')),
+                                DropdownMenuItem<String>(
+                                    value: 'Price', child: Text('Price(N)')),
+                                DropdownMenuItem<String>(
+                                    value: 'Brand', child: Text('Brand')),
+                              ],
+                            ),
+                          )
                         ])),
                 Container(
-                    width: 124,
+                    width: 130,
                     height: 40,
-                    padding: const EdgeInsets.symmetric(horizontal: 15.3),
+                    padding: const EdgeInsets.symmetric(horizontal: 6.3),
                     decoration: BoxDecoration(
                       color: const Color(0xffF8F8FA),
                       borderRadius: BorderRadius.circular(5),
@@ -115,11 +165,22 @@ class ShoppageState extends State<Shoppage> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          smalltext('Category'),
-                          Transform.rotate(
-                              angle: 55,
-                              child: Icon(Icons.arrow_back_ios,
-                                  size: 10, color: design.darkPurple))
+                          Expanded(child: smalltext(filterSub)),
+                          Expanded(
+                            child: DropdownButton<String>(
+                                isExpanded: true,
+                                underline: const SizedBox(),
+                                icon: Transform.rotate(
+                                    angle: 55,
+                                    child: Icon(Icons.arrow_back_ios,
+                                        size: 10, color: design.darkPurple)),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    filterSub = value!;
+                                  });
+                                },
+                                items: filterOption),
+                          )
                         ])),
                 Container(
                     alignment: Alignment.center,
@@ -191,30 +252,34 @@ class ShoppageState extends State<Shoppage> {
                       );
                     }
                     if (snapshot.connectionState == ConnectionState.active) {
-                      return Wrap(
-                        spacing: 15,
-                        children: List.generate(
-                            4,
-                            (index) => Shimmer.fromColors(
-                                  baseColor: const Color(0xFFEBEBF4),
-                                  highlightColor:
-                                      const Color(0xFFEBEBF4).withOpacity(0.1),
-                                  // loop: 5,
-                                  enabled: true,
-                                  // period: const Duration(milliseconds: 1500),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10.0),
-                                    child: Container(
-                                      height: 55,
-                                      width: 55,
-                                      decoration: const BoxDecoration(
-                                          shape: BoxShape.circle),
+                      return Center(
+                        child: Wrap(
+                            spacing: 15,
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(
+                              4,
+                              (index) => Shimmer.fromColors(
+                                baseColor: const Color(0xFFEBEBF4),
+                                highlightColor:
+                                    const Color(0xFFEBEBF4).withOpacity(0.1),
+                                // loop: 5,
+                                enabled: true,
+                                // period: const Duration(milliseconds: 1500),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 10),
+                                  child: Container(
+                                    height: 55,
+                                    width: 55,
+                                    decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Color(0xFFEBEBF4)),
 
-                                      // borderRadius: BorderRadius.circular(10),
-                                    ),
+                                    // borderRadius: BorderRadius.circular(10),
                                   ),
-                                )),
+                                ),
+                              ),
+                            )),
                       );
                     }
 
@@ -237,6 +302,7 @@ class ShoppageState extends State<Shoppage> {
                                       height: 55,
                                       width: 55,
                                       decoration: const BoxDecoration(
+                                          color: Color(0xFFEBEBF4),
                                           shape: BoxShape.circle),
 
                                       // borderRadius: BorderRadius.circular(10),
@@ -263,6 +329,7 @@ class ShoppageState extends State<Shoppage> {
                                       height: 55,
                                       width: 55,
                                       decoration: const BoxDecoration(
+                                          color: Color(0xFFEBEBF4),
                                           shape: BoxShape.circle),
 
                                       // borderRadius: BorderRadius.circular(10),
