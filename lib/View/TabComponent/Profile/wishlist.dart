@@ -3,6 +3,7 @@ import 'package:creadlymobile/Provider/wishlistprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../style.dart';
 
@@ -119,11 +120,26 @@ class _WishlistState extends State<Wishlist> {
                               ]),
                         ),
                       ));
-                    }
-                    if (snapshot.connectionState.name == 'waiting') {
-                      return design.loadingProgress();
                     } else {
-                      return design.loadingProgress();
+                      return Column(
+                        children: List.generate(
+                          5,
+                          (index) => Shimmer.fromColors(
+                              baseColor: const Color(0xFFEBEBF4),
+                              highlightColor:
+                                  const Color(0xFFEBEBF4).withOpacity(0.1),
+                              // loop: 5,
+                              enabled: true,
+                              // period: const Duration(milliseconds: 1500),
+                              child: Container(
+                                height: 70,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xffFfFfFf),
+                                  // borderRadius: BorderRadius.circular(10),
+                                ),
+                              )),
+                        ),
+                      );
                     }
                   });
             })
