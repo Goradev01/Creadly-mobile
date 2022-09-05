@@ -208,17 +208,19 @@ class _AllProductState extends State<AllProduct> {
             );
           }
           if (snapshot.connectionState.name == 'waiting') {
-            return Center(
-                child: CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              color: design.blue,
-            ));
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(25, 10, 25, 50),
+              child: design.shimmerProduct(
+                4,
+              ),
+            );
           } else {
-            return Center(
-                child: CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              color: design.blue,
-            ));
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(25, 10, 25, 50),
+              child: design.shimmerProduct(
+                4,
+              ),
+            );
           }
         }));
   }

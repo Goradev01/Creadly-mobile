@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:creadlymobile/Model/Core/cartdata.dart';
+import 'package:creadlymobile/Provider/addcartprovider.dart';
 import 'package:creadlymobile/Provider/getcartprovider.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_paystack_payment/flutter_paystack_payment.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Cart extends StatefulWidget {
   const Cart({Key? key}) : super(key: key);
@@ -97,12 +99,25 @@ class _CartState extends State<Cart> {
   }
 
   final plugin = PaystackPayment();
+  bool update = false;
   Future<List<CartData>>? futureCart;
   Future<int>? totalAmount;
   List<int>? productlimit;
+  Stream<List<CartData>> cart() async* {
+    List<CartData> cartdata = [];
+    while (cartdata.isEmpty && update) {
+      // await Future.delayed(const Duration(milliseconds: 500));
+      await Provider.of<GetCartProvider>(context, listen: false)
+          .getData()
+          .then((value) => cartdata = value);
+      yield cartdata;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    update = true;
     plugin.initialize(publicKey: paystackPublicKey);
     totalAmount =
         Provider.of<GetCartProvider>(context, listen: false).totalAmount();
@@ -224,27 +239,36 @@ class _CartState extends State<Cart> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text('Remove',
-                                          style: TextStyle(
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              decorationColor: design.blue,
-                                              fontSize: 10,
-                                              color: design.blue,
-                                              fontWeight: FontWeight.w400)),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Provider.of<AddCartProvider>(context,
+                                                  listen: false)
+                                              .removeCart(
+                                                  snapshot.data![index].id!)
+                                              .then((value) {
+                                            setState(() {
+                                              snapshot.data!.removeAt(index);
+                                            });
+                                          });
+                                        },
+                                        child: Text('Remove',
+                                            style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                decorationColor: design.blue,
+                                                fontSize: 10,
+                                                color: design.blue,
+                                                fontWeight: FontWeight.w400)),
+                                      ),
                                       const Spacer(),
                                       Row(
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              if (productlimit![index] <
-                                                  snapshot
-                                                      .data![index].quantity!) {
-                                                setState(() {
-                                                  productlimit![index] =
-                                                      productlimit![index] + 1;
-                                                });
-                                              }
+                                              setState(() {
+                                                productlimit![index] =
+                                                    productlimit![index] + 1;
+                                              });
                                             },
                                             child: Container(
                                               height: 24.1,
@@ -313,17 +337,271 @@ class _CartState extends State<Cart> {
                         ));
                       }
                       if (snapshot.connectionState.name == 'waiting') {
-                        return Center(
-                            child: CircularProgressIndicator(
-                          backgroundColor: Colors.white,
-                          color: design.blue,
-                        ));
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(25, 25, 25, 10),
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Container(
+                                        alignment: Alignment.center,
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: const Color(0xffF8F8FA)),
+                                        child: Icon(
+                                          Icons.arrow_back_ios,
+                                          size: 10,
+                                          color: design.blue,
+                                        )),
+                                  ),
+                                  design.wspacer(19),
+                                  Shimmer.fromColors(
+                                      baseColor: const Color(0xFFEBEBF4),
+                                      highlightColor: const Color(0xFFEBEBF4)
+                                          .withOpacity(0.1),
+                                      // loop: 5,
+                                      enabled: true,
+                                      // period: const Duration(milliseconds: 1500),
+                                      child: Container(
+                                        height: 18,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xffFfFfFf),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            ),
+                            Shimmer.fromColors(
+                                baseColor: const Color(0xFFEBEBF4),
+                                highlightColor:
+                                    const Color(0xFFEBEBF4).withOpacity(0.1),
+                                // loop: 5,
+                                enabled: true,
+                                // period: const Duration(milliseconds: 1500),
+                                child: Container(
+                                  height: 70,
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xffFfFfFf),
+                                    // borderRadius: BorderRadius.circular(10),
+                                  ),
+                                )),
+                            Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(25, 15, 25, 10),
+                                decoration: const BoxDecoration(
+                                    color: Color(0xfff8f8fa)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Shimmer.fromColors(
+                                        baseColor: const Color(0xFFEBEBF4),
+                                        highlightColor: const Color(0xFFEBEBF4)
+                                            .withOpacity(0.1),
+                                        // loop: 5,
+                                        enabled: true,
+                                        // period: const Duration(milliseconds: 1500),
+                                        child: Container(
+                                          height: 18,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xffFfFfFf),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        )),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 25, top: 10),
+                                      child: Row(
+                                        children: [
+                                          Shimmer.fromColors(
+                                              baseColor:
+                                                  const Color(0xFFEBEBF4),
+                                              highlightColor:
+                                                  const Color(0xFFEBEBF4)
+                                                      .withOpacity(0.1),
+                                              // loop: 5,
+                                              enabled: true,
+                                              // period: const Duration(milliseconds: 1500),
+                                              child: Container(
+                                                height: 18,
+                                                width: 100,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0xffFfFfFf),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                              )),
+                                          const Spacer(),
+                                          Shimmer.fromColors(
+                                              baseColor:
+                                                  const Color(0xFFEBEBF4),
+                                              highlightColor:
+                                                  const Color(0xFFEBEBF4)
+                                                      .withOpacity(0.1),
+                                              // loop: 5,
+                                              enabled: true,
+                                              // period: const Duration(milliseconds: 1500),
+                                              child: Container(
+                                                height: 20,
+                                                width: 20,
+                                                decoration: const BoxDecoration(
+                                                  color: Color(0xffFfFfFf),
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ))
+                          ],
+                        );
                       } else {
-                        return Center(
-                            child: CircularProgressIndicator(
-                          backgroundColor: Colors.white,
-                          color: design.blue,
-                        ));
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(25, 25, 25, 10),
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Container(
+                                        alignment: Alignment.center,
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: const Color(0xffF8F8FA)),
+                                        child: Icon(
+                                          Icons.arrow_back_ios,
+                                          size: 10,
+                                          color: design.blue,
+                                        )),
+                                  ),
+                                  design.wspacer(19),
+                                  Shimmer.fromColors(
+                                      baseColor: const Color(0xFFEBEBF4),
+                                      highlightColor: const Color(0xFFEBEBF4)
+                                          .withOpacity(0.1),
+                                      // loop: 5,
+                                      enabled: true,
+                                      // period: const Duration(milliseconds: 1500),
+                                      child: Container(
+                                        height: 18,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xffFfFfFf),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            ),
+                            Shimmer.fromColors(
+                                baseColor: const Color(0xFFEBEBF4),
+                                highlightColor:
+                                    const Color(0xFFEBEBF4).withOpacity(0.1),
+                                // loop: 5,
+                                enabled: true,
+                                // period: const Duration(milliseconds: 1500),
+                                child: Container(
+                                  height: 70,
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xffFfFfFf),
+                                    // borderRadius: BorderRadius.circular(10),
+                                  ),
+                                )),
+                            Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(25, 15, 25, 10),
+                                decoration: const BoxDecoration(
+                                    color: Color(0xfff8f8fa)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Shimmer.fromColors(
+                                        baseColor: const Color(0xFFEBEBF4),
+                                        highlightColor: const Color(0xFFEBEBF4)
+                                            .withOpacity(0.1),
+                                        // loop: 5,
+                                        enabled: true,
+                                        // period: const Duration(milliseconds: 1500),
+                                        child: Container(
+                                          height: 18,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xffFfFfFf),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        )),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 25, top: 10),
+                                      child: Row(
+                                        children: [
+                                          Shimmer.fromColors(
+                                              baseColor:
+                                                  const Color(0xFFEBEBF4),
+                                              highlightColor:
+                                                  const Color(0xFFEBEBF4)
+                                                      .withOpacity(0.1),
+                                              // loop: 5,
+                                              enabled: true,
+                                              // period: const Duration(milliseconds: 1500),
+                                              child: Container(
+                                                height: 18,
+                                                width: 100,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0xffFfFfFf),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                              )),
+                                          const Spacer(),
+                                          Shimmer.fromColors(
+                                              baseColor:
+                                                  const Color(0xFFEBEBF4),
+                                              highlightColor:
+                                                  const Color(0xFFEBEBF4)
+                                                      .withOpacity(0.1),
+                                              // loop: 5,
+                                              enabled: true,
+                                              // period: const Duration(milliseconds: 1500),
+                                              child: Container(
+                                                height: 20,
+                                                width: 20,
+                                                decoration: const BoxDecoration(
+                                                  color: Color(0xffFfFfFf),
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ))
+                          ],
+                        );
                       }
                     });
               }),
@@ -480,160 +758,160 @@ class _CartState extends State<Cart> {
                         fontSize: 10,
                         fontWeight: FontWeight.w400)),
               ),
-              Container(
-                width: width,
-                height: 60,
-                margin: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-                padding: const EdgeInsets.fromLTRB(26, 16, 16, 11),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/id.svg',
-                    ),
-                    design.wspacer(25),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Pay with BNPL Balance',
-                          style: TextStyle(
-                              color: design.ash,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        design.hspacer(10),
-                        const Text(
-                          '30% of total amount is deducted from your wallet balance',
-                          style: TextStyle(
-                              color: Color(0xff737373),
-                              fontSize: 7,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    design.amount(design.pink, 10.0, '50,000', FontWeight.w400),
-                    Radio(
-                      activeColor: const Color(0xff121212),
-                      value: radiokeyList[0],
-                      groupValue: radioKey,
-                      onChanged: (int? value) {
-                        setState(() {
-                          radioKey = value!;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: width,
-                height: 60,
-                margin: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-                padding: const EdgeInsets.fromLTRB(26, 16, 16, 11),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/atm.svg',
-                    ),
-                    design.wspacer(25),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '2983 9403 93XX XXXX',
-                          style: TextStyle(
-                              color: design.ash,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        design.hspacer(10),
-                        Row(
-                          children: [
-                            const Text(
-                              '2983 9403 93XX XXXX',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 7,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            design.wspacer(5),
-                            const Text(
-                              'Adekanye West Dotun',
-                              style: TextStyle(
-                                  color: Color(0xff737373),
-                                  fontSize: 7,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Image.asset('assets/Mastercard.png'),
-                    Radio(
-                      activeColor: const Color(0xff121212),
-                      value: radiokeyList[1],
-                      groupValue: radioKey,
-                      onChanged: (int? value) {
-                        setState(() {
-                          radioKey = value!;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: width,
-                height: 60,
-                margin: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-                padding: const EdgeInsets.fromLTRB(26, 16, 16, 11),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/credit.svg',
-                    ),
-                    design.wspacer(25),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Pay Using Credit Points',
-                          style: TextStyle(
-                              color: design.ash,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        design.hspacer(10),
-                        const Text(
-                          '1 credit point equals N1,000',
-                          style: TextStyle(
-                              color: Color(0xff737373),
-                              fontSize: 7,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    design.input(
-                        design.pink, 10.0, '20 Points', FontWeight.w400),
-                    Radio(
-                      activeColor: const Color(0xff121212),
-                      value: radiokeyList[2],
-                      groupValue: radioKey,
-                      onChanged: (int? value) {
-                        setState(() {
-                          radioKey = value!;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   width: width,
+              //   height: 60,
+              //   margin: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+              //   padding: const EdgeInsets.fromLTRB(26, 16, 16, 11),
+              //   child: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       SvgPicture.asset(
+              //         'assets/id.svg',
+              //       ),
+              //       design.wspacer(25),
+              //       Column(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Text(
+              //             'Pay with BNPL Balance',
+              //             style: TextStyle(
+              //                 color: design.ash,
+              //                 fontSize: 12,
+              //                 fontWeight: FontWeight.w500),
+              //           ),
+              //           design.hspacer(10),
+              //           const Text(
+              //             '30% of total amount is deducted from your wallet balance',
+              //             style: TextStyle(
+              //                 color: Color(0xff737373),
+              //                 fontSize: 7,
+              //                 fontWeight: FontWeight.w400),
+              //           ),
+              //         ],
+              //       ),
+              //       const Spacer(),
+              //       design.amount(design.pink, 10.0, '50,000', FontWeight.w400),
+              //       Radio(
+              //         activeColor: const Color(0xff121212),
+              //         value: radiokeyList[0],
+              //         groupValue: radioKey,
+              //         onChanged: (int? value) {
+              //           setState(() {
+              //             radioKey = value!;
+              //           });
+              //         },
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // Container(
+              //   width: width,
+              //   height: 60,
+              //   margin: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+              //   padding: const EdgeInsets.fromLTRB(26, 16, 16, 11),
+              //   child: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       SvgPicture.asset(
+              //         'assets/atm.svg',
+              //       ),
+              //       design.wspacer(25),
+              //       Column(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Text(
+              //             '2983 9403 93XX XXXX',
+              //             style: TextStyle(
+              //                 color: design.ash,
+              //                 fontSize: 12,
+              //                 fontWeight: FontWeight.w500),
+              //           ),
+              //           design.hspacer(10),
+              //           Row(
+              //             children: [
+              //               const Text(
+              //                 '2983 9403 93XX XXXX',
+              //                 style: TextStyle(
+              //                     color: Colors.black,
+              //                     fontSize: 7,
+              //                     fontWeight: FontWeight.w400),
+              //               ),
+              //               design.wspacer(5),
+              //               const Text(
+              //                 'Adekanye West Dotun',
+              //                 style: TextStyle(
+              //                     color: Color(0xff737373),
+              //                     fontSize: 7,
+              //                     fontWeight: FontWeight.w400),
+              //               ),
+              //             ],
+              //           ),
+              //         ],
+              //       ),
+              //       const Spacer(),
+              //       Image.asset('assets/Mastercard.png'),
+              //       Radio(
+              //         activeColor: const Color(0xff121212),
+              //         value: radiokeyList[1],
+              //         groupValue: radioKey,
+              //         onChanged: (int? value) {
+              //           setState(() {
+              //             radioKey = value!;
+              //           });
+              //         },
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // Container(
+              //   width: width,
+              //   height: 60,
+              //   margin: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+              //   padding: const EdgeInsets.fromLTRB(26, 16, 16, 11),
+              //   child: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       SvgPicture.asset(
+              //         'assets/credit.svg',
+              //       ),
+              //       design.wspacer(25),
+              //       Column(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Text(
+              //             'Pay Using Credit Points',
+              //             style: TextStyle(
+              //                 color: design.ash,
+              //                 fontSize: 12,
+              //                 fontWeight: FontWeight.w500),
+              //           ),
+              //           design.hspacer(10),
+              //           const Text(
+              //             '1 credit point equals N1,000',
+              //             style: TextStyle(
+              //                 color: Color(0xff737373),
+              //                 fontSize: 7,
+              //                 fontWeight: FontWeight.w400),
+              //           ),
+              //         ],
+              //       ),
+              //       const Spacer(),
+              //       design.input(
+              //           design.pink, 10.0, '20 Points', FontWeight.w400),
+              //       Radio(
+              //         activeColor: const Color(0xff121212),
+              //         value: radiokeyList[2],
+              //         groupValue: radioKey,
+              //         onChanged: (int? value) {
+              //           setState(() {
+              //             radioKey = value!;
+              //           });
+              //         },
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: GestureDetector(

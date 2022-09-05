@@ -10,6 +10,7 @@ import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../Provider/bnplprovider.dart';
 import '../../Provider/productprovider.dart';
@@ -180,27 +181,35 @@ class _HomepageState extends State<Homepage> {
                     );
                   }
                   if (snapshot.connectionState.name == 'waiting') {
-                    return Container(
-                      width: width,
-                      height: 114,
-                      decoration: const BoxDecoration(color: Color(0xffEDE9F7)),
-                      child: const Center(
-                          child: CircularProgressIndicator(
-                        backgroundColor: Color(0xffEDE9F7),
-                        color: Colors.white,
-                      )),
-                    );
+                    return Shimmer.fromColors(
+                        baseColor: const Color(0xFFEBEBF4),
+                        highlightColor:
+                            const Color(0xFFEBEBF4).withOpacity(0.1),
+                        // loop: 5,
+                        enabled: true,
+                        // period: const Duration(milliseconds: 1500),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          height: 136,
+                        ));
                   } else {
-                    return Container(
-                      width: width,
-                      height: 114,
-                      decoration: const BoxDecoration(color: Color(0xffEDE9F7)),
-                      child: const Center(
-                          child: CircularProgressIndicator(
-                        backgroundColor: Color(0xffEDE9F7),
-                        color: Colors.white,
-                      )),
-                    );
+                    return Shimmer.fromColors(
+                        baseColor: const Color(0xFFEBEBF4),
+                        highlightColor:
+                            const Color(0xFFEBEBF4).withOpacity(0.1),
+                        // loop: 5,
+                        enabled: true,
+                        // period: const Duration(milliseconds: 1500),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          height: 136,
+                        ));
                   }
                 }));
           }),
@@ -210,7 +219,23 @@ class _HomepageState extends State<Homepage> {
                   future: creditModel,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState.name == 'waiting') {
-                      design.loadingProgress();
+                      return Shimmer.fromColors(
+                          baseColor: const Color(0xFFEBEBF4),
+                          highlightColor:
+                              const Color(0xFFEBEBF4).withOpacity(0.1),
+                          // loop: 5,
+                          enabled: true,
+                          // period: const Duration(milliseconds: 1500),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 30, 30, 10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              height: 136,
+                            ),
+                          ));
                     }
                     if (snapshot.connectionState.name == 'done') {
                       return Padding(
@@ -284,12 +309,16 @@ class _HomepageState extends State<Homepage> {
                                                   Text(
                                                     !newuser
                                                         ? '--'
-                                                        : snapshot
-                                                            .data![0]
-                                                            .data![creditmodel[
-                                                                    index]
-                                                                .name]
-                                                            .toString(),
+                                                        : snapshot.data!
+                                                                .isNotEmpty
+                                                            ? snapshot
+                                                                .data![0]
+                                                                .data![
+                                                                    creditmodel[
+                                                                            index]
+                                                                        .name]
+                                                                .toString()
+                                                            : '--',
                                                     style: const TextStyle(
                                                         fontSize: 32.0,
                                                         fontWeight:
@@ -338,7 +367,23 @@ class _HomepageState extends State<Homepage> {
                                 }),
                           ));
                     } else {
-                      return design.loadingProgress();
+                      return Shimmer.fromColors(
+                          baseColor: const Color(0xFFEBEBF4),
+                          highlightColor:
+                              const Color(0xFFEBEBF4).withOpacity(0.1),
+                          // loop: 5,
+                          enabled: true,
+                          // period: const Duration(milliseconds: 1500),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 30, 30, 10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              height: 136,
+                            ),
+                          ));
                     }
                   });
             }),
@@ -561,9 +606,67 @@ class _HomepageState extends State<Homepage> {
                                   }));
                         }
                         if (snapshot.connectionState.name == 'waiting') {
-                          return design.loadingProgress();
+                          return SizedBox(
+                            height: 160,
+                            width: width,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(25, 10, 25, 50),
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 5,
+                                  itemBuilder: ((context, index) {
+                                    return Shimmer.fromColors(
+                                        baseColor: const Color(0xFFEBEBF4),
+                                        highlightColor: const Color(0xFFEBEBF4)
+                                            .withOpacity(0.1),
+                                        // loop: 5,
+                                        enabled: true,
+                                        // period: const Duration(milliseconds: 1500),
+                                        child: Container(
+                                          height: 150,
+                                          width: 150,
+                                          margin: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xffFfFfFf),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ));
+                                  })),
+                            ),
+                          );
                         } else {
-                          return design.loadingProgress();
+                          return SizedBox(
+                            height: 160,
+                            width: width,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(25, 10, 25, 50),
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 5,
+                                  itemBuilder: ((context, index) {
+                                    return Shimmer.fromColors(
+                                        baseColor: const Color(0xFFEBEBF4),
+                                        highlightColor: const Color(0xFFEBEBF4)
+                                            .withOpacity(0.1),
+                                        // loop: 5,
+                                        enabled: true,
+                                        // period: const Duration(milliseconds: 1500),
+                                        child: Container(
+                                          height: 150,
+                                          width: 150,
+                                          margin: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xffFfFfFf),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ));
+                                  })),
+                            ),
+                          );
                         }
                       });
                 }),
@@ -680,17 +783,19 @@ class _HomepageState extends State<Homepage> {
                     );
                   }
                   if (snapshot.connectionState.name == 'waiting') {
-                    return Center(
-                        child: CircularProgressIndicator(
-                      backgroundColor: Colors.white,
-                      color: design.blue,
-                    ));
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(25, 10, 25, 50),
+                      child: design.shimmerProduct(
+                        4,
+                      ),
+                    );
                   } else {
-                    return const Center(
-                        child: CircularProgressIndicator(
-                      backgroundColor: Colors.white,
-                      color: Colors.red,
-                    ));
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(25, 10, 25, 50),
+                      child: design.shimmerProduct(
+                        4,
+                      ),
+                    );
                   }
                 });
           })

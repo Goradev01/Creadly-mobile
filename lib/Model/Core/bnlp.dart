@@ -1,5 +1,5 @@
 class BnplData {
-  Map? data;
+  dynamic data;
 
   BnplData({
     required this.data,

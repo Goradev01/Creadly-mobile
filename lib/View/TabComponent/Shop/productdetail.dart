@@ -6,6 +6,7 @@ import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Productdetail extends StatefulWidget {
   final String id;
@@ -48,10 +49,6 @@ class _ProductdetailState extends State<Productdetail> {
             return FutureBuilder<List<ProductData>>(
                 future: futuredata,
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState.name == 'waiting') {
-                    return SizedBox(
-                        height: 50, child: design.loadingProgress());
-                  }
                   if (snapshot.connectionState.name == 'done') {
                     List<ProductData> data = snapshot.data!;
                     return Column(
@@ -272,11 +269,10 @@ class _ProductdetailState extends State<Productdetail> {
                               GestureDetector(
                                 onTap: () {
                                   // print(data[0].variants!);
-                                  if (stock < data[0].quantity!) {
-                                    setState(() {
-                                      stock = stock + 1;
-                                    });
-                                  }
+
+                                  setState(() {
+                                    stock = stock + 1;
+                                  });
                                 },
                                 child: Container(
                                   height: 28,
@@ -372,7 +368,130 @@ class _ProductdetailState extends State<Productdetail> {
                       ],
                     );
                   } else {
-                    return design.loadingProgress();
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(25, 25, 25, 10),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    height: 30,
+                                    width: 30,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: const Color(0xffF8F8FA)),
+                                    child: Icon(
+                                      Icons.arrow_back_ios,
+                                      size: 10,
+                                      color: design.blue,
+                                    )),
+                              ),
+                              design.wspacer(19),
+                              Shimmer.fromColors(
+                                  baseColor: const Color(0xFFEBEBF4),
+                                  highlightColor:
+                                      const Color(0xFFEBEBF4).withOpacity(0.1),
+                                  // loop: 5,
+                                  enabled: true,
+                                  // period: const Duration(milliseconds: 1500),
+                                  child: Container(
+                                    height: 18,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xffFfFfFf),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ),
+                        Shimmer.fromColors(
+                            baseColor: const Color(0xFFEBEBF4),
+                            highlightColor:
+                                const Color(0xFFEBEBF4).withOpacity(0.1),
+                            // loop: 5,
+                            enabled: true,
+                            // period: const Duration(milliseconds: 1500),
+                            child: Container(
+                              height: 200,
+                              decoration: const BoxDecoration(
+                                color: Color(0xffFfFfFf),
+                                // borderRadius: BorderRadius.circular(10),
+                              ),
+                            )),
+                        Container(
+                            padding: const EdgeInsets.fromLTRB(25, 15, 25, 10),
+                            decoration:
+                                const BoxDecoration(color: Color(0xfff8f8fa)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Shimmer.fromColors(
+                                    baseColor: const Color(0xFFEBEBF4),
+                                    highlightColor: const Color(0xFFEBEBF4)
+                                        .withOpacity(0.1),
+                                    // loop: 5,
+                                    enabled: true,
+                                    // period: const Duration(milliseconds: 1500),
+                                    child: Container(
+                                      height: 18,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xffFfFfFf),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    )),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 25, top: 10),
+                                  child: Row(
+                                    children: [
+                                      Shimmer.fromColors(
+                                          baseColor: const Color(0xFFEBEBF4),
+                                          highlightColor:
+                                              const Color(0xFFEBEBF4)
+                                                  .withOpacity(0.1),
+                                          // loop: 5,
+                                          enabled: true,
+                                          // period: const Duration(milliseconds: 1500),
+                                          child: Container(
+                                            height: 18,
+                                            width: 100,
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xffFfFfFf),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          )),
+                                      const Spacer(),
+                                      Shimmer.fromColors(
+                                          baseColor: const Color(0xFFEBEBF4),
+                                          highlightColor:
+                                              const Color(0xFFEBEBF4)
+                                                  .withOpacity(0.1),
+                                          // loop: 5,
+                                          enabled: true,
+                                          // period: const Duration(milliseconds: 1500),
+                                          child: Container(
+                                            height: 20,
+                                            width: 20,
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xffFfFfFf),
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ))
+                      ],
+                    );
                   }
                 });
           }),

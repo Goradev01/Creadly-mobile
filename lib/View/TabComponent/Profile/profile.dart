@@ -2,7 +2,6 @@ import 'package:creadlymobile/Provider/login.dart';
 import 'package:creadlymobile/View/Auth/userregistration.dart';
 import 'package:creadlymobile/View/TabComponent/Profile/card.dart';
 import 'package:creadlymobile/View/TabComponent/Profile/notification.dart';
-import 'package:creadlymobile/View/TabComponent/Profile/referral.dart';
 import 'package:creadlymobile/View/TabComponent/Profile/transaction.dart';
 import 'package:creadlymobile/View/TabComponent/Profile/userinfo.dart';
 import 'package:creadlymobile/View/TabComponent/Profile/wishlist.dart';
@@ -71,14 +70,14 @@ class _ProfileState extends State<Profile> {
           icon: SvgPicture.asset(
             'assets/card.svg',
           ),
-          title: 'Cards and Accounts',
+          title: 'Bank Accounts',
           nav: const Cardpage()),
-      ListItem(
-          icon: SvgPicture.asset(
-            'assets/credit.svg',
-          ),
-          title: 'Referrals & Credit Points',
-          nav: const Referral()),
+      // ListItem(
+      //     icon: SvgPicture.asset(
+      //       'assets/credit.svg',
+      //     ),
+      //     title: 'Referrals & Credit Points',
+      //     nav: const Referral()),
     ];
 
     return design.layout(SingleChildScrollView(

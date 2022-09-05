@@ -4,12 +4,13 @@ import 'package:creadlymobile/Provider/merchantprovider.dart';
 import 'package:creadlymobile/View/TabComponent/Shop/allmerchant.dart';
 import 'package:creadlymobile/View/TabComponent/Shop/merchantproduct.dart';
 import 'package:creadlymobile/View/TabComponent/Shop/searchproduct.dart';
-import 'package:creadlymobile/View/TabComponent/Shop/categoryProduct.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../Provider/categoryprovider.dart';
+import 'categoryProduct.dart';
 
 class Shoppage extends StatefulWidget {
   const Shoppage({Key? key}) : super(key: key);
@@ -19,12 +20,16 @@ class Shoppage extends StatefulWidget {
 }
 
 class ShoppageState extends State<Shoppage> {
+  Future<List<CategoryData>>? categoryData;
+  Future<List<MerchantData>>? merchantData;
   @override
   void initState() {
     super.initState();
 
-    Provider.of<CategoryProvider>(context, listen: false).getCategoryData();
-    Provider.of<MerchantProvider>(context, listen: false).getMerchantData();
+    categoryData =
+        Provider.of<CategoryProvider>(context, listen: false).getCategoryData();
+    merchantData =
+        Provider.of<MerchantProvider>(context, listen: false).getMerchantData();
     // print(Provider.of<CategoryProvider>(context, listen: true).categorydata);
   }
 
@@ -35,16 +40,6 @@ class ShoppageState extends State<Shoppage> {
           color: Color(0xff8e8e8e), fontSize: 10, fontWeight: FontWeight.w400),
     );
   }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // print('h');
-  //
-  //   print(Provider.of<CategoryProvider>(context, listen: false)
-  //       .categorydata[0]
-  //       .name);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -151,44 +146,132 @@ class ShoppageState extends State<Shoppage> {
               ),
             ),
             Consumer<CategoryProvider>(builder: (context, data, child) {
-              List<CategoryData> result = data.categorydata;
-
               // print(data);
-              return GridView.count(
-                shrinkWrap: true,
-                crossAxisCount: 4,
-                childAspectRatio: 0.7,
-                crossAxisSpacing: 15.0,
-                mainAxisSpacing: 10.0,
-                physics: const ScrollPhysics(),
-                children: List.generate(result.length, (index) {
-                  String image = result[index].imageUrl.toString();
-                  String id = result[index].id!;
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return CategoryProduct(id: id);
-                      }));
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 55,
-                          height: 55,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: design.shadeP, shape: BoxShape.circle),
-                          child: Image.network(image),
-                          // child: SvgPicture.asset('assets/shopicon/ipad.svg'),
-                        ),
-                        design.hspacer(10),
-                        smalltext(result[index].name)
-                      ],
-                    ),
-                  );
-                }),
-              );
+              return StreamBuilder<List<CategoryData>>(
+                  stream: data.getData(),
+                  builder: (context, snapshot) {
+                    print(snapshot.connectionState);
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      List<CategoryData> result = snapshot.data!;
+                      return GridView.count(
+                        shrinkWrap: true,
+                        crossAxisCount: 4,
+                        childAspectRatio: 0.7,
+                        crossAxisSpacing: 15.0,
+                        mainAxisSpacing: 10.0,
+                        physics: const ScrollPhysics(),
+                        children: List.generate(result.length, (index) {
+                          String image = result[index].imageUrl.toString();
+                          String id = result[index].id!;
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return CategoryProduct(id: id);
+                              }));
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 55,
+                                  height: 55,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: design.shadeP,
+                                      shape: BoxShape.circle),
+                                  child: Image.network(image),
+                                  // child: SvgPicture.asset('assets/shopicon/ipad.svg'),
+                                ),
+                                design.hspacer(10),
+                                smalltext(result[index].name)
+                              ],
+                            ),
+                          );
+                        }),
+                      );
+                    }
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      return Wrap(
+                        spacing: 15,
+                        children: List.generate(
+                            4,
+                            (index) => Shimmer.fromColors(
+                                  baseColor: const Color(0xFFEBEBF4),
+                                  highlightColor:
+                                      const Color(0xFFEBEBF4).withOpacity(0.1),
+                                  // loop: 5,
+                                  enabled: true,
+                                  // period: const Duration(milliseconds: 1500),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0),
+                                    child: Container(
+                                      height: 55,
+                                      width: 55,
+                                      decoration: const BoxDecoration(
+                                          shape: BoxShape.circle),
+
+                                      // borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                )),
+                      );
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Wrap(
+                        spacing: 15,
+                        children: List.generate(
+                            4,
+                            (index) => Shimmer.fromColors(
+                                  baseColor: const Color(0xFFEBEBF4),
+                                  highlightColor:
+                                      const Color(0xFFEBEBF4).withOpacity(0.1),
+                                  // loop: 5,
+                                  enabled: true,
+                                  // period: const Duration(milliseconds: 1500),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0),
+                                    child: Container(
+                                      height: 55,
+                                      width: 55,
+                                      decoration: const BoxDecoration(
+                                          shape: BoxShape.circle),
+
+                                      // borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                )),
+                      );
+                    } else {
+                      return Wrap(
+                        spacing: 15,
+                        children: List.generate(
+                            4,
+                            (index) => Shimmer.fromColors(
+                                  baseColor: const Color(0xFFEBEBF4),
+                                  highlightColor:
+                                      const Color(0xFFEBEBF4).withOpacity(0.1),
+                                  // loop: 5,
+                                  enabled: true,
+                                  // period: const Duration(milliseconds: 1500),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0),
+                                    child: Container(
+                                      height: 55,
+                                      width: 55,
+                                      decoration: const BoxDecoration(
+                                          shape: BoxShape.circle),
+
+                                      // borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                )),
+                      );
+                    }
+                  });
             }),
             Padding(
               padding: const EdgeInsets.only(
@@ -226,90 +309,115 @@ class ShoppageState extends State<Shoppage> {
               ),
             ),
             Consumer<MerchantProvider>(builder: (context, data, child) {
-              List<MerchantData> result = data.merchantdata;
-              print(result[0].profilePicture);
-              return Center(
-                child: GridView.count(
-                  // crossAxisCount: 2,
-                  shrinkWrap: true,
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.1,
-                  crossAxisSpacing: 12.0,
-                  mainAxisSpacing: 10.0,
-                  physics: const ScrollPhysics(),
-                  children: List.generate(
-                      result.length,
-                      (index) => GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                return MerchantProduct(id: result[index].id!);
-                              }));
-                            },
-                            child: Container(
-                              height: 120,
-                              alignment: Alignment.topCenter,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffFfFfFf),
-                                border: Border.all(
-                                    width: 1, color: const Color(0xfff8f8f8)),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 100,
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xffF6F6F6),
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
-                                          topRight: Radius.circular(10)),
-                                    ),
-                                    child: Image.network(
-                                        'https://visaapplicationdocuments.s3.amazonaws.com/2790021660482906703.jpg'),
+              return FutureBuilder<List<MerchantData>>(
+                  future: merchantData,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('error');
+                    }
+                    if (snapshot.connectionState.name == 'done') {
+                      final result = snapshot.data!;
 
-                                    // child: SvgPicture.asset(
-                                    //                       'assets/shopicon/shoplogo.svg')
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(result[index].shopName!,
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                                color: design.ash)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: const [
-                                            Text(
-                                              '',
-                                              style: TextStyle(
-                                                  color: Color(0xff8e8e8e),
-                                                  fontSize: 8,
-                                                  fontWeight: FontWeight.w400),
+                      return Center(
+                        child: GridView.count(
+                          // crossAxisCount: 2,
+                          shrinkWrap: true,
+                          crossAxisCount: 2,
+                          childAspectRatio: 1.1,
+                          crossAxisSpacing: 12.0,
+                          mainAxisSpacing: 10.0,
+                          physics: const ScrollPhysics(),
+                          children: List.generate(
+                              result.length,
+                              (index) => GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) {
+                                        return MerchantProduct(
+                                            id: result[index].id!);
+                                      }));
+                                    },
+                                    child: Container(
+                                      height: 120,
+                                      alignment: Alignment.topCenter,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xffFfFfFf),
+                                        border: Border.all(
+                                            width: 1,
+                                            color: const Color(0xfff8f8f8)),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 100,
+                                            padding: const EdgeInsets.all(12),
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xffF6F6F6),
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                  topRight:
+                                                      Radius.circular(10)),
                                             ),
-                                            Icon(Icons.star_outline,
-                                                size: 12.7,
-                                                color: Color(0xffFFB800))
-                                          ],
-                                        )
-                                      ],
+                                            child: Image.network(
+                                                'https://visaapplicationdocuments.s3.amazonaws.com/2790021660482906703.jpg'),
+
+                                            // child: SvgPicture.asset(
+                                            //                       'assets/shopicon/shoplogo.svg')
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(result[index].shopName!,
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: design.ash)),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: const [
+                                                    Text(
+                                                      '',
+                                                      style: TextStyle(
+                                                          color:
+                                                              Color(0xff8e8e8e),
+                                                          fontSize: 8,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                    Icon(Icons.star_outline,
+                                                        size: 12.7,
+                                                        color:
+                                                            Color(0xffFFB800))
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )),
-                ),
-              );
+                                  )),
+                        ),
+                      );
+                    }
+                    if (snapshot.connectionState.name == 'none') {
+                      return design.loadingProgress();
+                    } else {
+                      return design.loadingProgress();
+                    }
+                  });
             })
           ]),
         ),

@@ -14,4 +14,9 @@ class WishListHelper {
       return Right(data);
     });
   }
+
+  Future<Either<Exception, dynamic>> removeWishList(String productId) async {
+    final apiResult = await api.removeWishList(productId);
+    return apiResult.fold((l) => Left(l), (r) => Right(r));
+  }
 }

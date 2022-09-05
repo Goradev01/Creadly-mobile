@@ -5,9 +5,27 @@ import 'package:flutter/material.dart';
 class WishListProvider extends ChangeNotifier {
   int totalCost = 0;
   final helper = WishListHelper();
+  bool loadingRemoveWishList = false;
   void updateTotalCost(int val) {
     totalCost = val;
     notifyListeners();
+  }
+
+  void updateRemove(bool val) {
+    loadingRemoveWishList = val;
+
+    notifyListeners();
+  }
+
+  Future removeCart(String id) async {
+    helper.removeWishList(id).then((value) {
+      value.fold((l) => null, (r) {
+        if (r.statusCode == 200) {
+          updateRemove(false);
+          print('remove');
+        }
+      });
+    });
   }
 
   Future<List<WishListData>> getData() async {

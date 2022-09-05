@@ -1,6 +1,8 @@
-import 'package:creadlymobile/View/Auth/login.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../Provider/verificationprovider.dart';
 
 class Otp extends StatefulWidget {
   const Otp({Key? key}) : super(key: key);
@@ -75,10 +77,8 @@ class _OtpState extends State<Otp> {
               design.hspacer(80),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return const Login();
-                  }));
+                  Provider.of<VerificationProvider>(context, listen: false)
+                      .verify('token', context);
                 },
                 child: design.longButton(width, 'Submit'),
               ),

@@ -17,8 +17,7 @@ class BnplApi {
         Uri.parse(endpoint),
         headers: {
           'Content-Type': 'application/json',
-          "authorization":
-              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzBlN2VmOWQ4NTk1ZjgyNDE4NTljMDciLCJlbWFpbCI6Im1heW93YWlzYWFjb2xhZHVuam95ZUBnbWFpbC5jb20iLCJwaG9uZU51bWJlciI6IjA3MDM1ODA3MzUwIiwiY2FydCI6W10sIndpc2hsaXN0IjpbXSwiaWF0IjoxNjYxODk1OTQ0fQ.9Bw3fPpgWra-M9SDm7FRLvx8xjrOIZCu2tVrtovMPgA'
+          "authorization": usertoken
         },
       );
       final data = jsonDecode(response.body);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Ui {
   final blue = const Color(0xff3A0CA3);
@@ -172,6 +173,34 @@ class Ui {
         wspacer(19),
         title(text),
       ],
+    );
+  }
+
+  Widget shimmerProduct(
+    int num,
+  ) {
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      childAspectRatio: 1.1,
+      crossAxisSpacing: 15.0,
+      mainAxisSpacing: 10.0,
+      physics: const ScrollPhysics(),
+      children: List.generate(
+        num,
+        (index) => Shimmer.fromColors(
+            baseColor: const Color(0xFFEBEBF4),
+            highlightColor: const Color(0xFFEBEBF4).withOpacity(0.1),
+            // loop: 5,
+            enabled: true,
+            // period: const Duration(milliseconds: 1500),
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xffFfFfFf),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            )),
+      ),
     );
   }
 

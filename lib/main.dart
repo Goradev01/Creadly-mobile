@@ -11,6 +11,7 @@ import 'package:creadlymobile/Provider/orderprovider.dart';
 import 'package:creadlymobile/Provider/productprovider.dart';
 import 'package:creadlymobile/Provider/signup.dart';
 import 'package:creadlymobile/Provider/userdataprovider.dart';
+import 'package:creadlymobile/Provider/verificationprovider.dart';
 import 'package:creadlymobile/Provider/verifyidprovider.dart';
 import 'package:creadlymobile/Provider/verifyselfieprovider.dart';
 import 'package:creadlymobile/Provider/wishlistprovider.dart';
@@ -63,6 +64,9 @@ void main() {
       ),
       ChangeNotifierProvider<BnplProvider>(
         create: (_) => BnplProvider(),
+      ),
+      ChangeNotifierProvider<VerificationProvider>(
+        create: (_) => VerificationProvider(),
       ),
     ],
     child: const MyApp(),
