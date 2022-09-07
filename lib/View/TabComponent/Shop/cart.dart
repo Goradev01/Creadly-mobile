@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:creadlymobile/Model/Core/cartdata.dart';
 import 'package:creadlymobile/Provider/addcartprovider.dart';
 import 'package:creadlymobile/Provider/getcartprovider.dart';
+import 'package:creadlymobile/Provider/userdataprovider.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,15 @@ class Cart extends StatefulWidget {
 
   @override
   State<Cart> createState() => _CartState();
+}
+
+class PaymentPeriod {
+  String time;
+  int id;
+  PaymentPeriod({
+    required this.time,
+    required this.id,
+  });
 }
 
 class _CartState extends State<Cart> {
@@ -41,6 +51,13 @@ class _CartState extends State<Cart> {
     );
   }
 
+  List<PaymentPeriod> periodData = [
+    PaymentPeriod(time: '2 Months', id: 0),
+    PaymentPeriod(time: '3 Months', id: 1),
+    PaymentPeriod(time: '4 Months', id: 2),
+    PaymentPeriod(time: '5 Months', id: 3)
+  ];
+  int paymentKey = 0;
   List<int> radiokeyList = List.generate(3, (index) => index + 1);
   String _getReference() {
     log("We are here");
@@ -67,7 +84,7 @@ class _CartState extends State<Cart> {
     return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
   }
 
-  handleCheckout(BuildContext context) async {
+  handleCheckout(BuildContext context, int amount) async {
     // if (_method != CheckoutMethod.card && _isLocal) {
     //   _showMessage('Select server initialization method at the top');
     //   return;
@@ -75,8 +92,8 @@ class _CartState extends State<Cart> {
     // setState(() => inProgress = true);
     // _formKey.currentState?.save();
     Charge charge = Charge()
-      ..amount = 1000 + 00 // In base currency
-      ..email = 'customer@email.com'
+      ..amount = amount // In base currency
+      ..email = Provider.of<UserDataProvider>(context, listen: false).email
       ..card = _getCardFromUI();
 
     charge.reference = _getReference();
@@ -98,22 +115,70 @@ class _CartState extends State<Cart> {
     }
   }
 
+  List<Color> gradientPickPayment = [
+    const Color(0xffB5179E),
+    const Color(0xff3A0CA3)
+  ];
+  List<Color> plainPickPayment = [
+    const Color(0xffffffff),
+    const Color(0xffffffff)
+  ];
+  String stateChoose = 'State';
   final plugin = PaystackPayment();
   bool update = false;
   Future<List<CartData>>? futureCart;
   Future<int>? totalAmount;
   List<int>? productlimit;
-  Stream<List<CartData>> cart() async* {
-    List<CartData> cartdata = [];
-    while (cartdata.isEmpty && update) {
-      // await Future.delayed(const Duration(milliseconds: 500));
-      await Provider.of<GetCartProvider>(context, listen: false)
-          .getData()
-          .then((value) => cartdata = value);
-      yield cartdata;
-    }
-  }
-
+  final List<DropdownMenuItem<String>> lgaData = [
+    const DropdownMenuItem<String>(
+        value: 'lagosAgege', child: Text('lagosAgege')),
+    const DropdownMenuItem<String>(
+        value: 'lagosAjeromiIfelodun',
+        child: Text(
+          'lagosAjeromiIfelodun',
+        )),
+    const DropdownMenuItem<String>(
+        value: 'lagosAmuwoOdofin', child: Text('lagosAmuwoOdofin')),
+    const DropdownMenuItem<String>(
+        value: 'lagosBadagry', child: Text('lagosBadagry')),
+    const DropdownMenuItem<String>(
+        value: 'lagosApapa', child: Text('lagosApapa')),
+    const DropdownMenuItem<String>(value: 'lagosEpe', child: Text('lagosEpe')),
+    const DropdownMenuItem<String>(
+        value: 'lagosEtiOsa', child: Text('lagosEtiOsa')),
+    const DropdownMenuItem<String>(
+        value: 'lagosIbejuLekki', child: Text('lagosIbejuLekki')),
+    const DropdownMenuItem<String>(
+        value: 'lagosIkeja', child: Text('lagosIkeja')),
+    const DropdownMenuItem<String>(
+        value: 'lagosIkorodu', child: Text('lagosIkorodu')),
+    const DropdownMenuItem<String>(
+        value: 'lagosKosofe', child: Text('lagosKosofe')),
+    const DropdownMenuItem<String>(
+        value: 'lagosLagosIsland', child: Text('lagosLagosIsland')),
+    const DropdownMenuItem<String>(
+        value: 'lagosMushin', child: Text('lagosMushin')),
+    const DropdownMenuItem<String>(value: 'lagosOjo', child: Text('lagosOjo')),
+    const DropdownMenuItem<String>(
+        value: 'lagosOshodiIsolo', child: Text('lagosOshodiIsolo')),
+    const DropdownMenuItem<String>(
+        value: 'lagosShomolu', child: Text('lagosShomolu')),
+    const DropdownMenuItem<String>(
+        value: 'lagosSurulereLagosState',
+        child: Text('lagosSurulereLagosState')),
+    const DropdownMenuItem<String>(
+        value: 'northCentral', child: Text('northCentral')),
+    const DropdownMenuItem<String>(
+        value: 'northEast', child: Text('northEast')),
+    const DropdownMenuItem<String>(
+        value: 'northWest', child: Text('northWest')),
+    const DropdownMenuItem<String>(
+        value: 'southEast', child: Text('southEast')),
+    const DropdownMenuItem<String>(
+        value: 'southSouth', child: Text('southSouth')),
+    const DropdownMenuItem<String>(
+        value: 'southWest', child: Text('southWest')),
+  ];
   @override
   void initState() {
     super.initState();
@@ -634,11 +699,29 @@ class _CartState extends State<Cart> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  design.smallText('State'),
-                                  Transform.rotate(
-                                      angle: 55,
-                                      child: Icon(Icons.arrow_back_ios,
-                                          size: 10, color: design.darkPurple))
+                                  design.smallText(stateChoose),
+                                  Expanded(
+                                    flex: 1,
+                                    child: DropdownButton<String>(
+                                      isExpanded: true,
+                                      underline: const SizedBox(),
+                                      icon: Transform.rotate(
+                                          angle: 55,
+                                          child: Icon(Icons.arrow_back_ios,
+                                              size: 10,
+                                              color: design.darkPurple)),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          stateChoose = value!;
+                                        });
+                                      },
+                                      items: const [
+                                        DropdownMenuItem<String>(
+                                            value: 'Lagos',
+                                            child: Text('Lagos')),
+                                      ],
+                                    ),
+                                  )
                                 ])),
                         design.wspacer(10),
                         Container(
@@ -658,10 +741,23 @@ class _CartState extends State<Cart> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   design.smallText('LGA'),
-                                  Transform.rotate(
-                                      angle: 55,
-                                      child: Icon(Icons.arrow_back_ios,
-                                          size: 10, color: design.darkPurple))
+                                  Expanded(
+                                    flex: 1,
+                                    child: DropdownButton<String>(
+                                        isExpanded: true,
+                                        underline: const SizedBox(),
+                                        icon: Transform.rotate(
+                                            angle: 55,
+                                            child: Icon(Icons.arrow_back_ios,
+                                                size: 10,
+                                                color: design.darkPurple)),
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            stateChoose = value!;
+                                          });
+                                        },
+                                        items: lgaData),
+                                  )
                                 ])),
                       ],
                     ),
@@ -921,92 +1017,70 @@ class _CartState extends State<Cart> {
                               borderRadius: BorderRadius.circular(20)),
                           context: context,
                           builder: (context) {
-                            return Container(
-                              width: width,
-                              height: 267,
-                              padding: const EdgeInsets.all(30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  design.input(design.blue, 20,
-                                      'Set Payment Period', FontWeight.w700),
-                                  design.hspacer(10),
-                                  const Divider(),
-                                  design.hspacer(25),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                          child: Container(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      13, 4, 13, 4),
-                                              decoration: const BoxDecoration(
-                                                  gradient: LinearGradient(
-                                                      colors: [
-                                                    Color(0xffB5179E),
-                                                    Color(0xff3A0CA3)
-                                                  ])),
-                                              child: design.input(
-                                                  Colors.white,
-                                                  10,
-                                                  '2 Months',
-                                                  FontWeight.w400))),
-                                      InkWell(
-                                          child: Container(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      13, 4, 13, 4),
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      width: 1,
-                                                      color: design.blue)),
-                                              child: design.input(
-                                                  design.blue,
-                                                  10,
-                                                  '2 Months',
-                                                  FontWeight.w400))),
-                                      InkWell(
-                                          child: Container(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      13, 4, 13, 4),
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      width: 1,
-                                                      color: design.blue)),
-                                              child: design.input(
-                                                  design.blue,
-                                                  10,
-                                                  '4 Months',
-                                                  FontWeight.w400))),
-                                      InkWell(
-                                          child: Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            13, 4, 13, 4),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                width: 1, color: design.blue)),
-                                        child: design.input(design.blue, 10,
-                                            '5 Months', FontWeight.w400),
-                                      ))
-                                    ],
-                                  ),
-                                  design.hspacer(10),
-                                  design.input(design.pink, 10,
-                                      'N 250,000 Per Month', FontWeight.w400),
-                                  design.hspacer(20),
-                                  GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                        confirmbox(context, width, design);
-                                      },
-                                      child:
-                                          design.longButton(width, 'Confirm'))
-                                ],
-                              ),
-                            );
+                            return StatefulBuilder(
+                                builder: (context, StateSetter setState) {
+                              return Container(
+                                width: width,
+                                height: 267,
+                                padding: const EdgeInsets.all(30),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    design.input(design.blue, 20,
+                                        'Set Payment Period', FontWeight.w700),
+                                    design.hspacer(10),
+                                    const Divider(),
+                                    design.hspacer(25),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: List.generate(
+                                        periodData.length,
+                                        (index) => InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                paymentKey =
+                                                    periodData[index].id;
+                                              });
+                                            },
+                                            child: Container(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        13, 4, 13, 4),
+                                                decoration: BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                        colors: paymentKey ==
+                                                                periodData[index]
+                                                                    .id
+                                                            ? gradientPickPayment
+                                                            : plainPickPayment),
+                                                    border: Border.all(
+                                                        width: 1,
+                                                        color: design.blue)),
+                                                child: design.input(
+                                                    paymentKey == periodData[index].id
+                                                        ? Colors.white
+                                                        : design.blue,
+                                                    10,
+                                                    periodData[index].time,
+                                                    FontWeight.w400))),
+                                      ),
+                                    ),
+                                    design.hspacer(10),
+                                    design.input(design.pink, 10,
+                                        'N 250,000 Per Month', FontWeight.w400),
+                                    design.hspacer(20),
+                                    GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                          confirmbox(context, width, design);
+                                        },
+                                        child:
+                                            design.longButton(width, 'Confirm'))
+                                  ],
+                                ),
+                              );
+                            });
                           });
                     },
                     child: design.longButton(width, 'Make Payment')),
@@ -1024,142 +1098,140 @@ class _CartState extends State<Cart> {
         pageBuilder: (BuildContext context, Animation animation,
             Animation secondaryAnimation) {
           bool confirm = false;
-          return Dialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              child: Container(
-                  height: 398,
-                  width: width - 50,
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 30.0),
-                        child: Container(
-                            padding: const EdgeInsets.all(30),
-                            decoration: const BoxDecoration(
-                                image: DecorationImage(
-                              image: AssetImage('assets/Star 15.png'),
-                            )),
-                            child: Image.asset('assets/question.png')),
-                      ),
-                      design.title('Kindly confirm this action'),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20, bottom: 10),
-                        child: SizedBox(
-                          width: 214,
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              style: TextStyle(
-                                  color: design.numb,
-                                  fontSize: 10,
-                                  fontFamily: 'Moderat',
-                                  fontWeight: FontWeight.w500),
-                              children: <TextSpan>[
-                                const TextSpan(
-                                  text:
-                                      'You are about to make a purchase using the BNPL and would pay',
-                                ),
-                                // design.naira(design.blue, 10.0),
-                                TextSpan(
-                                    text: ' N30,000 Upfront',
-                                    style: TextStyle(color: design.blue)),
-                              ],
+          return StatefulBuilder(builder: (context, StateSetter setState) {
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Container(
+                    height: 398,
+                    width: width - 50,
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 30.0),
+                          child: Container(
+                              padding: const EdgeInsets.all(30),
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                image: AssetImage('assets/Star 15.png'),
+                              )),
+                              child: Image.asset('assets/question.png')),
+                        ),
+                        design.title('Kindly confirm this action'),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20, bottom: 10),
+                          child: SizedBox(
+                            width: 214,
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                    color: design.numb,
+                                    fontSize: 10,
+                                    fontFamily: 'Moderat',
+                                    fontWeight: FontWeight.w500),
+                                children: <TextSpan>[
+                                  const TextSpan(
+                                    text:
+                                        'You are about to make a purchase using the BNPL and would pay',
+                                  ),
+                                  // design.naira(design.blue, 10.0),
+                                  TextSpan(
+                                      text: ' N30,000 Upfront',
+                                      style: TextStyle(color: design.blue)),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Container(
-                          width: 265,
-                          height: 99,
-                          padding: const EdgeInsets.fromLTRB(14, 10, 0, 5),
-                          decoration: BoxDecoration(
-                              color: const Color(0xffF8F8FA),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              design.input(design.numb, 10.0,
-                                  'Payment Schedule', FontWeight.w400),
-                              design.hspacer(5),
-                              RichText(
-                                // textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  style: TextStyle(
-                                      color: design.ash,
-                                      fontSize: 12,
-                                      fontFamily: 'Moderat',
-                                      fontWeight: FontWeight.w400),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'N 120,000',
-                                        style: TextStyle(color: design.pink)),
-                                    const TextSpan(
-                                      text: ' Per Month for',
-                                    ),
-                                    TextSpan(
-                                        text: ' 6 months',
-                                        style: TextStyle(color: design.pink)),
-                                    // design.naira(design.blue, 10.0),
-                                  ],
+                        Container(
+                            width: 265,
+                            height: 99,
+                            padding: const EdgeInsets.fromLTRB(14, 10, 0, 5),
+                            decoration: BoxDecoration(
+                                color: const Color(0xffF8F8FA),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                design.input(design.numb, 10.0,
+                                    'Payment Schedule', FontWeight.w400),
+                                design.hspacer(5),
+                                RichText(
+                                  // textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                        color: design.ash,
+                                        fontSize: 12,
+                                        fontFamily: 'Moderat',
+                                        fontWeight: FontWeight.w400),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: 'N 120,000',
+                                          style: TextStyle(color: design.pink)),
+                                      const TextSpan(
+                                        text: ' Per Month for',
+                                      ),
+                                      TextSpan(
+                                          text: ' 6 months',
+                                          style: TextStyle(color: design.pink)),
+                                      // design.naira(design.blue, 10.0),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              // design.hspacer(20),
-                              const Spacer(),
-                              Row(
-                                children: [
-                                  Checkbox(
-                                      splashRadius: 3,
-                                      value: confirm,
-                                      onChanged: (bool? val) {
-                                        setState(() {
-                                          confirm = val!;
-                                        });
-                                      }),
-                                  design.wspacer(5),
-                                  design.input(
-                                      design.darkPurple,
-                                      10.0,
-                                      'I agree with this payment scheme',
-                                      FontWeight.w400)
-                                ],
-                              )
-                            ],
-                          )),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text(
-                                'Cancel',
-                                style: TextStyle(
-                                    color: Color(0xffFF4848),
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
-                              )),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: GestureDetector(
-                                onTap: () {
+                                // design.hspacer(20),
+                                const Spacer(),
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                        splashRadius: 3,
+                                        value: confirm,
+                                        onChanged: (bool? val) {
+                                          setState(() {
+                                            confirm = val!;
+                                          });
+                                        }),
+                                    design.wspacer(5),
+                                    design.input(
+                                        design.darkPurple,
+                                        10.0,
+                                        'I agree with this payment scheme',
+                                        FontWeight.w400)
+                                  ],
+                                )
+                              ],
+                            )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            TextButton(
+                                onPressed: () {
                                   Navigator.of(context).pop();
-                                  handleCheckout(context);
+                                },
+                                child: const Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                      color: Color(0xffFF4848),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500),
+                                )),
+                            GestureDetector(
+                                onTap: () {
+                                  int amount = 50000;
+                                  Navigator.of(context).pop();
+                                  handleCheckout(context, amount);
                                   // Navigator.of(context).push(
                                   //     MaterialPageRoute(builder: (context) {
                                   //   return const PurchaseDone();
                                   // }));
                                 },
-                                child: design.longButton(169.0, 'Confirm')),
-                          )
-                        ],
-                      )
-                    ],
-                  )));
+                                child: design.longButton(169.0, 'Confirm'))
+                          ],
+                        )
+                      ],
+                    )));
+          });
         });
   }
 }

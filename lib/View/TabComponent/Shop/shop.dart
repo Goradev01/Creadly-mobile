@@ -54,11 +54,16 @@ class ShoppageState extends State<Shoppage> {
     const DropdownMenuItem<String>(value: 'Skincare', child: Text('Skincare')),
   ];
   final List<DropdownMenuItem<String>> priceOption = [
-    const DropdownMenuItem<String>(value: '0-40,000', child: SizedBox()),
-    const DropdownMenuItem<String>(value: '40,000-80,000', child: SizedBox()),
-    const DropdownMenuItem<String>(value: '80,000-200,000', child: SizedBox()),
-    const DropdownMenuItem<String>(value: '200,000-600,000', child: SizedBox()),
-    const DropdownMenuItem<String>(value: '600,000 -1M', child: SizedBox()),
+    const DropdownMenuItem<String>(value: '0-40,000', child: Text('0-40,000')),
+    const DropdownMenuItem<String>(
+        value: '40,000-80,000',
+        child: Text(
+          '40,000-80,000',
+        )),
+    const DropdownMenuItem<String>(
+        value: '80,000-200,000', child: Text('80,000-200,000')),
+    const DropdownMenuItem<String>(
+        value: '200,000-600,000', child: Text('200,000-600,000')),
   ];
 
   String filter = 'Category';
