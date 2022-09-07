@@ -9,19 +9,48 @@ class UserDataProvider extends ChangeNotifier {
   final updateHelper = UpdateUserHelper();
   String email = '';
   String firstName = '';
+  String lastName = '';
+  String companyCode = '';
+  String bvn = '';
+  String dateOfBirth = '';
+  String address = '';
   String phoneNumber = '';
   final usertoken = LoginProvider().getUserToken();
-  bool loadingProgress = true;
+  bool loadingProgress = false;
   void updateLoadingProgress(bool val) {
     loadingProgress = val;
 
     notifyListeners();
   }
 
-  void updateDetail(String input, dynamic name, String phoneNo) {
-    email = input;
-    if (name != null) {
-      firstName = name;
+  void updateDetail(
+    String emailInput,
+    dynamic firstname,
+    dynamic lastname,
+    dynamic companycode,
+    dynamic bvnInput,
+    dynamic dateofBirthInput,
+    dynamic addressInput,
+    String phoneNo,
+  ) {
+    email = emailInput;
+    if (firstname != null) {
+      firstName = firstname;
+    }
+    if (lastname != null) {
+      lastName = lastname;
+    }
+    if (companycode != null) {
+      companyCode = companycode;
+    }
+    if (bvnInput != null) {
+      bvn = bvnInput;
+    }
+    if (addressInput != null) {
+      address = addressInput;
+    }
+    if (dateofBirthInput != null) {
+      dateOfBirth = dateofBirthInput;
     }
 
     phoneNumber = phoneNo;

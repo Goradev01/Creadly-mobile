@@ -28,6 +28,25 @@ class BankApi {
     }
   }
 
+  Future<Either<Exception, http.Response>> verifyBank(Map body) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    String usertoken = pref.getString('AuthToken')!;
+    try {
+      final response = await http.post(
+          Uri.parse(
+            '${Baseurl().url}/api/v1/transfers/validate-account-number',
+          ),
+          headers: {
+            "Content-Type": "application/json",
+            "authorization": usertoken
+          },
+          body: const JsonEncoder().convert(body));
+      return Right(response);
+    } on Exception catch (e) {
+      return Left(e);
+    }
+  }
+
   Future<Either<Exception, http.Response>> removeBank(String id) async {
     try {
       final response = await http.post(

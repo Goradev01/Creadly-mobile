@@ -180,31 +180,59 @@ class _RegistrationState extends State<Registration> {
                           )
                         ],
                       ),
-                      Container(
+                      //! firstname
+                      Consumer<UserDataProvider>(
+                          builder: (context, data, child) {
+                        if (data.firstName.isEmpty) {
+                          return Container(
+                              width: width,
+                              alignment: Alignment.centerLeft,
+                              margin:
+                                  const EdgeInsets.only(top: 10, bottom: 20),
+                              height: 51,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xffC0BACE),
+                                      width: 1.5),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10))),
+                              child: TextFormField(
+                                initialValue: '',
+                                onChanged: (input) {
+                                  setState(() {
+                                    firstname = input;
+                                  });
+                                },
+                                decoration: const InputDecoration(
+                                  // labelText: 'Email address',
+                                  border: InputBorder.none,
+                                  labelStyle: TextStyle(color: Colors.grey),
+                                  // errorText: validmail(email),
+                                ),
+                              ));
+                        }
+                        return Container(
                           width: width,
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.only(top: 10, bottom: 20),
                           height: 51,
                           padding: const EdgeInsets.symmetric(horizontal: 30),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xffC0BACE), width: 1.5),
+                          decoration: const BoxDecoration(
+                              color: Color(0xffC0BACE),
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(10))),
-                          child: TextFormField(
-                            initialValue: '',
-                            onChanged: (input) {
-                              setState(() {
-                                firstname = input;
-                              });
-                            },
-                            decoration: const InputDecoration(
-                              // labelText: 'Email address',
-                              border: InputBorder.none,
-                              labelStyle: TextStyle(color: Colors.grey),
-                              // errorText: validmail(email),
-                            ),
-                          )),
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Text(
+                            ' ${data.firstName}',
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w700,
+                                color: design.productblack),
+                          ),
+                        );
+                      }),
+
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -219,31 +247,57 @@ class _RegistrationState extends State<Registration> {
                           )
                         ],
                       ),
-                      Container(
+                      Consumer<UserDataProvider>(
+                          builder: (context, data, child) {
+                        if (data.lastName.isEmpty) {
+                          return Container(
+                              width: width,
+                              alignment: Alignment.centerLeft,
+                              margin:
+                                  const EdgeInsets.only(top: 10, bottom: 20),
+                              height: 51,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xffC0BACE),
+                                      width: 1.5),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10))),
+                              child: TextFormField(
+                                initialValue: '',
+                                onChanged: (input) {
+                                  setState(() {
+                                    lastname = input;
+                                  });
+                                },
+                                decoration: const InputDecoration(
+                                  // labelText: 'Email address',
+                                  border: InputBorder.none,
+                                  labelStyle: TextStyle(color: Colors.grey),
+                                  // errorText: validmail(email),
+                                ),
+                              ));
+                        }
+                        return Container(
                           width: width,
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.only(top: 10, bottom: 20),
                           height: 51,
                           padding: const EdgeInsets.symmetric(horizontal: 30),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xffC0BACE), width: 1.5),
+                          decoration: const BoxDecoration(
+                              color: Color(0xffC0BACE),
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(10))),
-                          child: TextFormField(
-                            initialValue: '',
-                            onChanged: (input) {
-                              setState(() {
-                                lastname = input;
-                              });
-                            },
-                            decoration: const InputDecoration(
-                              // labelText: 'Email address',
-                              border: InputBorder.none,
-                              labelStyle: TextStyle(color: Colors.grey),
-                              // errorText: validmail(email),
-                            ),
-                          )),
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Text(
+                            ' ${data.lastName}',
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w700,
+                                color: design.productblack),
+                          ),
+                        );
+                      }),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -259,111 +313,216 @@ class _RegistrationState extends State<Registration> {
                           )
                         ],
                       ),
-                      Container(
+                      Consumer<UserDataProvider>(
+                          builder: (context, data, child) {
+                        if (data.companyCode.isEmpty) {
+                          return Container(
+                              width: width,
+                              alignment: Alignment.centerLeft,
+                              margin:
+                                  const EdgeInsets.only(top: 10, bottom: 20),
+                              height: 51,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xffC0BACE),
+                                      width: 1.5),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10))),
+                              child: TextFormField(
+                                initialValue: '',
+                                onChanged: (input) {
+                                  setState(() {
+                                    companyinput = input;
+                                  });
+                                },
+                                decoration: const InputDecoration(
+                                  // labelText: 'Email address',
+                                  border: InputBorder.none,
+                                  labelStyle: TextStyle(color: Colors.grey),
+                                  // errorText: validmail(email),
+                                ),
+                              ));
+                        }
+                        return Container(
                           width: width,
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.only(top: 10, bottom: 20),
                           height: 51,
                           padding: const EdgeInsets.symmetric(horizontal: 30),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xffC0BACE), width: 1.5),
+                          decoration: const BoxDecoration(
+                              color: Color(0xffC0BACE),
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(10))),
-                          child: TextFormField(
-                            initialValue: '',
-                            onChanged: (input) {
-                              setState(() {
-                                companyinput = input;
-                              });
-                            },
-                            decoration: const InputDecoration(
-                              // labelText: 'Email address',
-                              border: InputBorder.none,
-                              labelStyle: TextStyle(color: Colors.grey),
-                              // errorText: validmail(email),
-                            ),
-                          )),
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Text(
+                            ' ${data.companyCode}',
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w700,
+                                color: design.productblack),
+                          ),
+                        );
+                      }),
                       design.smalltext('BVN'),
-                      Container(
+                      Consumer<UserDataProvider>(
+                          builder: (context, data, child) {
+                        if (data.bvn.isEmpty) {
+                          return Container(
+                              width: width,
+                              alignment: Alignment.centerLeft,
+                              margin:
+                                  const EdgeInsets.only(top: 10, bottom: 20),
+                              height: 51,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xffC0BACE),
+                                      width: 1.5),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10))),
+                              child: TextFormField(
+                                initialValue: '',
+                                onChanged: (input) {
+                                  setState(() {
+                                    bvn = input;
+                                  });
+                                },
+                                decoration: const InputDecoration(
+                                  // labelText: 'Email address',
+                                  border: InputBorder.none,
+                                  labelStyle: TextStyle(color: Colors.grey),
+                                  // errorText: validmail(email),
+                                ),
+                              ));
+                        }
+                        return Container(
                           width: width,
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.only(top: 10, bottom: 20),
                           height: 51,
                           padding: const EdgeInsets.symmetric(horizontal: 30),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xffC0BACE), width: 1.5),
+                          decoration: const BoxDecoration(
+                              color: Color(0xffC0BACE),
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(10))),
-                          child: TextFormField(
-                            initialValue: '',
-                            onChanged: (input) {
-                              setState(() {
-                                bvn = input;
-                              });
-                            },
-                            decoration: const InputDecoration(
-                              // labelText: 'Email address',
-                              border: InputBorder.none,
-                              labelStyle: TextStyle(color: Colors.grey),
-                              // errorText: validmail(email),
-                            ),
-                          )),
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Text(
+                            ' ${data.bvn}',
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w700,
+                                color: design.productblack),
+                          ),
+                        );
+                      }),
                       design.smalltext('Date Of Birth'),
-                      GestureDetector(
-                        onTap: () async {
-                          DateTime? date = await showDatePicker(
-                              context: context,
-                              initialDate: dateofbirth,
-                              firstDate: DateTime(1960),
-                              lastDate: dateofbirth);
-                          if (date != null) {
-                            setState(() {
-                              dateofbirth = date;
-                            });
-                          }
-                        },
-                        child: Container(
-                            width: width,
-                            alignment: Alignment.centerLeft,
-                            margin: const EdgeInsets.only(top: 10, bottom: 20),
-                            height: 51,
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color(0xffC0BACE), width: 1.5),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(10))),
-                            child: Text(
-                                '${dateofbirth.year.toString()}-${dateofbirth.month.toString()}-${dateofbirth.day.toString()}')),
-                      ),
-                      design.smalltext('Address'),
-                      Container(
+                      Consumer<UserDataProvider>(
+                          builder: (context, data, child) {
+                        if (data.dateOfBirth.isEmpty) {
+                          return GestureDetector(
+                            onTap: () async {
+                              DateTime? date = await showDatePicker(
+                                  context: context,
+                                  initialDate: dateofbirth,
+                                  firstDate: DateTime(1960),
+                                  lastDate: dateofbirth);
+                              if (date != null) {
+                                setState(() {
+                                  dateofbirth = date;
+                                });
+                              }
+                            },
+                            child: Container(
+                                width: width,
+                                alignment: Alignment.centerLeft,
+                                margin:
+                                    const EdgeInsets.only(top: 10, bottom: 20),
+                                height: 51,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 30),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: const Color(0xffC0BACE),
+                                        width: 1.5),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10))),
+                                child: Text(
+                                    '${dateofbirth.year.toString()}-${dateofbirth.month.toString()}-${dateofbirth.day.toString()}')),
+                          );
+                        }
+                        return Container(
                           width: width,
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.only(top: 10, bottom: 20),
                           height: 51,
                           padding: const EdgeInsets.symmetric(horizontal: 30),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xffC0BACE), width: 1.5),
+                          decoration: const BoxDecoration(
+                              color: Color(0xffC0BACE),
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(10))),
-                          child: TextFormField(
-                            initialValue: '',
-                            onChanged: (input) {
-                              setState(() {
-                                address = input;
-                              });
-                            },
-                            decoration: const InputDecoration(
-                              // labelText: 'Email address',
-                              border: InputBorder.none,
-                              labelStyle: TextStyle(color: Colors.grey),
-                              // errorText: validmail(email),
-                            ),
-                          )),
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Text(
+                            ' ${data.dateOfBirth}',
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w700,
+                                color: design.productblack),
+                          ),
+                        );
+                      }),
+
+                      design.smalltext('Address'),
+                      Consumer<UserDataProvider>(
+                          builder: (context, data, child) {
+                        if (data.address.isEmpty) {
+                          return Container(
+                              width: width,
+                              alignment: Alignment.centerLeft,
+                              margin:
+                                  const EdgeInsets.only(top: 10, bottom: 20),
+                              height: 51,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xffC0BACE),
+                                      width: 1.5),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10))),
+                              child: TextFormField(
+                                initialValue: '',
+                                onChanged: (input) {
+                                  setState(() {
+                                    address = input;
+                                  });
+                                },
+                                decoration: const InputDecoration(
+                                  // labelText: 'Email address',
+                                  border: InputBorder.none,
+                                  labelStyle: TextStyle(color: Colors.grey),
+                                  // errorText: validmail(email),
+                                ),
+                              ));
+                        }
+                        return Container(
+                          width: width,
+                          alignment: Alignment.centerLeft,
+                          margin: const EdgeInsets.only(top: 10, bottom: 20),
+                          height: 51,
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          decoration: const BoxDecoration(
+                              color: Color(0xffC0BACE),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Text(
+                            ' ${data.address}',
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w700,
+                                color: design.productblack),
+                          ),
+                        );
+                      }),
                     ],
                   ),
                 ),

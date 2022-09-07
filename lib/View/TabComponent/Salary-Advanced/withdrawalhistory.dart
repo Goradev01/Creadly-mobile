@@ -1,10 +1,12 @@
+import 'package:creadlymobile/Model/Core/withdraw.dart';
 import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
 
 import 'salary.dart';
 
 class Withdrawalhistory extends StatefulWidget {
-  const Withdrawalhistory({Key? key}) : super(key: key);
+  final List<WithdrawData> data;
+  const Withdrawalhistory({Key? key, required this.data}) : super(key: key);
 
   @override
   State<Withdrawalhistory> createState() => _WithdrawalhistoryState();
@@ -81,19 +83,19 @@ class _WithdrawalhistoryState extends State<Withdrawalhistory> {
             ),
             Column(
               children: List.generate(
-                  withdrawinfo.length,
+                  widget.data.length,
                   (index) => Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 10.0, bottom: 3),
-                            child: Text(withdrawinfo[index].date,
-                                style: TextStyle(
-                                    fontSize: 7,
-                                    color: design.numb,
-                                    fontWeight: FontWeight.w500)),
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(
+                          //       top: 10.0, bottom: 3),
+                          //   child: Text(widget.data[index].createdAt!,
+                          //       style: TextStyle(
+                          //           fontSize: 7,
+                          //           color: design.numb,
+                          //           fontWeight: FontWeight.w500)),
+                          // ),
                           Padding(
                             padding:
                                 const EdgeInsets.only(top: 3.0, bottom: 10),
@@ -103,7 +105,7 @@ class _WithdrawalhistoryState extends State<Withdrawalhistory> {
                                 Row(
                                   children: [
                                     design.naira(design.darkPurple, 15.0),
-                                    Text(withdrawinfo[index].amount,
+                                    Text(widget.data[index].amount!.toString(),
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: design.darkPurple,
@@ -117,25 +119,26 @@ class _WithdrawalhistoryState extends State<Withdrawalhistory> {
                                   // padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(25),
-                                      color:
-                                          withdrawinfo[index].mode == 'Pending'
-                                              ? const Color(0xffFFB800)
+                                      color: widget.data[index].status == 1
+                                          ? const Color(0xffFFB800)
+                                              .withOpacity(0.3)
+                                          : widget.data[index].status == 2
+                                              ? const Color(0xff00BA07)
                                                   .withOpacity(0.3)
-                                              : withdrawinfo[index].mode ==
-                                                      'Successful'
-                                                  ? const Color(0xff00BA07)
-                                                      .withOpacity(0.3)
-                                                  : const Color(0xffCE2E2E)
-                                                      .withOpacity(0.3)),
-                                  child: Text(withdrawinfo[index].mode,
+                                              : const Color(0xffCE2E2E)
+                                                  .withOpacity(0.3)),
+                                  child: Text(
+                                      widget.data[index].status == 1
+                                          ? 'Pending'
+                                          : widget.data[index].status == 2
+                                              ? 'Succussfull'
+                                              : 'Unsuccessfull',
                                       style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500,
-                                          color: withdrawinfo[index].mode ==
-                                                  'Pending'
+                                          color: widget.data[index].status == 1
                                               ? const Color(0xffFFB800)
-                                              : withdrawinfo[index].mode ==
-                                                      'Successful'
+                                              : widget.data[index].status == 2
                                                   ? const Color(0xff00BA07)
                                                   : const Color(0xffCE2E2E))),
                                 )

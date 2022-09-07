@@ -15,6 +15,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../Provider/bnplprovider.dart';
 import '../../Provider/productprovider.dart';
 import 'Shop/productdetail.dart';
+import 'ondemand/ondemand.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -60,7 +61,14 @@ class _HomepageState extends State<Homepage> {
     Provider.of<UserDataProvider>(context, listen: false).getUserData().then(
         (value) => Provider.of<UserDataProvider>(context, listen: false)
             .updateDetail(
-                value[0].email!, value[0].firstName!, value[0].phoneNumber!));
+                value[0].email!,
+                value[0].firstName!,
+                value[0].lastName!,
+                value[0].companyCode!,
+                value[0].bvn!,
+                value[0].dateOfBirth!,
+                value[0].address!,
+                value[0].phoneNumber!));
     print(Provider.of<UserDataProvider>(context, listen: false).firstName);
   }
 
@@ -256,19 +264,43 @@ class _HomepageState extends State<Homepage> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) {
-                                          return const Bnpl();
+                                          return Bnpl(
+                                            amount: snapshot.data!.isNotEmpty
+                                                ? snapshot
+                                                    .data![0]
+                                                    .data![
+                                                        creditmodel[index].name]
+                                                    .toString()
+                                                : '0',
+                                          );
                                         }));
                                       } else if (index == 2) {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) {
-                                          return const SalaryAdvanced();
+                                          return Ondemand(
+                                            amount: snapshot.data!.isNotEmpty
+                                                ? snapshot
+                                                    .data![0]
+                                                    .data![
+                                                        creditmodel[index].name]
+                                                    .toString()
+                                                : '0',
+                                          );
                                         }));
                                       } else {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) {
-                                          return const SalaryAdvanced();
+                                          return SalaryAdvanced(
+                                            amount: snapshot.data!.isNotEmpty
+                                                ? snapshot
+                                                    .data![0]
+                                                    .data![
+                                                        creditmodel[index].name]
+                                                    .toString()
+                                                : '--',
+                                          );
                                         }));
                                       }
                                     },

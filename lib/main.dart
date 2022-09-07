@@ -2,12 +2,14 @@
 
 // import 'package:creadlymobile/Provider/data.dart';
 import 'package:creadlymobile/Provider/addcartprovider.dart';
+import 'package:creadlymobile/Provider/bankprovider.dart';
 import 'package:creadlymobile/Provider/bnplprovider.dart';
 import 'package:creadlymobile/Provider/categoryprovider.dart';
 import 'package:creadlymobile/Provider/getcartprovider.dart';
 import 'package:creadlymobile/Provider/login.dart';
 import 'package:creadlymobile/Provider/merchantprovider.dart';
 import 'package:creadlymobile/Provider/orderprovider.dart';
+import 'package:creadlymobile/Provider/paymentprovider.dart';
 import 'package:creadlymobile/Provider/productprovider.dart';
 import 'package:creadlymobile/Provider/signup.dart';
 import 'package:creadlymobile/Provider/userdataprovider.dart';
@@ -15,6 +17,7 @@ import 'package:creadlymobile/Provider/verificationprovider.dart';
 import 'package:creadlymobile/Provider/verifyidprovider.dart';
 import 'package:creadlymobile/Provider/verifyselfieprovider.dart';
 import 'package:creadlymobile/Provider/wishlistprovider.dart';
+import 'package:creadlymobile/Provider/withdrawprovider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -68,6 +71,15 @@ void main() {
       ChangeNotifierProvider<VerificationProvider>(
         create: (_) => VerificationProvider(),
       ),
+      ChangeNotifierProvider<BankProvider>(
+        create: (_) => BankProvider(),
+      ),
+      ChangeNotifierProvider<WithdrawProvider>(
+        create: (_) => WithdrawProvider(),
+      ),
+      ChangeNotifierProvider<PaymentProvider>(
+        create: (_) => PaymentProvider(),
+      ),
     ],
     child: const MyApp(),
   ));
@@ -93,6 +105,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     Provider.of<LoginProvider>(context, listen: false).checkfirsttimer();
     getData();
+
+    print('dshgsd');
     super.initState();
   }
 

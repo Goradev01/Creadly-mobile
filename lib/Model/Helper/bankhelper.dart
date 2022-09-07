@@ -9,6 +9,11 @@ class BankHelper {
     return apiResult.fold((l) => Left(l), (r) => Right(r));
   }
 
+  Future<Either<Exception, Response>> verifyBank(Map body) async {
+    final apiResult = await api.verifyBank(body);
+    return apiResult.fold((l) => Left(l), (r) => Right(r));
+  }
+
   Future<Either<Exception, Response>> removeBank(String id) async {
     final apiResult = await api.removeBank(id);
     return apiResult.fold((l) => Left(l), (r) => Right(r));

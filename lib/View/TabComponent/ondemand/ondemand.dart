@@ -9,12 +9,12 @@ import '../../../Model/Core/banklist.dart';
 import '../../../Model/Core/withdraw.dart';
 import '../../../Provider/withdrawprovider.dart';
 
-class SalaryAdvanced extends StatefulWidget {
+class Ondemand extends StatefulWidget {
   final String amount;
-  const SalaryAdvanced({Key? key, required this.amount}) : super(key: key);
+  const Ondemand({Key? key, required this.amount}) : super(key: key);
 
   @override
-  State<SalaryAdvanced> createState() => _SalaryAdvancedState();
+  State<Ondemand> createState() => _OndemandState();
 }
 
 class Withdraw {
@@ -24,7 +24,7 @@ class Withdraw {
   Withdraw({required this.amount, required this.date, required this.mode});
 }
 
-class _SalaryAdvancedState extends State<SalaryAdvanced> {
+class _OndemandState extends State<Ondemand> {
   String amount = '';
   String accountNumber = '';
   String accountName = '';
@@ -32,8 +32,6 @@ class _SalaryAdvancedState extends State<SalaryAdvanced> {
   String cv2 = '';
   bool added = true;
   Stream<List<BankList>>? bankList;
-  int radioKey = 0;
-  List<int> radiokeyList = List.generate(1, (index) => index + 1);
   List<String> bankDetail = ['ade', 'boy'];
   String expiryDate = '';
   List<Withdraw> withdrawinfo = [
@@ -194,7 +192,7 @@ class _SalaryAdvancedState extends State<SalaryAdvanced> {
                 }
                 if (snapshot.connectionState == ConnectionState.done) {
                   final data = snapshot.data!;
-                  print(data.length);
+
                   return Column(children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
@@ -218,7 +216,7 @@ class _SalaryAdvancedState extends State<SalaryAdvanced> {
                                 )),
                           ),
                           design.wspacer(19),
-                          design.title('Salary Advance'),
+                          design.title('Ondemand'),
                         ],
                       ),
                     ),
@@ -430,18 +428,14 @@ class _SalaryAdvancedState extends State<SalaryAdvanced> {
                                     const EdgeInsets.symmetric(horizontal: 25),
                                 child: InkWell(
                                     onTap: () {
-                                      withdrawData.updateLoadingProgess(true);
                                       Map body = {
                                         "amount": 10000,
                                         "type": "salaryAdvance",
                                         "account": {
-                                          "accountNumber":
-                                              data[0].account!['accountNumber'],
-                                          "bank": data[0].account!['bank'],
-                                          "bankCode":
-                                              data[0].account!['bankCode'],
-                                          "accountName":
-                                              data[0].account!['accountName']
+                                          "accountNumber": "0161846863",
+                                          "bank": "Guaranty Trust Bank",
+                                          "bankCode": "058",
+                                          "accountName": "Mayowa Oladunjoye"
                                         }
                                       };
                                       Provider.of<WithdrawProvider>(context,
@@ -450,21 +444,6 @@ class _SalaryAdvancedState extends State<SalaryAdvanced> {
                                     },
                                     child:
                                         design.longButton(width, 'Withdraw')),
-                              ),
-                              design.hspacer(10),
-                              Center(
-                                child: Visibility(
-                                  visible: withdrawData.loadingProgess,
-                                  child: SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                        strokeWidth: 3,
-                                        // value: 0.5,
-                                        color: design.blue,
-                                        backgroundColor: Colors.white),
-                                  ),
-                                ),
                               ),
                               Container(
                                   decoration: const BoxDecoration(
@@ -580,7 +559,7 @@ class _SalaryAdvancedState extends State<SalaryAdvanced> {
                                                                             onTap:
                                                                                 () {
                                                                               Navigator.of(context).pop();
-                                                                              addaccount(context, width, design, data);
+                                                                              addaccount(context, width, design);
                                                                             },
                                                                             child:
                                                                                 design.longButton(169.0, 'Confirm'),
@@ -893,21 +872,18 @@ class _SalaryAdvancedState extends State<SalaryAdvanced> {
     ));
   }
 
-  Future<dynamic> addaccount(
-      BuildContext context, double width, Ui design, List<WithdrawData> data) {
+  Future<dynamic> addaccount(BuildContext context, double width, Ui design) {
     return showModalBottomSheet(
-        isScrollControlled: true,
         context: context,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30), topRight: Radius.circular(30))),
         builder: (BuildContext context) {
-          return StatefulBuilder(builder: (context, StateSetter setState) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(25, 30, 25, 30),
-              child: SizedBox(
-                width: width,
-                height: 389,
+          return SizedBox(
+              width: width,
+              height: 389,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(25, 30, 25, 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -921,7 +897,7 @@ class _SalaryAdvancedState extends State<SalaryAdvanced> {
                     const Divider(),
                     Column(
                         children: List.generate(
-                            1,
+                            2,
                             (index) => Container(
                                 width: width,
                                 margin: const EdgeInsets.symmetric(vertical: 5),
@@ -938,44 +914,31 @@ class _SalaryAdvancedState extends State<SalaryAdvanced> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          data[index].account!["accountNumber"],
+                                          '1909 2890 XXXX XX83',
                                           style: TextStyle(
                                               fontSize: 20.0,
                                               fontWeight: FontWeight.w500,
                                               color: design.ash),
-                                        ),
-                                        const Spacer(),
-                                        Radio(
-                                          activeColor: const Color(0xff121212),
-                                          value: radiokeyList[0],
-                                          groupValue: radioKey,
-                                          onChanged: (int? value) {
-                                            setState(() {
-                                              radioKey = value!;
-                                            });
-                                          },
                                         ),
                                         // Image.asset('assets/Mastercard.png'),
                                       ],
                                     ),
                                     RichText(
                                       textAlign: TextAlign.center,
-                                      text: TextSpan(
-                                        style: const TextStyle(
+                                      text: const TextSpan(
+                                        style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 10,
                                             fontFamily: 'Moderat',
                                             fontWeight: FontWeight.w500),
                                         children: <TextSpan>[
                                           TextSpan(
-                                            text:
-                                                '${data[index].account!["bank"]}   ',
+                                            text: '00194958938  ',
                                           ),
                                           // design.naira(design.blue, 10.0),
                                           TextSpan(
-                                              text: data[index]
-                                                  .account!["accountName"],
-                                              style: const TextStyle(
+                                              text: 'Adekanye West Dotun',
+                                              style: TextStyle(
                                                   color: Color(0xff737373))),
                                         ],
                                       ),
@@ -993,9 +956,7 @@ class _SalaryAdvancedState extends State<SalaryAdvanced> {
                     )
                   ],
                 ),
-              ),
-            );
-          });
+              ));
         });
   }
 

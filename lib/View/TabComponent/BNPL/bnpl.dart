@@ -2,7 +2,8 @@ import 'package:creadlymobile/View/style.dart';
 import 'package:flutter/material.dart';
 
 class Bnpl extends StatefulWidget {
-  const Bnpl({Key? key}) : super(key: key);
+  final String amount;
+  const Bnpl({Key? key, required this.amount}) : super(key: key);
 
   @override
   State<Bnpl> createState() => _BnplState();
@@ -89,7 +90,7 @@ class _BnplState extends State<Bnpl> {
                                   decorationStyle: TextDecorationStyle.double,
                                   decorationColor: design.blue,
                                   decoration: TextDecoration.lineThrough)),
-                          Text('200,000',
+                          Text(widget.amount,
                               style: TextStyle(
                                 fontSize: 32,
                                 color: design.blue,
@@ -120,45 +121,45 @@ class _BnplState extends State<Bnpl> {
               ),
             ),
           ),
-          Form(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  design.smalltext('Request Amount'),
-                  Container(
-                      width: width,
-                      alignment: Alignment.centerLeft,
-                      margin: const EdgeInsets.only(top: 10, bottom: 20),
-                      height: 51,
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: const Color(0xffC0BACE), width: 1.5),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        initialValue: '',
-                        onFieldSubmitted: (input) {
-                          setState(() {
-                            amount = input;
-                          });
-                        },
-                        decoration: const InputDecoration(
-                          // labelText: 'Email address',
-                          border: InputBorder.none,
-                          labelStyle: TextStyle(color: Colors.grey),
-                          // errorText: validmail(email),
-                        ),
-                      )),
-                  InkWell(
-                      onTap: () {}, child: design.longButton(width, 'Request')),
-                ],
-              ),
-            ),
-          ),
+          // Form(
+          //   child: Padding(
+          //     padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+          //     child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         design.smalltext('Request Amount'),
+          //         Container(
+          //             width: width,
+          //             alignment: Alignment.centerLeft,
+          //             margin: const EdgeInsets.only(top: 10, bottom: 20),
+          //             height: 51,
+          //             padding: const EdgeInsets.symmetric(horizontal: 30),
+          //             decoration: BoxDecoration(
+          //                 border: Border.all(
+          //                     color: const Color(0xffC0BACE), width: 1.5),
+          //                 borderRadius:
+          //                     const BorderRadius.all(Radius.circular(10))),
+          //             child: TextFormField(
+          //               keyboardType: TextInputType.number,
+          //               initialValue: '',
+          //               onFieldSubmitted: (input) {
+          //                 setState(() {
+          //                   amount = input;
+          //                 });
+          //               },
+          //               decoration: const InputDecoration(
+          //                 // labelText: 'Email address',
+          //                 border: InputBorder.none,
+          //                 labelStyle: TextStyle(color: Colors.grey),
+          //                 // errorText: validmail(email),
+          //               ),
+          //             )),
+          //         InkWell(
+          //             onTap: () {}, child: design.longButton(width, 'Request')),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
             child: design.title('Previous Requests'),
