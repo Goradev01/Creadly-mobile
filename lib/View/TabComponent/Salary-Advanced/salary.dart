@@ -65,6 +65,13 @@ class _SalaryAdvancedState extends State<SalaryAdvanced> {
   }
 
   @override
+  void dispose() {
+    Provider.of<WithdrawProvider>(context, listen: false)
+        .updateLoadingProgess(false);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final design = Ui();
     final width = MediaQuery.of(context).size.width;
